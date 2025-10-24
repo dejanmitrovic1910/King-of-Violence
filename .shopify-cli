@@ -1,0 +1,2 @@
+$env:SHOPIFY_FLAG_STORE="king-of-violence.myshopify.com"
+set SHOPIFY_FLAG_STORE=king-of-violence.myshopify.com
