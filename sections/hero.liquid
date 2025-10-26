@@ -27,6 +27,9 @@
   if section.settings.image_2 != blank and media_type_2 == 'image'
     assign has_image_2 = true
   endif
+  if section.settings.image_mobile != blank
+    assign has_image_mobile = true
+  endif
   if section.settings.video_1 != blank and media_type_1 == 'video'
     assign has_video_1 = true
   endif
@@ -152,6 +155,21 @@
     </div>
   {%- endif -%}
 
+  {%- if has_image_mobile -%}
+    {{
+      section.settings.image_mobile
+      | image_url: width: 3840
+      | image_tag:
+        width: section.settings.image_mobile.width,
+        widths: widths,
+        height: section.settings.image_mobile.height,
+        alt: section.settings.image_mobile.alt,
+        class: 'hero__image hero__image--mobile',
+        sizes: sizes,
+        fetchpriority: fetch_priority
+    }}
+  {%- endif -%}
+
   {% if has_media == false %}
     {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__image' }}
   {%- endif -%}
@@ -179,6 +197,19 @@
         width: section.settings.image_2.width,
         widths: widths,
         height: section.settings.image_2.height,
+        alt: '',
+        class: 'hero__image',
+        sizes: sizes
+    }}
+  {% endif %}
+  {% if has_image_mobile %}
+    {{
+      section.settings.image_mobile
+      | image_url: width: 3840
+      | image_tag:
+        width: section.settings.image_mobile.width,
+        widths: widths,
+        height: section.settings.image_mobile.height,
         alt: '',
         class: 'hero__image',
         sizes: sizes
@@ -240,7 +271,7 @@
     {%- endif -%}
     <div
       class="hero__media-wrapper"
-      style="--hero-media-count: {{ media_count }};{%- if section.settings.image_1 != blank -%} --hero-media-aspect-ratio: {{ section.settings.image_1.aspect_ratio }};{% endif %}"
+      style="--hero-media-count: {{ media_count }}; padding-top: {{ section.settings.padding-block-start }}px; {%- if section.settings.image_1 != blank -%} --hero-media-aspect-ratio: {{ section.settings.image_1.aspect_ratio }};{% endif %}"
     >
       {% liquid
         if section.settings.toggle_overlay
@@ -531,6 +562,15 @@
       "id": "video_2",
       "label": "t:settings.video",
       "visible_if": "{{ section.settings.media_type_2 == 'video' }}"
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "t:settings.image",
     },
     {
       "type": "header",

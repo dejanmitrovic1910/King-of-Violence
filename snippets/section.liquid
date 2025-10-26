@@ -5,6 +5,10 @@
   @param {string} children - The children of the section
 {%- enddoc -%}
 
+{% assign email_wrapper_enable = false %}
+{% if section.settings.email_wrapper %}
+  {% assign email_wrapper_enable = true %}
+{% endif %}
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
   class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
@@ -60,7 +64,13 @@
       "
       data-testid="section-content"
     >
-      {{ children }}
+      {% if email_wrapper_enable %}
+        <div class="email-wrapper">
+          {{ children }}
+        </div>
+      {% else %}
+        {{ children }}
+      {% endif %}
     </div>
   </div>
 </div>

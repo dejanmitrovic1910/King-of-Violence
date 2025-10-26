@@ -1,10 +1,8 @@
-
-
 {% capture children %}
   {% content_for 'blocks' %}
 {% endcapture %}
 
-{% render 'section', section: section, children: children %}
+{% render 'section', section: section, children: children, email_wrapper: true %}
 
 {% schema %}
 {

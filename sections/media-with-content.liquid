@@ -14,7 +14,7 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
-  class="section section--{{ section.settings.section_width }} disable-section-top-offset media-with-content color-{{ section.settings.color_scheme }} spacing-style {{ media_class_modifier }}"
+  class="section section--{{ section.settings.section_width }} disable-section-top-offset media-with-content color-{{ section.settings.color_scheme }} spacing-style {{ media_class_modifier }} {% if section.settings.media_width == 'full' %}section--full-width-media__container{% endif %}"
   data-testid="media-with-content"
   style="
     {%- render 'spacing-style', settings: section.settings %}
