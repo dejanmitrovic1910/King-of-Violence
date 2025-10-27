@@ -36,6 +36,28 @@
       "visible_if": "{{ block.settings.media_type == 'image' }}"
     },
     {
+      "type": "select",
+      "id": "mobile_image_enable",
+      "label": "Mobile Image",
+      "options": [
+        {
+          "value": "no",
+          "label": "No"
+        },
+        {
+          "value": "yes",
+          "label": "Yes"
+        }
+      ],
+      "default": "no"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image",
+      "visible_if": "{{ block.settings.mobile_image_enable == 'yes' }}"
+    },
+    {
       "type": "url",
       "id": "link",
       "label": "t:settings.link",

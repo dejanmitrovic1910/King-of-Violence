@@ -18,6 +18,12 @@
   if block_settings.media_type == 'video'
     assign show_video = true
   endif
+  assign media-block__media--desktop = 'sss'
+  assign show_mobile_image = false
+  if block_settings.mobile_image_enable == 'yes' and block_settings.mobile_image != blank
+    assign show_mobile_image = true
+    assign media-block__media--desktop = 'media-block__media--desktop'
+  endif
 %}
 
 <div
@@ -40,11 +46,19 @@
   {%- if show_image -%}
     {% capture image_tag %}
       {% if block_settings.image != blank %}
+        {% assign media_classes = 'media-block__media border-style ' | append: media-block__media--desktop %}
         {% render 'image',
           image: block_settings.image,
-          class: 'media-block__media border-style',
+          class: media_classes,
           unset_image_tag: unset_image_tag
         %}
+        {% if show_mobile_image %}
+          {% render 'image',
+            image: block_settings.mobile_image,
+            class: 'media-block__media border-style media-block__media--mobile',
+            unset_image_tag: unset_image_tag
+          %}
+        {% endif %}
       {% else %}
         <div class="placeholder-image media-block__media border-style">
           {{ 'detailed-apparel-1' | placeholder_svg_tag: 'hero__image' }}

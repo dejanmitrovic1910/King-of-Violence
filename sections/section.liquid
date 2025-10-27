@@ -1,8 +1,10 @@
 {% capture children %}
   {% content_for 'blocks' %}
 {% endcapture %}
-
-{% render 'section', section: section, children: children, email_wrapper: true %}
+<script>
+  console.log("children", {{ blocks | json }});
+</script>
+{% render 'section', section: section, children: children %}
 
 {% schema %}
 {
@@ -416,6 +418,18 @@
       "step": 1,
       "unit": "px",
       "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "email_wrapper",
+      "label": "Email Wrapper",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "identifier",
+      "label": "Identifier",
+      "default": "custom-section"
     }
   ],
   "presets": [

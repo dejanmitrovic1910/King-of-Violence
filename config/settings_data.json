@@ -9,6 +9,10 @@
  */
 {
   "current": {
+    "logo": "shopify://shop_images/block-letter-logo.png",
+    "logo_inverse": "shopify://shop_images/white-logo.png",
+    "logo_height": 42,
+    "logo_height_mobile": 28,
     "type_body_font": "geist_n4",
     "type_subheading_font": "geist_n5",
     "type_heading_font": "geist_n6",
@@ -57,8 +61,6 @@
     "input_border_width": 1,
     "inputs_border_radius": 8,
     "type_preset": "paragraph",
-    "logo_height": 36,
-    "logo_height_mobile": 28,
     "popover_border_radius": 8,
     "popover_border": "none",
     "product_corner_radius": 2,
@@ -70,6 +72,7 @@
     "variant_button_border_width": 1,
     "variant_button_radius": 2,
     "variant_button_width": "equal-width-buttons",
+    "content_for_index": [],
     "color_schemes": {
       "scheme-1": {
         "settings": {

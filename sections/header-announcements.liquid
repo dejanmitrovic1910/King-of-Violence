@@ -10,6 +10,7 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <aside
+  id="announcement-bar"
   class="announcement-bar spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
   style="{% render 'spacing-padding', settings: section.settings %}; --border-bottom-width: {{ section.settings.divider_width }}px;"
 >
@@ -217,3 +218,15 @@
   ]
 }
 {% endschema %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const bar = document.getElementById('announcement-bar');
+    console.log('Bar:', bar);
+    if (bar) {
+      const height = bar.offsetHeight;
+      document.documentElement.style.setProperty('--announcement-bar-height', height + 'px');
+      console.log('Announcement bar height:', height);
+    }
+  });
+</script>

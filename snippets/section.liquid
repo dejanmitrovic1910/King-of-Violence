@@ -32,7 +32,7 @@
      {% endif %}
   "
 >
-  <div class="custom-section-background">
+  <div class="custom-section-background {% if email_wrapper_enable %}email-wrapper-background{% endif %}">
     {% render 'background-media',
       background_media: section.settings.background_media,
       background_video: section.settings.video,

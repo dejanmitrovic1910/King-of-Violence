@@ -6,9 +6,10 @@
   top:0;
   right: 0;
   height: 100%;
+  width: 70%;
 }
 
-@media only screen and (max-width: 586px) {
+/* @media only screen and (max-width: 586px) {
     .hero__container .hero__media-wrapper .hero__image--mobile{
         display: block;
     }
@@ -23,7 +24,7 @@
     .hero__container .hero__media-wrapper img:not(.hero__image--mobile){
         display: block;
     }
-}
+} */
 
 .email-wrapper {
     background: rgba(255, 255, 255, 0.35);
@@ -35,3 +36,75 @@
     padding: 32px 64px;
     color: white;
 }
+
+.email-wrapper-background.custom-section-background img{
+    filter: blur(2px);
+}
+
+.hero__container rte-formatter h1{
+    margin: 0;
+}
+
+footer .details-content li a {
+    color: white;
+    font-size: 19px;
+    text-decoration: underline;
+}
+
+.editorial h1,
+.editorial h2,
+.editorial h3,
+.editorial h4,
+.editorial h5,
+.editorial h6,
+.editorial p,
+.editorial a{
+    color: white !important;
+}
+.editorial rte-formatter h1:first-child,
+.editorial rte-formatter h2:first-child,
+.editorial rte-formatter h3:first-child,
+.editorial rte-formatter h4:first-child,
+.editorial rte-formatter h5:first-child,
+.editorial rte-formatter h6:first-child{
+    margin : 0;
+}
+@media screen and (min-width: 768px) {
+    .media-block__media--desktop{
+        display: block;
+    }
+    .media-block__media--mobile{
+        display: none;
+    }
+}
+@media screen and (max-width: 767px) {
+    .media-block__media--desktop{
+        display: none;
+    }
+    .media-block__media--mobile{
+        display: block;
+    }
+    .section--full-width-media__container div:nth-of-type(2) {
+        position: relative;
+        width: 100%;
+    }
+    .editorial div:nth-of-type(2) {
+        background-color: black;
+    }
+    .editorial * {
+        width: 100%;
+        text-align: center !important;
+        min-width: 100%;
+    }
+}
+
+#header-group div:nth-of-type(1) {
+    z-index: 2 !important;
+}
+
+.hero__container .button-link{
+    padding: 15px 25px;
+    border: 1px solid white;
+}
+
+#header-component[data-sticky-state="inactive"]
