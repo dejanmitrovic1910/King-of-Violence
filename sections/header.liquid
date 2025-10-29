@@ -1086,3 +1086,22 @@
   "presets": []
 }
 {% endschema %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const header = document.getElementById('header-component');
+    if (!header) return;
+  
+    function updateHeight() {
+      const height = header.offsetHeight;
+      document.documentElement.style.setProperty('--header-height', height + 'px');
+    }
+  
+    updateHeight();
+  
+    window.addEventListener('resize', updateHeight);
+  
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(bar);
+  });
+  
+</script>

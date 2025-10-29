@@ -71,7 +71,9 @@
         "overlay_style": "solid",
         "gradient_direction": "to top",
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "email_wrapper": false,
+        "identifier": "custom-section"
       }
     },
     "section_3gzURG": {
@@ -159,6 +161,7 @@
         "text_chFeBH",
         "email_signup_XTkxxc"
       ],
+      "disabled": true,
       "name": "t:names.email_signup",
       "settings": {
         "content_direction": "column",
@@ -186,7 +189,9 @@
         "overlay_style": "solid",
         "gradient_direction": "to top",
         "padding-block-start": 70,
-        "padding-block-end": 76
+        "padding-block-end": 76,
+        "email_wrapper": true,
+        "identifier": "custom-section"
       }
     },
     "footer": {
@@ -221,8 +226,10 @@
         "section_width": "page-width",
         "gap": 0,
         "color_scheme": "",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "padding-block-start": 100,
+        "padding-block-end": 100,
+        "background_image": "shopify://shop_images/aifaceswap-798f85de2a2930a53f73b1a2aed74570.jpg",
+        "background_image_position": "cover"
       }
     },
     "utilities": {
@@ -272,6 +279,7 @@
         "footer_policy_list_wrEqbN",
         "social_links_F94qGb"
       ],
+      "disabled": true,
       "settings": {
         "section_width": "page-width",
         "gap": 24,

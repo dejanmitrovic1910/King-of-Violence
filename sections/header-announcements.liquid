@@ -222,11 +222,19 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const bar = document.getElementById('announcement-bar');
-    console.log('Bar:', bar);
-    if (bar) {
+    if (!bar) return;
+  
+    function updateHeight() {
       const height = bar.offsetHeight;
       document.documentElement.style.setProperty('--announcement-bar-height', height + 'px');
-      console.log('Announcement bar height:', height);
     }
+  
+    updateHeight();
+  
+    window.addEventListener('resize', updateHeight);
+  
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(bar);
   });
+  
 </script>

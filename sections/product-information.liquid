@@ -44,6 +44,7 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
+  id="product-information"
   class="product-information section section--{{ content_width }} spacing-style color-{{ section.settings.color_scheme }} relative"
   style="{% render 'spacing-style', settings: section.settings %} --gap: {{ section.settings.gap }}px;"
 >
@@ -52,7 +53,7 @@
     {% render 'skip-to-content-link', href: product_href, text: 'accessibility.skip_to_product_info' %}
   {% endif %}
   <div
-    class="{{ product_grid_class }}"
+    class="{{ product_grid_class }} product-information__content"
     data-product-grid-content
   >
     {% assign render_order_array = render_order | split: ',' %}
@@ -153,7 +154,7 @@
         }
 
         &:has(.media-gallery--extend) {
-          grid-column: 1 / 3;
+          grid-column: 2 / 3;
         }
       }
 

@@ -17,12 +17,38 @@
           "name": "t:names.spacer",
           "settings": {
             "size": "percent",
-            "percent_size": 0,
+            "percent_size": 81,
             "pixel_size": 0,
-            "custom_mobile_size": false,
+            "custom_mobile_size": true,
             "size_mobile": "percent",
-            "percent_size_mobile": 100,
+            "percent_size_mobile": 81,
             "pixel_size_mobile": 120
+          },
+          "blocks": {}
+        },
+        "text_KVQA8J": {
+          "type": "text",
+          "name": "t:names.text",
+          "settings": {
+            "text": "<h1>ENTER THE KINGDOM. </h1><h1>CLAIM YOUR CROWN.</h1>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {}
         },
@@ -44,14 +70,14 @@
       },
       "block_order": [
         "spacer_iqNMWF",
+        "text_KVQA8J",
         "button_3cL8kq"
       ],
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "video",
         "media_type_2": "image",
-        "image_2": "shopify://shop_images/Hero_section.avif",
-        "image_mobile": "shopify://shop_images/Hero_section-solo.jpg",
+        "image_2": "shopify://shop_images/Hero_section_resoultion_improved.jpg",
         "link": "shopify://collections/all",
         "open_in_new_tab": false,
         "content_direction": "column",
@@ -84,6 +110,7 @@
           "static": true,
           "settings": {
             "media_type": "image",
+            "mobile_image_enable": "no",
             "link": "",
             "video_loop": true,
             "video_autoplay": false,
@@ -230,7 +257,8 @@
         "extend_media": true,
         "color_scheme": "scheme-1",
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "identifier": "custom-section"
       }
     },
     "collection_list_mcURmi": {
@@ -551,7 +579,9 @@
         "overlay_style": "solid",
         "gradient_direction": "to top",
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "email_wrapper": false,
+        "identifier": "custom-section"
       }
     },
     "divider_WDCL3k": {
@@ -813,7 +843,9 @@
           "static": true,
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/ChatGPT_Image_Oct_24_2025_06_59_26_PM.png",
+            "image": "shopify://shop_images/Belt_long_b49a62d2-ff27-43cb-8ef1-42f6bacc1cd4.jpg",
+            "mobile_image_enable": "yes",
+            "mobile_image": "shopify://shop_images/belt_mobile2.jpg",
             "link": "",
             "video_loop": true,
             "video_autoplay": false,
@@ -828,14 +860,14 @@
           "settings": {
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "center",
-            "gap": 24
+            "gap": 14
           },
           "blocks": {
             "text_CgU6Gr": {
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<h6>Instant classics </h6>",
+                "text": "<h6>King of Violence</h6>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -861,7 +893,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h2>Meet the essentials of a better wardrobe </h2>",
+                "text": "<h2>ENTER THE KINGDOM. </h2><h2>CLAIM YOUR CROWN.</h2>",
                 "width": "fit-content",
                 "max_width": "narrow",
                 "alignment": "left",
@@ -887,7 +919,7 @@
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<p>Designed in styles and tones that endure the passing of time and the passing of fickle trends. </p><p>Built for longevity and rooted in practicality, these pieces accompany you through every journey - whether close to home or around the world.</p>",
+                "text": "<p>Champions are made in the moments you don’t see. Whether you’re walking the streets or stepping into the cage, it’s the same fight. </p><p>Every day. Every challenge. It’s not just about how you fight—it’s about how you live.<br/><br/></p>",
                 "width": "fit-content",
                 "max_width": "narrow",
                 "alignment": "left",
@@ -937,12 +969,13 @@
       "settings": {
         "media_position": "left",
         "media_width": "full",
-        "media_height": "80svh",
+        "media_height": "50svh",
         "section_width": "full-width",
         "extend_media": false,
         "color_scheme": "scheme-2",
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "identifier": "editorial"
       }
     },
     "collection_links_hdqKQM": {
@@ -1224,7 +1257,180 @@
         "overlay_style": "solid",
         "gradient_direction": "to top",
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "email_wrapper": false,
+        "identifier": "custom-section"
+      }
+    },
+    "section_GzH6pg": {
+      "type": "section",
+      "blocks": {
+        "text_7RrLjk": {
+          "type": "text",
+          "name": "t:names.heading",
+          "settings": {
+            "text": "<h2>JOIN THE FIGHT</h2>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_V8XRwj": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Stay in our corner and you’ll be the first to know when we unlock the next fighter capsule honoring the legends of combat sports. <strong>Enter your email for 10% off your next order!</strong></p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "paragraph",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "email_signup_QLNMFD": {
+          "type": "email-signup",
+          "settings": {
+            "width": "custom",
+            "custom_width": 100,
+            "inherit_color_scheme": true,
+            "heading": "",
+            "heading_preset": "h3",
+            "color_scheme": "",
+            "border_style": "all",
+            "border_width": 1,
+            "border_radius": 100,
+            "input_type_preset": "paragraph",
+            "style_class": "button-unstyled",
+            "display_type": "arrow",
+            "label": "Sign up",
+            "integrated_button": true,
+            "button_type_preset": "paragraph",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_7RrLjk",
+        "text_V8XRwj",
+        "email_signup_QLNMFD"
+      ],
+      "name": "t:names.email_signup",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "scheme-2",
+        "background_media": "image",
+        "video_position": "cover",
+        "background_image": "shopify://shop_images/Ufc_S_Wallpaper_Id.jpg",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 40,
+        "padding-block-end": 40,
+        "email_wrapper": true,
+        "identifier": "custom-section"
+      }
+    },
+    "marquee_yqAABQ": {
+      "type": "marquee",
+      "blocks": {
+        "icon_dAwrWC": {
+          "type": "icon",
+          "name": "t:names.icon",
+          "settings": {
+            "icon": "none",
+            "image_upload": "shopify://shop_images/favicon_9b700279-055b-48c2-b043-677bfeff8b08.png",
+            "width": 24,
+            "link": "",
+            "open_in_new_tab": false
+          },
+          "blocks": {}
+        },
+        "text_BrD7Qf": {
+          "type": "text",
+          "settings": {
+            "text": "<p>ENTER THE KINGDOM.CLAIM YOUR CROWN.</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "tight",
+            "letter_spacing": "tight",
+            "case": "none",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "icon_dAwrWC",
+        "text_BrD7Qf"
+      ],
+      "name": "t:names.marquee_section",
+      "settings": {
+        "movement_direction": "normal",
+        "color_scheme": "",
+        "padding-block-start": 16,
+        "padding-block-end": 16,
+        "gap_between_elements": 24
       }
     }
   },
@@ -1238,6 +1444,8 @@
     "product_list_4jqyPz",
     "media_with_content_aF6TTD",
     "collection_links_hdqKQM",
-    "section_C6LC7D"
+    "section_C6LC7D",
+    "section_GzH6pg",
+    "marquee_yqAABQ"
   ]
 }

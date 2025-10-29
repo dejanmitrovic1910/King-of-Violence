@@ -107,4 +107,17 @@ footer .details-content li a {
     border: 1px solid white;
 }
 
-#header-component[data-sticky-state="inactive"]
+/* #header-component[data-sticky-state="inactive"] */
+
+#product-information {
+    margin-top: calc(var(--header-height) + var(--announcement-bar-height) + 20px);
+    padding: 0;
+}
+#product-information media-gallery {
+    margin : 0;
+}
+
+#product-information .product-information__content {
+    max-width: 1260px;
+    margin: auto;
+}
