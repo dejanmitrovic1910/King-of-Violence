@@ -1,3 +1,20 @@
+@font-face {
+    font-family: 'PermanentMarker';
+    src: url("{{ 'PermanentMarker-Regular.woff2' | asset_url }}") format("woff2");
+    font-style: normal;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+body
+{
+  font-family: "PermanentMarker" !important;
+}
+
 .section--full-width-media__container {
   display: block;
 }
@@ -117,7 +134,14 @@ footer .details-content li a {
     margin : 0;
 }
 
-#product-information .product-information__content {
-    max-width: 1260px;
-    margin: auto;
+@media screen and (min-width: 1260px) {
+    #product-information .product-information__content {
+        max-width: 1260px;
+        margin: auto;
+    }
+}
+
+
+.hero-marquee{
+    border-bottom: 3px solid black;
 }
