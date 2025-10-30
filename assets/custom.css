@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'PermanentMarker';
-    src: url("{{ 'PermanentMarker-Regular.woff2' | asset_url }}") format("woff2");
+    src: url("PermanentMarker.woff2") format("woff2");
     font-style: normal;
 }
 
@@ -9,8 +9,7 @@ h2,
 h3,
 h4,
 h5,
-h6,
-body
+h6
 {
   font-family: "PermanentMarker" !important;
 }
@@ -142,6 +141,11 @@ footer .details-content li a {
 }
 
 
-.hero-marquee{
+.hero-marquee, .select-hero-title{
     border-bottom: 3px solid black;
+}
+
+.footer-marquee {
+    border-top: 3px solid rgb(254 201 9);
+    border-bottom: 3px solid rgb(254 201 9)
 }

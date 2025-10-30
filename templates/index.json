@@ -102,6 +102,48 @@
         "padding-block-end": 48
       }
     },
+    "marquee_ND8ixP": {
+      "type": "marquee",
+      "blocks": {
+        "text_DJxxjP": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Every punch tells a story • Every round tests a soul • This is where warriors are made — welcome to the UFC</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "1.25rem",
+            "line_height": "tight",
+            "letter_spacing": "tight",
+            "case": "none",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_DJxxjP"
+      ],
+      "name": "t:names.marquee_section",
+      "settings": {
+        "movement_direction": "normal",
+        "color_scheme": "",
+        "padding-block-start": 15,
+        "padding-block-end": 15,
+        "gap_between_elements": 24,
+        "identifier": "hero-marquee"
+      }
+    },
     "media_with_content_GRV6iJ": {
       "type": "media-with-content",
       "blocks": {
@@ -110,6 +152,7 @@
           "static": true,
           "settings": {
             "media_type": "image",
+            "image": "shopify://shop_images/Ufc_Ultimate_Fighting_Championship_Logo_Wallpaper_Background.jpg",
             "mobile_image_enable": "no",
             "link": "",
             "video_loop": true,
@@ -172,7 +215,7 @@
                   "type": "text",
                   "name": "Heading",
                   "settings": {
-                    "text": "<p>New this season</p>",
+                    "text": "<p>The UFC isn’t just a sport</p>",
                     "width": "fit-content",
                     "max_width": "narrow",
                     "alignment": "left",
@@ -198,7 +241,7 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>A collection of inspired silhouettes crafted from the finest fibers.</p>",
+                    "text": "<p>It’s the ultimate test of strength, skill, and heart. Every fight is raw, real, and unpredictable, where athletes push past limits and define what greatness means. <br/></p>",
                     "width": "fit-content",
                     "max_width": "narrow",
                     "alignment": "left",
@@ -227,7 +270,7 @@
                     "label": "Shop now",
                     "link": "shopify://collections/all",
                     "open_in_new_tab": false,
-                    "style_class": "button-secondary",
+                    "style_class": "button",
                     "width": "fit-content",
                     "custom_width": 100,
                     "width_mobile": "fit-content",
@@ -259,6 +302,115 @@
         "padding-block-start": 0,
         "padding-block-end": 0,
         "identifier": "custom-section"
+      }
+    },
+    "section_GYXtdL": {
+      "type": "section",
+      "blocks": {
+        "text_L339TX": {
+          "type": "text",
+          "name": "t:names.heading",
+          "settings": {
+            "text": "<h2>Select your hero</h2>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_mqMthE": {
+          "type": "text",
+          "name": "t:names.text",
+          "disabled": true,
+          "settings": {
+            "text": "<p>We make things that work better and last longer. Our products solve real problems with clean design and honest materials.</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "button_wHUca7": {
+          "type": "button",
+          "name": "t:names.button",
+          "disabled": true,
+          "settings": {
+            "label": "Shop now",
+            "link": "shopify://collections/all",
+            "open_in_new_tab": false,
+            "style_class": "button",
+            "width": "fit-content",
+            "custom_width": 100,
+            "width_mobile": "fit-content",
+            "custom_width_mobile": 100
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_L339TX",
+        "text_mqMthE",
+        "button_wHUca7"
+      ],
+      "name": "t:names.rich_text_section",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 25,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 6,
+        "padding-block-end": 4,
+        "email_wrapper": false,
+        "identifier": "select-hero-title"
       }
     },
     "collection_list_mcURmi": {
@@ -375,7 +527,11 @@
       },
       "name": "Collection list",
       "settings": {
-        "collection_list": [],
+        "collection_list": [
+          "justing-gaethje",
+          "chuck-liddell",
+          "chris-camozzi"
+        ],
         "layout_type": "grid",
         "carousel_on_mobile": true,
         "columns": 3,
@@ -432,7 +588,8 @@
         "color_scheme": "scheme-5",
         "padding-block-start": 20,
         "padding-block-end": 20,
-        "gap_between_elements": 52
+        "gap_between_elements": 52,
+        "identifier": "custom-marquee"
       }
     },
     "section_8zY7P4": {
@@ -1430,13 +1587,16 @@
         "color_scheme": "",
         "padding-block-start": 16,
         "padding-block-end": 16,
-        "gap_between_elements": 24
+        "gap_between_elements": 24,
+        "identifier": "custom-marquee"
       }
     }
   },
   "order": [
     "hero_rhMed7",
+    "marquee_ND8ixP",
     "media_with_content_GRV6iJ",
+    "section_GYXtdL",
     "collection_list_mcURmi",
     "marquee_izzYrQ",
     "section_8zY7P4",
