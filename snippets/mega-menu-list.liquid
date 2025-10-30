@@ -49,6 +49,7 @@
     endif
   endif
 
+  
   if menu_content_type == 'featured_collections'
     if parent_link.type == 'collection_link'
       assign collection_handles = parent_link.object.handle | append: ','
@@ -271,6 +272,7 @@
   }
 {% endstyle %}
 
+
 {% case menu_content_type %}
   {% when 'featured_products' %}
     {%- capture image_sizes -%}
@@ -307,7 +309,7 @@
       </ul>
     </span>
   {% when 'featured_collections' %}
-    {% assign collection_handles = collection_handles | split: ',' | uniq %}
+    {% assign collection_handles = collection_handles | remove: 'all,' | split: ',' | uniq %}
     {%- capture image_sizes -%}
       {%- render 'util-mega-menu-img-sizes-attr',
         menu_content_type: 'featured_collections',
