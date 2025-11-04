@@ -272,20 +272,6 @@
               },
               "blocks": {}
             },
-            "variant_picker_xqW6ee": {
-              "type": "variant-picker",
-              "name": "t:names.product_variant_picker",
-              "settings": {
-                "variant_style": "buttons",
-                "show_swatches": true,
-                "alignment": "left",
-                "padding-block-start": 0,
-                "padding-block-end": 8,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "buy_buttons_NmYpFG": {
               "type": "buy-buttons",
               "name": "t:names.product_buy_buttons",
@@ -322,6 +308,15 @@
                 }
               },
               "block_order": []
+            },
+            "rebuy_personalization_engine_rebuy_widget_TPhLhB": {
+              "type": "shopify://apps/rebuy-personalization-engine/blocks/rebuy-widget/a26ae9b9-933b-40bf-bbc6-bf1220bbc4dc",
+              "settings": {
+                "enabled": true,
+                "id": "",
+                "product_id_enabled": true,
+                "collection_id_enabled": false
+              }
             },
             "accordion_iWQwkW": {
               "type": "accordion",
@@ -472,8 +467,8 @@
             "product_description_nEcbgc",
             "product_inventory_RQbaBF",
             "variant_picker_3Nha6V",
-            "variant_picker_xqW6ee",
             "buy_buttons_NmYpFG",
+            "rebuy_personalization_engine_rebuy_widget_TPhLhB",
             "accordion_iWQwkW"
           ]
         }
@@ -668,6 +663,7 @@
       "block_order": [
         "text_hT9TEm"
       ],
+      "disabled": true,
       "name": "t:names.product_recommendations",
       "settings": {
         "product": "{{ closest.product }}",
@@ -686,6 +682,94 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 24,
         "padding-block-end": 24
+      }
+    },
+    "176220124184c1bd3a": {
+      "type": "_blocks",
+      "blocks": {
+        "rebuy_personalization_engine_rebuy_widget_QEeWVX": {
+          "type": "shopify://apps/rebuy-personalization-engine/blocks/rebuy-widget/a26ae9b9-933b-40bf-bbc6-bf1220bbc4dc",
+          "settings": {
+            "enabled": true,
+            "id": "251310",
+            "product_id_enabled": true,
+            "collection_id_enabled": false
+          }
+        }
+      },
+      "block_order": [
+        "rebuy_personalization_engine_rebuy_widget_QEeWVX"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "1762201285cc4b2323": {
+      "type": "_blocks",
+      "blocks": {
+        "rebuy_personalization_engine_rebuy_widget_37QKXw": {
+          "type": "shopify://apps/rebuy-personalization-engine/blocks/rebuy-widget/a26ae9b9-933b-40bf-bbc6-bf1220bbc4dc",
+          "settings": {
+            "enabled": true,
+            "id": "251297",
+            "product_id_enabled": true,
+            "collection_id_enabled": false
+          }
+        }
+      },
+      "block_order": [
+        "rebuy_personalization_engine_rebuy_widget_37QKXw"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     },
     "collection_list_RGddHj": {
@@ -825,6 +909,8 @@
   "order": [
     "product-information",
     "product_recommendations_UeDczP",
+    "176220124184c1bd3a",
+    "1762201285cc4b2323",
     "collection_list_RGddHj"
   ]
 }

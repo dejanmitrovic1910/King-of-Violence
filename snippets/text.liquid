@@ -50,7 +50,7 @@
 
 {% capture attributes %}
   class="{{ class }} spacing-style text-block text-block--{{ block.id }} {{ block_settings.type_preset }}
-    {{ text_block_classes }}
+    {{ text_block_classes }} {{ block.settings.identifier }}
   "
 
   style="
@@ -82,11 +82,11 @@
 %}
 
 {% if fallback_text != blank and plain_text == blank %}
-  <div {{ attributes }}>
+  <div {{ attributes }} >
     {{ fallback_text }}
   </div>
 {% elsif plain_text != blank %}
-  <{{ element }} {{ attributes }}>
+  <{{ element }} {{ attributes }} >
     {{ block.settings.text }}
   </{{ element }}>
 {% endif %}

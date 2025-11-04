@@ -3,15 +3,36 @@
     src: url("PermanentMarker.woff2") format("woff2");
     font-style: normal;
 }
+@font-face {
+    font-family: 'permanent-marker';
+    src: url("PermanentMarker.woff2") format("woff2");
+    font-style: normal;
+}
+@font-face {
+    font-family: 'DancingScript';
+    src: url("DancingScript.woff2") format("woff2");
+    font-style: normal;
+}
+@font-face {
+    font-family: 'dancing-script';
+    src: url("DancingScript.woff2") format("woff2");
+    font-style: normal;
+}
 
 h1,
 h2,
 h3,
 h4,
 h5,
-h6
+h6,
+.permanent-marker
 {
   font-family: "PermanentMarker" !important;
+}
+
+.dancing-script{
+    font-family: "DancingScript" !important;
+    font-size: 24px;
 }
 
 .section--full-width-media__container {
@@ -144,30 +165,56 @@ footer .details-content li a {
 }
 
 
-.hero-marquee, .select-hero-title{
+.select-hero-title{
     border-bottom: 3px solid black;
 }
 
-.footer-marquee {
+.footer-marquee, .hero-marquee {
     border-top: 3px solid rgb(254 201 9);
-    border-bottom: 3px solid rgb(254 201 9)
+    border-bottom: 3px solid rgb(254 201 9);
+    box-shadow: 0 -3px 19px -5px rgb(254 201 9),
+                0 3px 14px -5px rgb(254 201 9);
+    z-index: 99;
 }
 
 .youtube-video-dashboard {
-    padding-top: 70px;
-    background-color: rgb(183 178 171);
+    /* padding-top: 70px; */
+    background-color: rgb(183 178 171) !important;
 }
 
-.youtube-video-dashboard .custom-section-content{
-    border-radius: 15px;
+.youtube-video-dashboard .custom-section-content img{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     overflow: hidden;
 }
-.youtube-video-dashboard .group-block-content{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    padding: 20px;
+@media only screen and (max-width: 768px) {
+    .youtube-video-dashboard .group-block-content{
+        grid-template-columns: repeat(2,1fr);
+        display: grid;
+        gap: 1rem;
+        padding: 20px;
+    }
+}
+@media only screen and (min-width: 769px) {
+    .youtube-video-dashboard .group-block-content{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        padding: 20px;
+    }
 }
 .youtube-video-dashboard .section-content-wrapper{
     gap: 0 !important;
+}
+
+.youtube-video-dashboard .group-block{
+    background-color: rgb(51 51 51);
+}
+@media only screen and (max-width: 749px) {
+    .ufc-section .group-block-content{
+        align-items: center;
+    }
+    .ufc-section .group-block-content .ufc-text{
+        align-items: center;
+    }
 }
