@@ -114,9 +114,9 @@
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
-                    "type_preset": "h2",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
+                    "type_preset": "custom",
+                    "font": "permanent-marker",
+                    "font_size": "2rem",
                     "line_height": "normal",
                     "letter_spacing": "normal",
                     "case": "none",
@@ -309,15 +309,6 @@
               },
               "block_order": []
             },
-            "rebuy_personalization_engine_rebuy_widget_TPhLhB": {
-              "type": "shopify://apps/rebuy-personalization-engine/blocks/rebuy-widget/a26ae9b9-933b-40bf-bbc6-bf1220bbc4dc",
-              "settings": {
-                "enabled": true,
-                "id": "",
-                "product_id_enabled": true,
-                "collection_id_enabled": false
-              }
-            },
             "accordion_iWQwkW": {
               "type": "accordion",
               "name": "t:names.accordion",
@@ -339,6 +330,7 @@
               "blocks": {
                 "accordion_row_TbgNUF": {
                   "type": "_accordion-row",
+                  "disabled": true,
                   "settings": {
                     "heading": "Product Details",
                     "open_by_default": false,
@@ -367,7 +359,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "identifier": "custom-text"
                       },
                       "blocks": {}
                     }
@@ -388,7 +381,7 @@
                     "text_wbGpVU": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>To maintain the beauty and integrity of your purchase, we recommend treating it with care. Simple maintenance practices, such as gentle washing and proper storage, can effectively preserve the longevity of your favorites. We encourage you to refer to the care instructions included with each item, designed to help you keep your purchase in top condition.</p>",
+                        "text": "<p>Keep your gear fight-ready.<br/>Every piece in our collection is built for performance and made to last — but true warriors know that maintenance matters. Wash gently, air dry, and store with care to keep your apparel in peak condition. Follow the care instructions on each item to preserve the comfort, strength, and style that define our brand. Train hard. Keep your gear harder.<br/><br/></p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -406,7 +399,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "identifier": "custom-text"
                       },
                       "blocks": {}
                     }
@@ -427,7 +421,7 @@
                     "text_hYWKPd": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Our products are crafted to fit true to size, ensuring that you can confidently select your usual size with ease. Whether you’re looking for a relaxed or tailored fit, our designs are made to complement your unique shape and style.</p>",
+                        "text": "<p>Engineered for movement. Designed for confidence.</p><p><br/>Our apparel is crafted to fit true to size with an athletic silhouette that moves with you — in the gym, in the cage, or on the street. Choose your regular size for a standard fit, or size up for a more relaxed feel. Every piece is designed to complement your form and fuel your performance.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -445,7 +439,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "identifier": "custom-text"
                       },
                       "blocks": {}
                     }
@@ -460,6 +455,15 @@
                 "accordion_row_XMFatY",
                 "accordion_row_kmdwc8"
               ]
+            },
+            "rebuy_personalization_engine_rebuy_widget_wJnQ6K": {
+              "type": "shopify://apps/rebuy-personalization-engine/blocks/rebuy-widget/a26ae9b9-933b-40bf-bbc6-bf1220bbc4dc",
+              "settings": {
+                "enabled": true,
+                "id": "251440",
+                "product_id_enabled": true,
+                "collection_id_enabled": false
+              }
             }
           },
           "block_order": [
@@ -468,8 +472,8 @@
             "product_inventory_RQbaBF",
             "variant_picker_3Nha6V",
             "buy_buttons_NmYpFG",
-            "rebuy_personalization_engine_rebuy_widget_TPhLhB",
-            "accordion_iWQwkW"
+            "accordion_iWQwkW",
+            "rebuy_personalization_engine_rebuy_widget_wJnQ6K"
           ]
         }
       },
@@ -509,7 +513,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         },
@@ -684,21 +689,24 @@
         "padding-block-end": 24
       }
     },
-    "176220124184c1bd3a": {
+    "1762201285cc4b2323": {
       "type": "_blocks",
       "blocks": {
-        "rebuy_personalization_engine_rebuy_widget_QEeWVX": {
+        "rebuy_personalization_engine_rebuy_widget_37QKXw": {
           "type": "shopify://apps/rebuy-personalization-engine/blocks/rebuy-widget/a26ae9b9-933b-40bf-bbc6-bf1220bbc4dc",
           "settings": {
             "enabled": true,
-            "id": "251310",
+            "id": "251297",
             "product_id_enabled": true,
             "collection_id_enabled": false
           }
         }
       },
       "block_order": [
-        "rebuy_personalization_engine_rebuy_widget_QEeWVX"
+        "rebuy_personalization_engine_rebuy_widget_37QKXw"
+      ],
+      "custom_css": [
+        ".shopify-app-block {width: 100%;}"
       ],
       "settings": {
         "content_direction": "column",
@@ -728,21 +736,24 @@
         "padding-block-end": 0
       }
     },
-    "1762201285cc4b2323": {
+    "1762222250c93aa7ca": {
       "type": "_blocks",
       "blocks": {
-        "rebuy_personalization_engine_rebuy_widget_37QKXw": {
+        "rebuy_personalization_engine_rebuy_widget_PNj4Gf": {
           "type": "shopify://apps/rebuy-personalization-engine/blocks/rebuy-widget/a26ae9b9-933b-40bf-bbc6-bf1220bbc4dc",
           "settings": {
             "enabled": true,
-            "id": "251297",
+            "id": "251429",
             "product_id_enabled": true,
             "collection_id_enabled": false
           }
         }
       },
       "block_order": [
-        "rebuy_personalization_engine_rebuy_widget_37QKXw"
+        "rebuy_personalization_engine_rebuy_widget_PNj4Gf"
+      ],
+      "custom_css": [
+        ".shopify-app-block {width: 100%;}"
       ],
       "settings": {
         "content_direction": "column",
@@ -775,6 +786,33 @@
     "collection_list_RGddHj": {
       "type": "collection-list",
       "blocks": {
+        "text_mjaHkA": {
+          "type": "text",
+          "name": "t:names.heading",
+          "settings": {
+            "text": "<h2>Select your Hero</h2>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "h2",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 20,
+            "padding-block-end": 20,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
+          },
+          "blocks": {}
+        },
         "static-collection-card": {
           "type": "_collection-card",
           "name": "t:names.collection_card",
@@ -884,12 +922,19 @@
           ]
         }
       },
+      "block_order": [
+        "text_mjaHkA"
+      ],
       "name": "Collection list",
       "settings": {
-        "collection_list": [],
-        "layout_type": "grid",
+        "collection_list": [
+          "chris-camozzi",
+          "chuck-liddell",
+          "justing-gaethje"
+        ],
+        "layout_type": "bento",
         "carousel_on_mobile": false,
-        "columns": 4,
+        "columns": 3,
         "mobile_columns": "2",
         "mobile_card_size": "60cqw",
         "columns_gap": 0,
@@ -898,19 +943,76 @@
         "max_collections": 4,
         "icons_style": "arrow",
         "icons_shape": "none",
-        "section_width": "full-width",
+        "section_width": "page-width",
         "gap": 0,
         "color_scheme": "",
         "padding-block-start": 0,
         "padding-block-end": 0
+      }
+    },
+    "marquee_mDnPjx": {
+      "type": "marquee",
+      "blocks": {
+        "icon_NmPApz": {
+          "type": "icon",
+          "name": "t:names.icon",
+          "settings": {
+            "icon": "price_tag",
+            "image_upload": "shopify://shop_images/favicon_9b700279-055b-48c2-b043-677bfeff8b08.png",
+            "width": 24,
+            "link": "",
+            "open_in_new_tab": false
+          },
+          "blocks": {}
+        },
+        "text_3cmGiq": {
+          "type": "text",
+          "settings": {
+            "text": "<p>ENTER THE KINGDOM • CLAIM YOUR CROWN</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "tight",
+            "letter_spacing": "tight",
+            "case": "none",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "icon_NmPApz",
+        "text_3cmGiq"
+      ],
+      "name": "t:names.marquee_section",
+      "settings": {
+        "movement_direction": "normal",
+        "color_scheme": "",
+        "padding-block-start": 16,
+        "padding-block-end": 16,
+        "gap_between_elements": 24,
+        "identifier": "footer-marquee"
       }
     }
   },
   "order": [
     "product-information",
     "product_recommendations_UeDczP",
-    "176220124184c1bd3a",
     "1762201285cc4b2323",
-    "collection_list_RGddHj"
+    "1762222250c93aa7ca",
+    "collection_list_RGddHj",
+    "marquee_mDnPjx"
   ]
 }

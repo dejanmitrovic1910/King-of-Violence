@@ -48,7 +48,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         },
@@ -126,7 +127,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         }
@@ -138,8 +140,8 @@
       "settings": {
         "movement_direction": "normal",
         "color_scheme": "",
-        "padding-block-start": 15,
-        "padding-block-end": 15,
+        "padding-block-start": 16,
+        "padding-block-end": 16,
         "gap_between_elements": 24,
         "identifier": "hero-marquee"
       }
@@ -166,7 +168,7 @@
           "type": "_content-without-appearance",
           "static": true,
           "settings": {
-            "horizontal_alignment_flex_direction_column": "center",
+            "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "center",
             "gap": 0
           },
@@ -215,7 +217,7 @@
                   "type": "text",
                   "name": "Heading",
                   "settings": {
-                    "text": "<p>The UFC isn’t just a sport</p>",
+                    "text": "<h3>The UFC isn’t just a sport</h3>",
                     "width": "fit-content",
                     "max_width": "narrow",
                     "alignment": "left",
@@ -233,7 +235,8 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "identifier": "custom-text"
                   },
                   "blocks": {}
                 },
@@ -241,12 +244,12 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>It’s the ultimate test of strength, skill, and heart. Every fight is raw, real, and unpredictable, where athletes push past limits and define what greatness means. <br/></p>",
-                    "width": "fit-content",
+                    "text": "<p>Champions are made in the moments you don’t see. Whether you’re walking the streets or stepping into the cage, it’s the same fight. Every day. Every challenge. It’s not just about how you fight—it’s about how you live.</p>",
+                    "width": "100%",
                     "max_width": "narrow",
                     "alignment": "left",
-                    "type_preset": "h2",
-                    "font": "var(--font-primary--family)",
+                    "type_preset": "dancing-script",
+                    "font": "var(--font-body--family)",
                     "font_size": "",
                     "line_height": "normal",
                     "letter_spacing": "normal",
@@ -259,7 +262,8 @@
                     "padding-block-start": 0,
                     "padding-block-end": 24,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "identifier": "ufc-text"
                   },
                   "blocks": {}
                 },
@@ -295,13 +299,13 @@
       "settings": {
         "media_position": "left",
         "media_width": "medium",
-        "media_height": "60svh",
+        "media_height": "auto",
         "section_width": "full-width",
         "extend_media": true,
         "color_scheme": "scheme-1",
         "padding-block-start": 0,
         "padding-block-end": 0,
-        "identifier": "custom-section"
+        "identifier": "ufc-section"
       }
     },
     "section_GYXtdL": {
@@ -326,10 +330,11 @@
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
+            "padding-block-start": 35,
+            "padding-block-end": 35,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         },
@@ -356,7 +361,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         },
@@ -407,8 +413,8 @@
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 6,
-        "padding-block-end": 4,
+        "padding-block-start": 0,
+        "padding-block-end": 0,
         "email_wrapper": false,
         "identifier": "select-hero-title"
       }
@@ -574,7 +580,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         }
@@ -695,7 +702,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "identifier": "custom-text"
               },
               "blocks": {}
             },
@@ -769,7 +777,7 @@
             "horizontal_alignment": "flex-start",
             "vertical_alignment": "center",
             "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
+            "horizontal_alignment_flex_direction_column": "center",
             "vertical_alignment_flex_direction_column": "center",
             "gap": 12,
             "width": "fill",
@@ -787,8 +795,8 @@
             "border_width": 1,
             "border_opacity": 100,
             "border_radius": 0,
-            "padding-block-start": 40,
-            "padding-block-end": 40,
+            "padding-block-start": 35,
+            "padding-block-end": 35,
             "padding-inline-start": 40,
             "padding-inline-end": 40
           },
@@ -797,7 +805,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h3>New Arrivals</h3>",
+                "text": "<h2>New Arrivals</h2>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -815,7 +823,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "identifier": "custom-text"
               },
               "blocks": {}
             }
@@ -982,11 +991,11 @@
         "columns": 4,
         "mobile_columns": "2",
         "mobile_card_size": "60cqw",
-        "columns_gap": 0,
+        "columns_gap": 24,
         "rows_gap": 36,
-        "icons_style": "none",
-        "icons_shape": "none",
-        "section_width": "full-width",
+        "icons_style": "arrow",
+        "icons_shape": "circle",
+        "section_width": "page-width",
         "horizontal_alignment": "flex-start",
         "gap": 0,
         "color_scheme": "scheme-1",
@@ -1044,7 +1053,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "identifier": "custom-text"
               },
               "blocks": {}
             },
@@ -1070,7 +1080,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 8,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "identifier": "custom-text"
               },
               "blocks": {}
             },
@@ -1096,7 +1107,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "identifier": "custom-text"
               },
               "blocks": {}
             },
@@ -1263,7 +1275,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "identifier": "custom-text"
               },
               "blocks": {}
             },
@@ -1361,7 +1374,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "identifier": "custom-text"
               },
               "blocks": {}
             },
@@ -1455,6 +1469,7 @@
           "disabled": true,
           "settings": {
             "source": "uploaded",
+            "video_url": "",
             "video_autoplay": false,
             "video_loop": true,
             "alt": "",
@@ -1506,10 +1521,10 @@
             "link": "",
             "open_in_new_tab": false,
             "placeholder": "",
-            "padding-block-start": 0,
+            "padding-block-start": 20,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 20
           },
           "blocks": {
             "video_WymN4j": {
@@ -1523,7 +1538,7 @@
                 "alt": "",
                 "custom_width": 100,
                 "custom_width_mobile": 100,
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16/9",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -1546,7 +1561,7 @@
                 "alt": "",
                 "custom_width": 100,
                 "custom_width_mobile": 100,
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16/9",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -1569,7 +1584,7 @@
                 "alt": "",
                 "custom_width": 100,
                 "custom_width_mobile": 100,
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16/9",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -1592,7 +1607,7 @@
                 "alt": "",
                 "custom_width": 100,
                 "custom_width_mobile": 100,
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16/9",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -1615,7 +1630,7 @@
                 "alt": "",
                 "custom_width": 100,
                 "custom_width_mobile": 100,
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16/9",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -1638,7 +1653,7 @@
                 "alt": "",
                 "custom_width": 100,
                 "custom_width_mobile": 100,
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16/9",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -1691,8 +1706,8 @@
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 0,
-        "padding-block-end": 0,
+        "padding-block-start": 70,
+        "padding-block-end": 70,
         "email_wrapper": false,
         "identifier": "youtube-video-dashboard"
       }
@@ -1722,7 +1737,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         },
@@ -1747,7 +1763,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         },
@@ -1832,7 +1849,7 @@
         "text_BrD7Qf": {
           "type": "text",
           "settings": {
-            "text": "<p>ENTER THE KINGDOM.CLAIM YOUR CROWN.</p>",
+            "text": "<p>ENTER THE KINGDOM • CLAIM YOUR CROWN</p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
@@ -1850,7 +1867,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         }

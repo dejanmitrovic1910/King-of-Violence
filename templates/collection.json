@@ -34,13 +34,42 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
+          },
+          "blocks": {}
+        },
+        "text_TK9jKq": {
+          "type": "text",
+          "name": "t:names.text",
+          "settings": {
+            "text": "{{ closest.collection.description }}",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 20,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         }
       },
       "block_order": [
-        "text_tqQTNE"
+        "text_tqQTNE",
+        "text_TK9jKq"
       ],
       "name": "Collection heading",
       "settings": {
@@ -68,7 +97,7 @@
         "overlay_style": "solid",
         "gradient_direction": "to top",
         "padding-block-start": 80,
-        "padding-block-end": 80,
+        "padding-block-end": 20,
         "email_wrapper": false,
         "identifier": "custom-section"
       }
@@ -112,8 +141,8 @@
             "border_radius": 0,
             "padding-block-start": 0,
             "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-start": 10,
+            "padding-inline-end": 10
           },
           "blocks": {
             "product_card_gallery_RaBfTi": {
@@ -251,15 +280,15 @@
         "mobile_product_card_size": "small",
         "enable_infinite_scroll": true,
         "products_per_page": 24,
-        "product_grid_width": "full-width",
-        "full_width_on_mobile": true,
-        "columns_gap_horizontal": 0,
+        "product_grid_width": "centered",
+        "full_width_on_mobile": false,
+        "columns_gap_horizontal": 16,
         "columns_gap_vertical": 16,
         "padding-inline-start": 0,
         "padding-inline-end": 0,
         "color_scheme": "",
         "padding-block-start": 0,
-        "padding-block-end": 24
+        "padding-block-end": 30
       }
     }
   },
