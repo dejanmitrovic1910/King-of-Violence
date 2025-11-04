@@ -11,7 +11,7 @@
 {% endif %}
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
-  class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} {{ section.settings.identifier }}"
   data-testid="ui-test-section"
 
   {% if request.visual_preview_mode %}
