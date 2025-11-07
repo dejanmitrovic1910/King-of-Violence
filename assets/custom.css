@@ -18,13 +18,16 @@
     src: url("DancingScript.woff2") format("woff2");
     font-style: normal;
 }
+@font-face {
+    font-family: 'KoVFont';
+    src: url("KoVFont.woff2") format("woff2");
+    font-style: normal;
+}
+.ko-v-font{
+    font-family: "KoVFont" !important;
+}
 
 h1,
-h2,
-h3,
-h4,
-h5,
-h6,
 .permanent-marker
 {
   font-family: "PermanentMarker" !important;
