@@ -1,6 +1,6 @@
 @font-face {
-    font-family: 'PermanentMarker';
-    src: url("PermanentMarker.woff2") format("woff2");
+    font-family: 'KoVHeadingFont';
+    src: url("KoVHeadingFont.woff2") format("woff2");
     font-style: normal;
 }
 @font-face {
@@ -8,35 +8,33 @@
     src: url("PermanentMarker.woff2") format("woff2");
     font-style: normal;
 }
-@font-face {
-    font-family: 'DancingScript';
-    src: url("DancingScript.woff2") format("woff2");
-    font-style: normal;
-}
+
 @font-face {
     font-family: 'dancing-script';
     src: url("DancingScript.woff2") format("woff2");
     font-style: normal;
-}
+} 
 @font-face {
     font-family: 'KoVFont';
     src: url("KoVFont.woff2") format("woff2");
     font-style: normal;
 }
-.ko-v-font{
-    font-family: "KoVFont" !important;
-}
 
 h1,
-.permanent-marker
+h2,
+h3,
+h4,
+h5,
+h6,
+.ko-v-font
 {
-  font-family: "PermanentMarker" !important;
+  font-family: "KoVHeadingFont" !important;
 }
 
-.dancing-script{
+/* .dancing-script{
     font-family: "DancingScript" !important;
     font-size: 24px;
-}
+} */
 
 .section--full-width-media__container {
   display: block;
@@ -152,10 +150,10 @@ footer .details-content li a {
 
 /* #header-component[data-sticky-state="inactive"] */
 
-#product-information {
+/* #product-information {
     margin-top: calc(var(--header-height) + var(--announcement-bar-height) + 20px);
     padding: 0;
-}
+} */
 #product-information media-gallery {
     margin : 0;
 }
@@ -220,4 +218,8 @@ footer .details-content li a {
     .ufc-section .group-block-content .ufc-text{
         align-items: center;
     }
+}
+
+header.header-section{
+    z-index: 1000 !important;
 }
