@@ -9,11 +9,11 @@
     font-style: normal;
 }
 
-@font-face {
+/* @font-face {
     font-family: 'dancing-script';
     src: url("DancingScript.woff2") format("woff2");
     font-style: normal;
-} 
+}  */
 @font-face {
     font-family: 'KoVFont';
     src: url("KoVFont.woff2") format("woff2");
@@ -29,6 +29,10 @@ h6,
 .ko-v-font
 {
   font-family: "KoVHeadingFont" !important;
+}
+
+body{
+    --basic-color: #fec909;
 }
 
 /* .dancing-script{
@@ -84,9 +88,10 @@ h6,
 }
 
 footer .details-content li a {
-    color: white;
+    color: var(--basic-color);
     font-size: 19px;
     text-decoration: underline;
+    text-underline-offset: 4px;
 }
 
 .editorial h1,
@@ -145,7 +150,9 @@ footer .details-content li a {
 
 .hero__container .button-link{
     padding: 15px 25px;
-    border: 1px solid white;
+    text-transform: uppercase;
+    font-weight: 500;
+    /* border: 1px solid white; */
 }
 
 /* #header-component[data-sticky-state="inactive"] */
@@ -222,4 +229,213 @@ footer .details-content li a {
 
 header.header-section{
     z-index: 1000 !important;
+}
+
+.email-signup-custom .section-content-wrapper{
+    display: grid;
+    grid-template-columns: 5fr 5fr;
+    gap: 1rem;
+}
+@media only screen and (min-width: 769px) {
+    .custom-text-mobile{
+        display: none !important;
+    }
+    .custom-text-desktop{
+        display: block !important;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .email-signup-custom .section-content-wrapper{
+        grid-template-columns: 1fr;
+    }
+    .email-signup-custom .group-block{
+        order: 2;
+        padding: 0 25px;
+    }
+    .email-signup-custom .image-block{
+        order: 1;
+    }
+    .email-signup-custom .image-block img{
+        max-width: 340px;
+    }
+    .custom-text-mobile{
+        display: block !important;
+    }
+    .custom-text-desktop{
+        display: none !important;
+    }
+}
+
+.join-fight p,
+.ufc-text p{
+    font-size: 23.0128px !important;
+}
+
+.email-signup-custom .email-signup__input.paragraph{
+    padding: 5px 10px;
+    border-radius: 6.4px;
+    background-color: transparent;
+    outline-color: black;
+    outline-width: 2px;
+    font-size: 19.2px;
+    outline-offset: 1px;
+}
+
+.email-signup__input-group-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.email-signup__input-group-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.email-signup-custom .email-signup__button--integrated{
+    position: static;
+}
+
+.email-signup-custom .email-signup__button:not(.button-unstyled){
+    padding: 12.8px 24px;
+    border-radius: 300px;
+    color: #FEC909;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+.email-signup-custom .email-signup__button:not(.button-unstyled):hover,
+.email-signup-custom .email-signup__button:not(.button-unstyled):active {
+    opacity: 0.8;
+    background-color: black;
+}
+
+.email-signup-custom .custom-section-content{
+    max-width: 1400px;
+    margin: auto;
+}
+
+.name-label{
+    line-height: 28px;
+    font-weight: 500;
+}
+
+.group-label{
+    line-height: 28px;
+    font-size: 18.9184px;
+    font-weight: 500;
+}
+
+.email-signup-custom .required-asterisk{
+    font-size: 14.5408px;
+    opacity: 0.7;
+}
+
+/* Footer style */
+footer .section-background .background-image-container img{
+    object-position: 100% 21%;
+}
+footer .section-background:after{
+    background-color: rgb(11, 11, 29);
+    opacity: 0.8;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    content: '';
+}
+
+footer .footer-content{
+    display: flex;
+    justify-content: space-around;
+}
+footer .footer-content .image-block{
+    width: 35%;
+}
+footer .footer-content .group-block{
+    max-width: fit-content;
+}
+
+footer .footer-content .menu__item + .menu__item{
+    margin-block-start: 12px;
+}
+
+footer .footer-content .social-icons__icon{
+    fill: white;
+}
+
+@media only screen and (max-width: 768px) {
+    footer .footer-content .image-block{
+        width: 100%;
+    }
+    footer .footer-content .image-block img{
+        width: 70%;
+        margin: auto;
+    }
+
+    footer .mobile-memu-container{
+        max-width: none !important;
+        padding: 0 40px;
+    }
+    
+    .mobile-memu-container .menu-social .group-block-content{
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+    }
+    .mobile-memu-container > .group-block-content{
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+    }
+    .desktop-menu{
+        display: none;
+    }
+    footer .footer-content{
+        flex-direction: column;
+    }
+}
+@media only screen and (min-width: 769px) {
+    .desktop-memu{
+        display: block;
+    }
+    .mobile-memu-container{
+        display: none;
+    }
+}
+
+.intro-marquee{
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+}
+
+.editorial a.link{
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    font-weight: 500;
+    font-size: 19.2px;
+}
+
+.featured-collection-products .collection-product-wrapper > .group-block-content{
+    display: grid;
+    grid-template-columns: 2.8fr 1fr;
+    gap: 1rem;
+}
+
+.featured-collection-products .collection-product-wrapper .featured-product-wrapper {
+    height: 100%;
+}
+.featured-collection-products .collection-product-wrapper .featured-product-wrapper .group-block-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.featured-collection-products .collection-product-wrapper .featured-product-wrapper .group-block-content [ref="productTitleLink"] *{
+    color: white;
+    font-size: 23.0128px;
+    font-weight: 500;
+    text-transform: uppercase;
 }

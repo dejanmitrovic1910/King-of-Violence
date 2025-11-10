@@ -115,6 +115,8 @@
     },
     "email_signup": {
       "label": "Email",
+      "first_name": "First Name",
+      "last_name": "Last Name",
       "placeholder": "Email address",
       "success": "Thanks for subscribing!"
     },

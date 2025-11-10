@@ -483,7 +483,7 @@
         "equal_columns": false,
         "limit_details_width": false,
         "gap": 48,
-        "color_scheme": "",
+        "color_scheme": "scheme-5",
         "padding-block-start": 0,
         "padding-block-end": 0
       }
@@ -945,7 +945,7 @@
         "icons_shape": "none",
         "section_width": "page-width",
         "gap": 0,
-        "color_scheme": "",
+        "color_scheme": "scheme-5",
         "padding-block-start": 0,
         "padding-block-end": 0
       }

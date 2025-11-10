@@ -21,6 +21,7 @@
     size-style
     {% if settings.inherit_color_scheme == false %} color-{{ settings.color_scheme }}{% endif %}
     {{ class }}
+    {{ settings.identifier }}
   "
   style="
     {% render 'border-override', settings: settings %}
@@ -55,18 +56,22 @@
     {% endif %}
   </div>
 
-  <div
-    class="
-      group-block-content
-      {% if request.design_mode %}group-block-content--design-mode{% endif %}
-      layout-panel-flex
-      layout-panel-flex--{{ settings.content_direction | default: 'column' }}
-      {% if settings.vertical_on_mobile %} mobile-column{% endif %}
-    "
-    style="{% render 'layout-panel-style', settings: settings %}"
-  >
-    {{- children -}}
-  </div>
+  {% if settings.show_carousel %}
+    {% render 'group-video', slides: children, slide_count: 4, settings: settings, block_children: block_children %}
+  {% else %}
+    <div
+      class="
+        group-block-content
+        {% if request.design_mode %}group-block-content--design-mode{% endif %}
+        layout-panel-flex
+        layout-panel-flex--{{ settings.content_direction | default: 'column' }}
+        {% if settings.vertical_on_mobile %} mobile-column{% endif %}
+      "
+      style="{% render 'layout-panel-style', settings: settings %}"
+      >
+        {{- children -}}
+      </div>
+  {% endif %}
 </div>
 
 {% stylesheet %}

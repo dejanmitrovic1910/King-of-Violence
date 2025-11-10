@@ -1,10 +1,19 @@
-
-
-{%- capture children %}
-  {% content_for 'blocks' %}
-{% endcapture %}
-
-{% render 'group', children: children, settings: block.settings, shopify_attributes: block.shopify_attributes %}
+{%- if block.settings.show_carousel -%}
+  {%- assign children_array = '' -%}
+  {%- for block_child in block.blocks -%}
+    {%- capture block_html -%}
+      {% render block_child %}
+    {%- endcapture -%}
+    {%- assign children_array = children_array | append: block_html | append: '|||SEP|||' -%}
+  {%- endfor -%}
+  {%- assign children_array = children_array | split: '|||SEP|||' -%}
+  {% render 'group', children: children_array, settings: block.settings, shopify_attributes: block.shopify_attributes %}
+{%- else -%}
+  {%- capture children %}
+    {% content_for 'blocks' %}
+  {% endcapture %}
+  {% render 'group', children: children, settings: block.settings, shopify_attributes: block.shopify_attributes, block_children: block.blocks %}
+{%- endif -%}
 
 {% schema %}
 {
@@ -498,7 +507,18 @@
       "unit": "px",
       "default": 0
     },
-    
+    {
+      "type": "checkbox",
+      "id": "show_carousel",
+      "label": "Show Carousel",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "identifier",
+      "label": "Identifier",
+      "default": "custom-group"
+    }
   ],
   "presets": [
     {

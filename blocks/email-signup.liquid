@@ -1,5 +1,3 @@
-
-
 {% assign block_settings = block.settings %}
 <email-signup-block
   class="email-signup-block size-style spacing-style"
@@ -13,33 +11,106 @@
   {% endif %}
   {%- form 'customer', class: 'email-signup__form spacing-style' %}
     <div
-      class="email-signup__input-group {% if block_settings.inherit_color_scheme == false %}color-{{ block_settings.color_scheme }}{% endif %}"
+      class="email-signup__input-group-container {% if block_settings.inherit_color_scheme == false %}color-{{ block_settings.color_scheme }}{% endif %}"
       style="--border-width: {{ block_settings.border_width }}px; --border-radius: {{ block_settings.border_radius }}px;"
     >
-      <label
-        for="EmailInput-{{ block.id }}"
-        class="visually-hidden"
-      >
-        {{ 'blocks.email_signup.label' | t }}
-      </label>
-      <input
-        id="EmailInput-{{ block.id }}"
-        class="email-signup__input email-signup__input--{{ block_settings.border_style }} {{ block_settings.input_type_preset }} {{ block_settings.border_variation }}"
-        type="email"
-        name="contact[email]"
-        autocorrect="off"
-        autocapitalize="off"
-        autocomplete="email"
-        placeholder="{{ 'blocks.email_signup.placeholder' | t }}"
-        required
-        {% if form.errors %}
-          autofocus
-          aria-invalid="true"
-          aria-describedby="Email-signup__message-error-{{ block.id }}"
-        {% elsif form.posted_successfully? %}
-          aria-describedby="Email-signup__message-success-{{ block.id }}"
-        {% endif %}
-      >
+      <div class="email-signup__input-group-inner email-signup-name-group">
+        <label class="group-label"> Name <span class="required-asterisk">(required)</span> </label>
+        <div class="email-signup__input-group">
+          <div class="firstname-input-group">
+            <label
+              for="FirstNameInput-{{ block.id }}"
+              class="name-label"
+            >
+              {{ 'blocks.email_signup.first_name' | t }}
+            </label>
+            <input
+              id="FirstNameInput-{{ block.id }}"
+              class="email-signup__input email-signup__input--{{ block_settings.border_style }} {{ block_settings.input_type_preset }} {{ block_settings.border_variation }}"
+              type="text"
+              name="contact[first_name]"
+              autocomplete="given-name"
+              placeholder="First Name"
+              required
+            >
+          </div>
+          <div class="lastname-input-group">
+            <label
+              for="LastNameInput-{{ block.id }}"
+              class="name-label"
+            >
+              {{ 'blocks.email_signup.last_name' | t }}
+            </label>
+            <input
+              id="LastNameInput-{{ block.id }}"
+              class="email-signup__input email-signup__input--{{ block_settings.border_style }} {{ block_settings.input_type_preset }} {{ block_settings.border_variation }}"
+              type="text"
+              name="contact[last_name]"
+              autocomplete="family-name"
+              placeholder="Last Name"
+              required
+            >
+          </div>
+        </div>
+      </div>
+      <div class="email-signup__input-group-inner email-signup-email-group">
+        <label
+          for="EmailInput-{{ block.id }}"
+          class="group-label"
+        >
+          {{ 'blocks.email_signup.label' | t }} <span class="required-asterisk">(required)</span>
+        </label>
+        <input
+          id="EmailInput-{{ block.id }}"
+          class="email-signup__input email-signup__input--{{ block_settings.border_style }} {{ block_settings.input_type_preset }} {{ block_settings.border_variation }}"
+          type="email"
+          name="contact[email]"
+          autocorrect="off"
+          autocapitalize="off"
+          autocomplete="email"
+          placeholder="{{ 'blocks.email_signup.placeholder' | t }}"
+          required
+          {% if form.errors %}
+            autofocus
+            aria-invalid="true"
+            aria-describedby="Email-signup__message-error-{{ block.id }}"
+          {% elsif form.posted_successfully? %}
+            aria-describedby="Email-signup__message-success-{{ block.id }}"
+          {% endif %}
+        >
+        </div>
+        {%- if form.errors -%}
+          <div
+            id="Email-signup__message-error-{{ block.id }}"
+            class="email-signup__message email-signup__message--error"
+            tabindex="-1"
+          >
+            <svg
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+              focusable="false"
+              aria-hidden="true"
+              class="icon-error"
+            >
+              {%- render 'icon', icon: 'error'  -%}
+            </svg>
+            {{- form.errors.translated_fields.email | capitalize }}
+            {{ form.errors.messages.email -}}
+          </div>
+        {%- endif -%}
+    
+        {%- if form.posted_successfully? -%}
+          <div
+            id="Email-signup__message-success-{{ block.id }}"
+            class="email-signup__message email-signup__message--success"
+            tabindex="-1"
+          >
+            <span class="svg-wrapper icon-success">
+              {{ 'icon-checkmark.svg' | inline_asset_content }}
+            </span>
+            <p class="email-signup__message-text">{{ 'blocks.email_signup.success' | t }}</p>
+          </div>
+        {%- endif -%}
       <button
         class="email-signup__button {% if block_settings.integrated_button or block_settings.border_style == 'underline' %}email-signup__button--integrated{% endif %} email-signup__button--{{ block_settings.display_type }} {{ block_settings.button_type_preset }} {{ block_settings.style_class }} {{ block_settings.style_class }}--{{ block.id }} {% if block_settings.inherit_color_scheme == false %}color-{{ block_settings.color_scheme }}{% endif %}"
         {% if block_settings.display_type != 'text' %}
@@ -62,38 +133,6 @@
       </button>
     </div>
 
-    {%- if form.errors -%}
-      <div
-        id="Email-signup__message-error-{{ block.id }}"
-        class="email-signup__message email-signup__message--error"
-        tabindex="-1"
-      >
-        <svg
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-          focusable="false"
-          aria-hidden="true"
-          class="icon-error"
-        >
-          {%- render 'icon', icon: 'error'  -%}
-        </svg>
-        {{- form.errors.translated_fields.email | capitalize }}
-        {{ form.errors.messages.email -}}
-      </div>
-    {%- endif -%}
-
-    {%- if form.posted_successfully? -%}
-      <div
-        id="Email-signup__message-success-{{ block.id }}"
-        class="email-signup__message email-signup__message--success"
-        tabindex="-1"
-      >
-        <span class="svg-wrapper icon-success">
-          {{ 'icon-checkmark.svg' | inline_asset_content }}
-        </span>
-        <p class="email-signup__message-text">{{ 'blocks.email_signup.success' | t }}</p>
-      </div>
-    {%- endif -%}
   {% endform %}
 
   <script
@@ -128,7 +167,7 @@
   .email-signup__input-group {
     position: relative;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr 1fr;
     background-color: transparent;
   }
 
@@ -136,11 +175,11 @@
     gap: var(--gap-xs);
   }
 
-  .email-signup__input-group:not(:has(.email-signup__button--arrow)) {
+  /* .email-signup__input-group:not(:has(.email-signup__button--arrow)) {
     @media screen and (max-width: 749px) {
       grid-template-columns: 1fr;
     }
-  }
+  } */
 
   .email-signup__input {
     width: 100%;

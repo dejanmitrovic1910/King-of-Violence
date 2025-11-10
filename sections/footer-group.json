@@ -199,6 +199,29 @@
     "footer": {
       "type": "Footer",
       "blocks": {
+        "image_eH7Ui6": {
+          "type": "image",
+          "name": "t:names.image",
+          "settings": {
+            "image": "shopify://shop_images/2.png",
+            "link": "",
+            "image_ratio": "adapt",
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
         "group_RcYWXw": {
           "type": "group",
           "name": "t:names.group",
@@ -259,36 +282,37 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "social_links_Epk7cH": {
+              "type": "social-links",
+              "name": "t:names.social_media_links",
+              "settings": {
+                "facebook_url": "",
+                "instagram_url": "https://www.instagram.com/kingofviolenceco/",
+                "youtube_url": "https://www.youtube.com/@OfficialChuckLiddell/videos",
+                "tiktok_url": "",
+                "twitter_url": "",
+                "threads_url": "",
+                "linkedin_url": "",
+                "bluesky_url": "",
+                "snapchat_url": "",
+                "pinterest_url": "",
+                "tumblr_url": "",
+                "vimeo_url": "",
+                "custom_url": ""
+              },
+              "blocks": {}
             }
           },
           "block_order": [
-            "menu_tE4fpx"
+            "menu_tE4fpx",
+            "social_links_Epk7cH"
           ]
-        },
-        "social_links_x4yUMJ": {
-          "type": "social-links",
-          "name": "t:names.social_media_links",
-          "settings": {
-            "facebook_url": "",
-            "instagram_url": "https://www.instagram.com/kingofviolenceco/",
-            "youtube_url": "https://www.youtube.com/@OfficialChuckLiddell/videos",
-            "tiktok_url": "",
-            "twitter_url": "",
-            "threads_url": "",
-            "linkedin_url": "",
-            "bluesky_url": "",
-            "snapchat_url": "",
-            "pinterest_url": "",
-            "tumblr_url": "",
-            "vimeo_url": "",
-            "custom_url": ""
-          },
-          "blocks": {}
         }
       },
       "block_order": [
-        "group_RcYWXw",
-        "social_links_x4yUMJ"
+        "image_eH7Ui6",
+        "group_RcYWXw"
       ],
       "settings": {
         "section_width": "page-width",
@@ -296,7 +320,7 @@
         "color_scheme": "",
         "padding-block-start": 100,
         "padding-block-end": 100,
-        "background_image": "shopify://shop_images/aifaceswap-798f85de2a2930a53f73b1a2aed74570.jpg",
+        "background_image": "shopify://shop_images/footer_image.webp",
         "background_image_position": "cover"
       }
     },
