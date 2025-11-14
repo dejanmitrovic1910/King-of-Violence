@@ -104,7 +104,9 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "show_carousel": false,
+                "identifier": "custom-group"
               },
               "blocks": {
                 "product_title_7VVz8U": {
@@ -169,7 +171,9 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "show_carousel": false,
+                    "identifier": "custom-group"
                   },
                   "blocks": {
                     "price_UN6aHJ": {
@@ -485,7 +489,7 @@
         "gap": 48,
         "color_scheme": "scheme-5",
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 40
       }
     },
     "product_recommendations_UeDczP": {
@@ -720,7 +724,7 @@
         "section_width": "page-width",
         "section_height": "",
         "section_height_custom": 50,
-        "color_scheme": "",
+        "color_scheme": "scheme-db578fa1-da9c-48c2-a278-c672d942f928",
         "background_media": "none",
         "video_position": "cover",
         "background_image_position": "cover",
@@ -767,7 +771,7 @@
         "section_width": "page-width",
         "section_height": "",
         "section_height_custom": 50,
-        "color_scheme": "",
+        "color_scheme": "scheme-db578fa1-da9c-48c2-a278-c672d942f928",
         "background_media": "none",
         "video_position": "cover",
         "background_image_position": "cover",
@@ -867,7 +871,9 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "show_carousel": false,
+                "identifier": "custom-group"
               },
               "blocks": {
                 "collection_title_aE3Ycp": {
@@ -886,7 +892,7 @@
                     "wrap": "pretty",
                     "color": "var(--color-foreground)",
                     "background": true,
-                    "background_color": "#ffffff",
+                    "background_color": "#030302",
                     "corner_radius": 0,
                     "padding-block-start": 4,
                     "padding-block-end": 4,
