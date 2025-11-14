@@ -595,6 +595,15 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
   #rebuy-widget-251297.rebuy-widget .rebuy-money *{
     color: white !important;
   }
+  #rebuy-widget-251297 .rebuy-product-info .rebuy-product-title-link {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;       /* show only 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 18px;            /* your custom line-height */
+    max-height: calc(18px * 2);
+  }
 
   /* Recently viewed */
   #rebuy-widget-251429 .rebuy-product-options-container {
@@ -625,7 +634,7 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
     background-size: 24px;
   }
   #rebuy-widget-251429 .rebuy-select{
-    padding: 9px 50px 9px 15px;
+    padding: 9px 30px 9px 15px;
   }
 
   #rebuy-widget-251429 .rebuy-button{
@@ -640,5 +649,13 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
   #rebuy-widget-251429.rebuy-widget .rebuy-money *{
     color: white !important;
   }
-}
+  #rebuy-widget-251429 .rebuy-product-info .rebuy-product-title-link {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;       /* show only 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 18px;            /* your custom line-height */
+    max-height: calc(18px * 2);
+  }
 </style>

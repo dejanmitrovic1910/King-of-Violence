@@ -439,3 +439,10 @@ footer .footer-content .social-icons__icon{
     font-weight: 500;
     text-transform: uppercase;
 }
+
+.product-page-collection-list .bento-box .bento-box__item:nth-of-type(2) .collection-card__image img{
+    object-position: center 21%;
+}
+.product-page-collection-list .bento-box .bento-box__item:nth-of-type(3) .collection-card__image img{
+    object-position: center 0;
+}
