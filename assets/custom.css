@@ -419,19 +419,39 @@ footer .footer-content .social-icons__icon{
     font-size: 19.2px;
 }
 
-.featured-collection-products .collection-product-wrapper > .group-block-content{
-    display: grid;
-    grid-template-columns: 2.8fr 1fr;
-    gap: 1rem;
+
+@media only screen and (max-width: 1024px) {
+    .featured-collection-products .collection-product-wrapper > .group-block-content{
+        display: block;
+    }
+    .featured-collection-products .collection-product-wrapper .featured-product-wrapper {
+        padding: 20px 0;
+    }
+    .featured-collection-products .collection-product-wrapper .featured-product-wrapper .group-block-content{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+    .featured-collection-products .collection-product-wrapper .featured-product-wrapper .group-block-content product-card-link:nth-of-type(3){
+        display: none;
+    }
 }
 
 .featured-collection-products .collection-product-wrapper .featured-product-wrapper {
     height: 100%;
 }
-.featured-collection-products .collection-product-wrapper .featured-product-wrapper .group-block-content{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+
+@media only screen and (min-width: 1025px) {
+    .featured-collection-products .collection-product-wrapper .featured-product-wrapper .group-block-content{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .featured-collection-products .collection-product-wrapper > .group-block-content{
+        display: grid;
+        grid-template-columns: 2.8fr 1fr;
+        gap: 1rem;
+    }
 }
 .featured-collection-products .collection-product-wrapper .featured-product-wrapper .group-block-content [ref="productTitleLink"] *{
     color: white;
@@ -446,3 +466,39 @@ footer .footer-content .social-icons__icon{
 .product-page-collection-list .bento-box .bento-box__item:nth-of-type(3) .collection-card__image img{
     object-position: center 0;
 }
+
+
+.editorial .media-block img:nth-of-type(1){
+    object-position: center 14%;
+}
+.editorial .media-block img:nth-of-type(2){
+    object-position: center 25%;
+}
+
+.featured-collection-products product-card-link .contents > *{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+
+
+/* Klaviyo Form Styles */
+
+.needsclick[aria-label="POPUP Form"] form.klaviyo-form{
+    flex-direction: column;
+    max-height: 80vh;
+}
+.needsclick[aria-label="POPUP Form"] form.klaviyo-form > .needsclick:nth-of-type(1){
+    width: 100%;
+}
+
+
+
+
+
+
+
