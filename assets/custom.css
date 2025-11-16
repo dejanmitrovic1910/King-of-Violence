@@ -489,12 +489,31 @@ footer .footer-content .social-icons__icon{
 /* Klaviyo Form Styles */
 
 .needsclick[aria-label="POPUP Form"] form.klaviyo-form{
-    flex-direction: column;
+    flex-direction: column !important;
     max-height: 80vh;
+    min-height: fit-content;
 }
 .needsclick[aria-label="POPUP Form"] form.klaviyo-form > .needsclick:nth-of-type(1){
-    width: 100%;
+    width: 100% !important;
 }
+
+.needsclick[data-testid="POPUP"] >.needsclick:nth-of-type(1) >.needsclick:nth-of-type(1) > .needsclick:nth-of-type(2){
+    display: none !important;
+}
+
+#header-group .shopify-section-group-header-group{
+    position: sticky;
+    top: -1px;
+}
+
+#header-group .header-section:has(>#header-component[sticky=always]) {
+    top: calc(var(--announcement-bar-height) - 1px);
+}
+
+#MainContent{
+    margin-top: -2px;
+}
+
 
 
 

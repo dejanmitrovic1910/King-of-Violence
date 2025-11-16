@@ -137,14 +137,21 @@ class HeaderComponent extends Component {
     }
 
     if (stickyMode === 'always') {
-      const isAtTop = this.getBoundingClientRect().top >= 0;
-
-      if (isAtTop) {
+      // Always use <div class="shopify-section-group-header-group"> as the reference for top alignment.
+      const anchorDiv = document.querySelector('div.shopify-section-group-header-group');
+      let anchorBottom = 0;
+      if (anchorDiv && anchorDiv.getBoundingClientRect) {
+        anchorBottom = anchorDiv.getBoundingClientRect().bottom;
+      }
+      if (this.getBoundingClientRect().top >= anchorBottom) {
+        // reset sticky state when header is scrolled up to natural position
+        this.#offscreen = false;
+        this.dataset.stickyState = 'inactive';
         this.dataset.scrollDirection = 'none';
-      } else if (isScrollingUp) {
-        this.dataset.scrollDirection = 'up';
       } else {
-        this.dataset.scrollDirection = 'down';
+        // show sticky header when scrolling up
+        this.dataset.stickyState = 'active';
+        this.dataset.scrollDirection = 'up';
       }
 
       this.#lastScrollTop = scrollTop;
@@ -153,8 +160,13 @@ class HeaderComponent extends Component {
 
     if (isScrollingUp) {
       this.removeAttribute('data-animating');
-
-      if (this.getBoundingClientRect().top >= 0) {
+      // Always use <div class="shopify-section-group-header-group"> as the reference for top alignment.
+      const anchorDiv = document.querySelector('div.shopify-section-group-header-group');
+      let anchorBottom = 0;
+      if (anchorDiv && anchorDiv.getBoundingClientRect) {
+        anchorBottom = anchorDiv.getBoundingClientRect().bottom;
+      }
+      if (this.getBoundingClientRect().top >= anchorBottom) {
         // reset sticky state when header is scrolled up to natural position
         this.#offscreen = false;
         this.dataset.stickyState = 'inactive';
