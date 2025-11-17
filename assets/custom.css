@@ -512,6 +512,12 @@ footer .footer-content .social-icons__icon{
 }
 .needsclick[aria-label="POPUP Form"] form.klaviyo-form > .needsclick:nth-of-type(1){
     width: 100% !important;
+    margin: 0 !important;
+    min-height: auto !important;
+}
+.needsclick[aria-label="POPUP Form"] form.klaviyo-form > .needsclick:nth-of-type(2){
+    min-height: auto !important;
+    padding: 0 !important;
 }
 
 .needsclick[data-testid="POPUP"] >.needsclick:nth-of-type(1) >.needsclick:nth-of-type(1) > .needsclick:nth-of-type(2){

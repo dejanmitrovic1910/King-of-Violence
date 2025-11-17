@@ -21,7 +21,7 @@
             "pixel_size": 0,
             "custom_mobile_size": true,
             "size_mobile": "percent",
-            "percent_size_mobile": 81,
+            "percent_size_mobile": 50,
             "pixel_size_mobile": 120
           },
           "blocks": {}
@@ -35,6 +35,7 @@
             "max_width": "normal",
             "alignment": "left",
             "type_preset": "rte",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
@@ -49,7 +50,7 @@
             "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0,
-            "identifier": "custom-text"
+            "identifier": "hero-section-name"
           },
           "blocks": {}
         },
@@ -64,7 +65,8 @@
             "width": "custom",
             "custom_width": 15,
             "width_mobile": "fit-content",
-            "custom_width_mobile": 100
+            "custom_width_mobile": 100,
+            "identifier": "stress-btn"
           },
           "blocks": {}
         }
@@ -114,6 +116,7 @@
             "max_width": "normal",
             "alignment": "left",
             "type_preset": "custom",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "1.25rem",
             "line_height": "tight",
@@ -149,6 +152,34 @@
     "media_with_content_GRV6iJ": {
       "type": "media-with-content",
       "blocks": {
+        "text": {
+          "type": "text",
+          "static": true,
+          "settings": {
+            "text": "<h2>DON'T MISS ANOTHER DROP!</h2>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "h2",
+            "capitalize": false,
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 30,
+            "padding-block-end": 30,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "identifier": "media-with-content-mobile-title"
+          },
+          "blocks": {}
+        },
         "media": {
           "type": "_media-without-appearance",
           "static": true,
@@ -219,11 +250,12 @@
                   "type": "text",
                   "name": "Heading",
                   "settings": {
-                    "text": "<h3>DON'T MISS ANOTHER DROP!</h3>",
+                    "text": "<h2>DON'T MISS ANOTHER DROP!</h2>",
                     "width": "100%",
                     "max_width": "narrow",
                     "alignment": "center",
                     "type_preset": "h2",
+                    "capitalize": false,
                     "font": "var(--font-primary--family)",
                     "font_size": "",
                     "line_height": "normal",
@@ -238,7 +270,7 @@
                     "padding-block-end": 10,
                     "padding-inline-start": 0,
                     "padding-inline-end": 0,
-                    "identifier": "custom-text"
+                    "identifier": "media-with-content-desktop-title"
                   },
                   "blocks": {}
                 },
@@ -251,6 +283,7 @@
                     "max_width": "narrow",
                     "alignment": "center",
                     "type_preset": "dancing-script",
+                    "capitalize": false,
                     "font": "var(--font-body--family)",
                     "font_size": "",
                     "line_height": "normal",
@@ -280,7 +313,8 @@
                     "width": "fit-content",
                     "custom_width": 88,
                     "width_mobile": "fit-content",
-                    "custom_width_mobile": 100
+                    "custom_width_mobile": 100,
+                    "identifier": "stress-btn"
                   },
                   "blocks": {}
                 }
@@ -355,6 +389,7 @@
                 "max_width": "normal",
                 "alignment": "center",
                 "type_preset": "rte",
+                "capitalize": true,
                 "font": "var(--font-primary--family)",
                 "font_size": "",
                 "line_height": "normal",
@@ -483,7 +518,7 @@
                     "show_sale_price_first": true,
                     "show_installments": false,
                     "show_tax_info": false,
-                    "type_preset": "h6",
+                    "type_preset": "h4",
                     "width": "100%",
                     "alignment": "left",
                     "font": "var(--font-body--family)",
@@ -560,6 +595,7 @@
             "max_width": "normal",
             "alignment": "center",
             "type_preset": "rte",
+            "capitalize": true,
             "font": "var(--font-heading--family)",
             "font_size": "2rem",
             "line_height": "normal",
@@ -695,9 +731,9 @@
       "name": "Collection list",
       "settings": {
         "collection_list": [
-          "justing-gaethje",
           "chuck-liddell",
-          "chris-camozzi"
+          "chris-camozzi",
+          "justing-gaethje"
         ],
         "layout_type": "grid",
         "carousel_on_mobile": true,
@@ -730,6 +766,7 @@
             "max_width": "normal",
             "alignment": "center",
             "type_preset": "rte",
+            "capitalize": true,
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
@@ -794,7 +831,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/chuck_ultimate_insta_tall.png",
+                "image": "shopify://shop_images/chuck_ultimate_insta_tall_1.png",
                 "link": "shopify://collections/chuck-liddell",
                 "image_ratio": "adapt",
                 "width": "fill",
@@ -920,7 +957,7 @@
                         "show_sale_price_first": true,
                         "show_installments": false,
                         "show_tax_info": false,
-                        "type_preset": "h6",
+                        "type_preset": "h4",
                         "width": "100%",
                         "alignment": "left",
                         "font": "var(--font-body--family)",
@@ -1008,7 +1045,7 @@
                         "show_sale_price_first": true,
                         "show_installments": false,
                         "show_tax_info": false,
-                        "type_preset": "h6",
+                        "type_preset": "h4",
                         "width": "100%",
                         "alignment": "left",
                         "font": "var(--font-body--family)",
@@ -1096,7 +1133,7 @@
                         "show_sale_price_first": true,
                         "show_installments": false,
                         "show_tax_info": false,
-                        "type_preset": "h6",
+                        "type_preset": "h4",
                         "width": "100%",
                         "alignment": "left",
                         "font": "var(--font-body--family)",
@@ -1179,6 +1216,7 @@
             "max_width": "normal",
             "alignment": "left",
             "type_preset": "h2",
+            "capitalize": false,
             "font": "var(--font-primary--family)",
             "font_size": "var(--font-size--heading-lg)",
             "line_height": "tight",
@@ -1303,6 +1341,7 @@
                 "max_width": "normal",
                 "alignment": "left",
                 "type_preset": "rte",
+                "capitalize": false,
                 "font": "var(--font-primary--family)",
                 "font_size": "",
                 "line_height": "normal",
@@ -1332,7 +1371,8 @@
                 "width": "fit-content",
                 "custom_width": 100,
                 "width_mobile": "fit-content",
-                "custom_width_mobile": 100
+                "custom_width_mobile": 100,
+                "identifier": "custom-button"
               },
               "blocks": {}
             }
@@ -1382,6 +1422,34 @@
     "media_with_content_aF6TTD": {
       "type": "media-with-content",
       "blocks": {
+        "text": {
+          "type": "text",
+          "static": true,
+          "settings": {
+            "text": "",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "capitalize": false,
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
+          },
+          "blocks": {}
+        },
         "media": {
           "type": "_media-without-appearance",
           "static": true,
@@ -1416,6 +1484,7 @@
                 "max_width": "normal",
                 "alignment": "left",
                 "type_preset": "h6",
+                "capitalize": false,
                 "font": "var(--font-primary--family)",
                 "font_size": "",
                 "line_height": "normal",
@@ -1443,6 +1512,7 @@
                 "max_width": "narrow",
                 "alignment": "left",
                 "type_preset": "rte",
+                "capitalize": false,
                 "font": "var(--font-primary--family)",
                 "font_size": "",
                 "line_height": "normal",
@@ -1470,6 +1540,7 @@
                 "max_width": "narrow",
                 "alignment": "left",
                 "type_preset": "rte",
+                "capitalize": false,
                 "font": "var(--font-primary--family)",
                 "font_size": "",
                 "line_height": "normal",
@@ -1492,14 +1563,15 @@
               "type": "button",
               "name": "t:names.button",
               "settings": {
-                "label": "Shop the collection",
+                "label": "Shop collection",
                 "link": "shopify://collections/chuck-liddell",
                 "open_in_new_tab": false,
                 "style_class": "button",
                 "width": "fit-content",
                 "custom_width": 100,
                 "width_mobile": "fit-content",
-                "custom_width_mobile": 100
+                "custom_width_mobile": 45,
+                "identifier": "stress-btn"
               },
               "blocks": {}
             }
@@ -1519,7 +1591,7 @@
         "media_height": "50svh",
         "section_width": "full-width",
         "extend_media": false,
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-db578fa1-da9c-48c2-a278-c672d942f928",
         "padding-block-start": 0,
         "padding-block-end": 0,
         "identifier": "editorial"
@@ -1640,6 +1712,7 @@
                 "max_width": "normal",
                 "alignment": "center",
                 "type_preset": "h3",
+                "capitalize": false,
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
                 "line_height": "normal",
@@ -1668,7 +1741,8 @@
                 "width": "fit-content",
                 "custom_width": 100,
                 "width_mobile": "fit-content",
-                "custom_width_mobile": 100
+                "custom_width_mobile": 100,
+                "identifier": "custom-button"
               },
               "blocks": {}
             }
@@ -1741,6 +1815,7 @@
                 "max_width": "normal",
                 "alignment": "center",
                 "type_preset": "h3",
+                "capitalize": false,
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
                 "line_height": "normal",
@@ -1769,7 +1844,8 @@
                 "width": "fit-content",
                 "custom_width": 100,
                 "width_mobile": "fit-content",
-                "custom_width_mobile": 100
+                "custom_width_mobile": 100,
+                "identifier": "custom-button"
               },
               "blocks": {}
             }
@@ -2107,6 +2183,7 @@
             "max_width": "normal",
             "alignment": "center",
             "type_preset": "rte",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
@@ -2133,6 +2210,7 @@
             "max_width": "normal",
             "alignment": "center",
             "type_preset": "paragraph",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
@@ -2227,6 +2305,7 @@
             "max_width": "normal",
             "alignment": "center",
             "type_preset": "rte",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
@@ -2296,6 +2375,7 @@
                 "max_width": "normal",
                 "alignment": "center",
                 "type_preset": "rte",
+                "capitalize": false,
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
                 "line_height": "normal",
@@ -2318,10 +2398,11 @@
               "type": "text",
               "settings": {
                 "text": "<p>Stay in our corner and you’ll be the first to know when we unlock the next fighter capsule honoring the legends of combat sports. <strong>Enter your email for 10% off your next order!</strong></p>",
-                "width": "fit-content",
+                "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
                 "type_preset": "paragraph",
+                "capitalize": false,
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
                 "line_height": "normal",
@@ -2443,6 +2524,7 @@
             "max_width": "normal",
             "alignment": "center",
             "type_preset": "rte",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
@@ -2623,6 +2705,7 @@
             "max_width": "normal",
             "alignment": "left",
             "type_preset": "custom",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "tight",

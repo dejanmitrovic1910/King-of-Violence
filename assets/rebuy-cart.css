@@ -46,3 +46,18 @@ background: #222;
     font-weight: 900;
     font-size: 18px;
 }
+
+#rebuy-cart .rebuy-cart__flyout-empty-cart *{
+    color: white;
+}
+#rebuy-cart .rebuy-cart__flyout-empty-cart h4{
+    color: white;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+#rebuy-cart .rebuy-cart__flyout-empty-cart a{
+    background-color: var(--basic-color);
+    border-color: var(--basic-color);
+    text-decoration: none;
+}
