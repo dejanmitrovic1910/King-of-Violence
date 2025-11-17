@@ -111,7 +111,7 @@
         "text_DJxxjP": {
           "type": "text",
           "settings": {
-            "text": "<p>Every punch tells a story • Every round tests a soul • This is where warriors are made — welcome to the UFC</p>",
+            "text": "<h5>👊      USE  FIRSTBLOOD20  AT  CHECKOUT              👊            USE  FIRSTBLOOD20  AT  CHECKOUT    👊        USE                   FIRSTBLOOD20  TO  KNOCKOUT</h5>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
@@ -384,7 +384,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h2>New Arrivals</h2>",
+                "text": "<h2>FRESH DROPS</h2>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -1507,7 +1507,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h2>ENTER THE KINGDOM. </h2><h2>CLAIM YOUR BELT.</h2>",
+                "text": "<h2>ENTER THE KINGDOM. </h2><h2>CLAIM YOUR CROWN.</h2>",
                 "width": "fit-content",
                 "max_width": "narrow",
                 "alignment": "left",
@@ -2371,7 +2371,7 @@
               "name": "t:names.heading",
               "settings": {
                 "text": "<h2>JOIN THE FIGHT</h2>",
-                "width": "fit-content",
+                "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
                 "type_preset": "rte",
@@ -2700,7 +2700,7 @@
         "text_BrD7Qf": {
           "type": "text",
           "settings": {
-            "text": "<p>ENTER THE KINGDOM • CLAIM YOUR CROWN</p>",
+            "text": "<p><strong>ENTER THE KINGDOM • CLAIM YOUR CROWN</strong></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",

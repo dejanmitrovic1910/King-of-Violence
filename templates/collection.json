@@ -359,7 +359,7 @@
         "text_MBkMRg": {
           "type": "text",
           "settings": {
-            "text": "<p>ENTER THE KINGDOM • CLAIM YOUR CROWN</p>",
+            "text": "<p><strong>ENTER THE KINGDOM • CLAIM YOUR CROWN</strong></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
