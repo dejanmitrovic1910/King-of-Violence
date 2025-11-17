@@ -2611,7 +2611,7 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) > *:not(.tax-note) {
   justify-content: space-between;
   align-items: center;
   color: var(--color-input-text);
-  background-color: var(--color-input-background);
+  background-color: rgba(255, 255, 255, 0.8);
   border: var(--style-border-width-inputs) solid var(--color-input-border);
   border-radius: var(--style-border-radius-inputs);
   flex: 1 1 var(--quantity-selector-width);

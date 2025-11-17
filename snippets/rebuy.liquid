@@ -1,0 +1,277 @@
+<div data-rebuy-component="cart-items" data-rebuy-component-id="cart_items">
+  <ul
+    v-if="hasItems()"
+    data-smartcart-items
+    tabindex="0"
+    role="list"
+  >
+    <li
+      class="rebuy-cart__flyout-item"
+      v-for="item in items()"
+      v-if="!isHiddenItem(item)"
+      :key="item.key"
+      v-bind:class="[ 'product-' + item.handle, itemProductTagsClasses(item), itemPropertyClasses(item) ]"
+      aria-label="product"
+      role="listitem"
+    >
+      <!-- Image -->
+      <div class="rebuy-cart__flyout-item-media">
+        <a
+          v-bind:href="itemURL(item)"
+          v-bind:aria-label="itemLinkLabel(item)"
+        >
+          <img
+            v-bind:src="sizeImage(item.image, '240x240')"
+            v-bind:alt="itemImageAlt(item)"
+          >
+        </a>
+      </div>
+
+      <!-- Item Info -->
+      <div class="rebuy-cart__flyout-item-info">
+        <!-- Product Title -->
+        <a
+          role="heading"
+          aria-level="5"
+          class="rebuy-cart__flyout-item-product-title"
+          v-bind:href="itemURL(item)"
+          v-html="item"
+        ></a>
+
+        <!-- Variant Title -->
+        <div
+          class="rebuy-cart__label-container"
+        >
+          <div
+            class="rebuy-cart__label"
+          >
+            SIZE:
+          </div>
+          <div
+            class="rebuy-cart__flyout-item-variant-title"
+            v-html="item.variant_title ? item.variant_title : 'unique size'"
+          ></div>
+        </div>
+
+        <!-- Discount Message -->
+        <div
+          class="rebuy-cart__flyout-item-discount-message"
+          v-if="hasLineItemDiscount(item)"
+          v-html="lineItemDiscountMessage(item)"
+        ></div>
+
+        <!-- Pricing -->
+        <div class="rebuy-cart__flyout-item-price">
+          <div v-if="itemHasDiscount(item)">
+            <span
+              class="rebuy-money sale"
+            >
+              <span class="sr-only">Sale price</span>
+              <span v-html="formatMoney(itemPrice(item))"></span>
+            </span>
+            <span
+              class="rebuy-money compare-at"
+            >
+              <span class="sr-only">Original price</span>
+              <span v-html="formatMoney(compareAtPrice(item))"></span>
+            </span>
+          </div>
+
+          <span
+            class="rebuy-money discount"
+            v-if="itemHasDiscount(item)"
+          >
+            {{ Math.round((( (typeof compareAtPrice(item) === "string" ? Number(compareAtPrice(item)) * 100 : compareAtPrice(item)) - Number(itemPrice(item)) ) / (typeof compareAtPrice(item) === "string" ? Number(compareAtPrice(item)) * 100 : compareAtPrice(item))) * 100) -}}
+            % OFF
+          </span>
+          <div v-if="!itemHasDiscount(item)">
+            <span
+              class="rebuy-money"
+            >
+              <span class="sr-only">Price</span>
+              <span v-html="formatMoney(itemPrice(item))"></span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Quantity -->
+        <div class="rebuy-cart__flyout-item-quantity">
+          <div
+            class="rebuy-cart__flyout-item-quantity-widget"
+            v-if="hideQuantitySelectors && !hideQuantitySelectors(item)"
+          >
+            <button
+              class="rebuy-cart__flyout-item-quantity-widget-button"
+              v-bind:aria-label="'Decrease quantity of ' + item.product_title"
+              v-on:click="decreaseItem(item)"
+              type="button"
+            >
+              <i
+                class="far"
+                v-bind:class="[(item.status == 'decreasing') ? 'fa-sync-alt fa-fast-spin' : 'fa-minus']"
+                aria-hidden="true"
+              ></i>
+            </button>
+
+            <span
+              class="rebuy-cart__flyout-item-quantity-widget-label"
+            >
+              <span class="sr-only">Quantity of {{ item.product_title }}</span>
+              {{ item.quantity }}
+            </span>
+
+            <button
+              class="rebuy-cart__flyout-item-quantity-widget-button"
+              v-bind:aria-label="'Increase quantity of ' + item.product_title"
+              v-on:click="increaseItem(item)"
+              type="button"
+            >
+              <i
+                class="far"
+                v-bind:class="[(item.status == 'increasing') ? 'fa-sync-alt fa-fast-spin' : 'fa-plus']"
+                aria-hidden="true"
+              ></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Remove Item -->
+        <button
+          class="rebuy-cart__flyout-item-remove"
+          type="button"
+          v-bind:aria-label="'Remove ' + item.product_title"
+          v-on:click="removeItem(item)"
+        >
+          <i
+            class="far"
+            v-bind:class="[(item.status == 'removing') ? 'fa-sync-alt fa-fast-spin' : 'fa-trash']"
+            aria-hidden="true"
+          ></i>
+        </button>
+
+        <!-- Bundle Details -->
+        <div class="rebuy-cart__flyout-item-bundle" v-if="itemIsBundle(item) && !hideBundleOptions(item)">
+          <!-- Expand / Collapse Bundle Details -->
+          <button
+            v-if="itemBundleLength(item) > 0"
+            class="rebuy-cart__flyout-item-bundle-toggle-button"
+            v-on:click="toggleActiveBundle(item)"
+            type="button"
+            v-bind:aria-label="(isBundleVisible(item) ? 'Collapse' : 'Expand') + ' bundle of ' + item.product_title"
+          >
+            {{ isBundleVisible(item) ? 'Hide' : 'Show' }}
+            <span v-html="itemBundleLength(item)"></span>
+            items
+            <span class="rebuy-cart__flyout-bundle-chev-icon">
+              <i v-bind:class="['fas', isBundleVisible(item) ? 'fa-chevron-up' : 'fa-chevron-down']"></i>
+            </span>
+          </button>
+
+          <ul
+            class="rebuy-cart__flyout-item-bundle-children"
+            v-if="itemBundleLength(item) > 0 && isBundleVisible(item)"
+            tabindex="0"
+          >
+            <li class="rebuy-cart__flyout-item-bundle-child" v-for="(option, index) in item.options_with_values">
+              <div class="rebuy-cart__flyout-item-bundle-chiage-container">
+                <img
+                  v-bind:src="getBundleOptionImageld-left"
+                >
+                <div
+                  class="rebuy-cart__flyout-item-bundle-im(item.product, option, index)"
+                  v-bind:alt="childBundleTitle(option)"
+                  class="rebuy-cart__flyout-item-bundle-image"
+                ></div>
+              </div>
+
+              <div class="rebuy-cart__flyout-item-bundle-child-right">
+                <h5 v-html="childBundleTitle(option)" class="rebuy-cart__flyout-item-bundle-title"></h5>
+                <p v-html="option.value" class="rebuy-cart__flyout-item-bundle-value"></p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- End Bundle Details -->
+      </div>
+      <!-- End Info -->
+
+      <!-- Buy More Save More -->
+      <div
+        v-if="itemHasBMSM(item) && bMSMFinalTierNotReached(item)"
+        class="rebuy-cart__flyout-item-buy-more-save-more"
+      >
+        <div
+          v-if="hasBMSMButtons()"
+          class="rebuy-cart__flyout-item-buy-more-save-more-container"
+        >
+          <div
+            v-for="tier in getBMSMTiers()"
+            class="rebuy-cart__flyout-item-buy-more-save-more-button-container"
+            v-if="tier.quantity > item.quantity"
+          >
+            <button
+              v-on:click="adjustBMSMQuantity(item, tier)"
+              class="rebuy-button rebuy-cart__flyout-item-buy-more-save-more-button"
+              v-bind:aria-label="getBMSMButtonText(tier)"
+            >
+              <span v-html="getBMSMButtonText(tier)"></span>
+            </button>
+          </div>
+        </div>
+
+        <span
+          v-if="!hasBMSMButtons()"
+          class="rebuy-cart__flyout-buy-more-save-more-dynamic-message-text"
+          v-html="buyMoreSaveMoreDynamicText(item)"
+        ></span>
+      </div>
+      <!-- End Buy More Save More -->
+
+      <!-- Switch to Subscription -->
+      <div
+        class="rebuy-cart__flyout-item-subscription"
+        v-if="hasSwitchToSubscription(item)"
+      >
+        <button
+          class="rebuy-button outline"
+          v-if="!item.product.subscription || item.status == 'downgrading' || item.status == 'upgrading'"
+          v-bind:aria-label="'Switch ' + item.product_title + ' to a Subscription'"
+          v-bind:disabled="(item.status == 'downgrading' || item.status == 'upgrading')"
+          v-on:click="updateItemDeliveryFrequency(item, selectedSubscriptionFrequency(item, 0), 'onetime')"
+          type="button"
+        >
+          <span v-html="switchToSubscriptionLabel(item)"></span>
+        </button>
+
+        <select
+          class="rebuy-select muted"
+          aria-label="Subscription delivery frequency"
+          v-if="item.product.subscription && item.status != 'downgrading'"
+          v-model="item.product.subscription_frequency"
+          v-on:change="updateItemDeliveryFrequency(item)"
+        >
+          <optgroup
+            v-if="!item.product.is_subscription_only && !subscriptionDowngradeDisabled()"
+            v-bind:label="getSwitchToSubscriptionLabel('onetime_option_group_label')"
+          >
+            <option
+              v-bind:value="'onetime'"
+              v-html="getSwitchToSubscriptionLabel('onetime_option_label')"
+            ></option>
+          </optgroup>
+          <optgroup v-bind:label="subscriptionOptionGroupLabel(item)">
+            <option
+              v-for="frequency in subscriptionFrequencies(item)"
+              v-bind:value="frequency"
+              v-html="subscriptionOptionLabel(item, frequency, item.product.subscription_interval)"
+            ></option>
+          </optgroup>
+        </select>
+      </div>
+      <!-- End Switch to Subscription -->
+    </li>
+  </ul>
+
+  <!-- Empty Cart -->
+  <div class="rebuy-cart__flyout-empty-cart" v-html="emptyCartMarkup()" v-if="!hasItems()"></div>
+</div>

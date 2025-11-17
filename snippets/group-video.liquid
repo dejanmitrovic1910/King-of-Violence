@@ -2,42 +2,24 @@
   <div class="featured-video" id="featured-video-container">
     {{ slides[0] }}
   </div>
-  <div class="youtube-video-dashboard">
-    <div class="carousel-wrapper">
-      {% for slide in slides %}
-        {%- comment -%}
-          Find youtube ID for the thumbnail; assumes slide has an <iframe src="https://www.youtube.com/embed/VIDEO_ID?...">
-        {%- endcomment -%}
-        {% assign match = slide | split: 'youtube.com/embed/' %}
-        {% assign sub = match[1] | split: '?' %}
-        <div class="carousel-video" data-index="{{ forloop.index0 }}">
-          {% comment %} <img src="https://img.youtube.com/vi/{{ sub[0] }}/hqdefault.jpg" alt="Video thumbnail"> {% endcomment %}
-          <img src="//king-of-violence.myshopify.com/cdn/shop/files/5.png?v=1761188168&width=3840" alt="Video thumbnail">
-        </div>
-      {% endfor %}
-    </div>
-  </div>
+  {% render 'resource-list-carousel', slides: slides, slide_count: '4', settings: settings %}
 </div>
 <script>
-  var slideElements = {{ slides | jsonify }};
-  console.log("slideElements",slideElements);
-  document.querySelectorAll('.carousel-video').forEach(function(item) {
-    console.log("item",item);
-    item.addEventListener('click', function() {
-      var idx = parseInt(item.getAttribute('data-index'));
-      var featuredContainer = document.getElementById('featured-video-container');
-      {% comment %} featuredContainer.innerHTML = slideElements[idx]; {% endcomment %}
-      {% comment %} console.log("dddddddd"); {% endcomment %}
-        {% comment %} console.log("dddddddd",idx);
-      console.log("dddddddd",{{slides[idx]}}); {% endcomment %}
-      {% comment %} featuredContainer.innerHTML = slides[idx]; {% endcomment %}
+  document.querySelectorAll('.youtube-video-dashboard deferred-media').forEach((item) => {
+    item.addEventListener('click', () => {
+      const featuredContainer = document.getElementById('featured-video-container');
+
+      // Replace featured video HTML with the clicked one
+      featuredContainer.innerHTML = item.dataset.video;
+
+      // Re-initialize any deferred-media behavior
+      const deferred = featuredContainer.querySelector('deferred-media');
+      if (deferred && deferred.loadContent) deferred.loadContent();
     });
   });
 </script>
 
-
-<style>
-    .carousel-video:active{
-        border: 2px solid #000;
-    }
-</style>
+<div class="carousel-video" data-embed='<iframe src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&.."></iframe>'>
+  <!-- inside here, show thumbnail or a deferred-media image/preview -->
+  <!-- Optionally, render the deferred-media element if you want but do not place a live iframe there -->
+</div>

@@ -212,48 +212,56 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
                       </div>
                     </div>
                     <div class="rebuy-product-options-container" v-if="product.variants.length == 1">
-                      <div class="rebuy-product-actions" style="width: 100%;">
-                        <div class="subscription-checkbox" v-if="showSubscriptionOptions(product)">
-                            <label class="rebuy-checkbox-label">
-                                <input
-                                    class="checkbox-input rebuy-checkbox"
-                                    v-model="product.subscription"
-                                    v-on:change="toggleSubscription(product)"
-                                    type="checkbox" />
-                                <span class="checkbox-label" v-html="upgradeToSubscriptionLabel(product)"></span>
-                            </label>
-                        </div>
+                        <div class="rebuy-product-options">
+                            <div class="rebuy-product-options-unique-one">
+                              <span class="rebuy-product-options-unique-one-text">UNIQUE ONE</span>
+                              <span class="rebuy-product-options-unique-one-icon">
+                                  <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='black' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" alt="Unique One">
+                              </span>
+                            </div>
+                        </div>   
+                        <div class="rebuy-product-actions">
+                            <div class="subscription-checkbox" v-if="showSubscriptionOptions(product)">
+                                <label class="rebuy-checkbox-label">
+                                    <input
+                                        class="checkbox-input rebuy-checkbox"
+                                        v-model="product.subscription"
+                                        v-on:change="toggleSubscription(product)"
+                                        type="checkbox" />
+                                    <span class="checkbox-label" v-html="upgradeToSubscriptionLabel(product)"></span>
+                                </label>
+                            </div>
 
-                        <div class="subscription-frequency" v-if="showSubscriptionFrequency(product)">
-                            <select
-                                class="rebuy-select"
-                                v-model="product.subscription_frequency"
-                                v-on:change="updateSubscriptionFrequency(product)">
-                                <option v-for="frequency in product.subscription_frequencies" v-bind:value="frequency">{{ frequencyLabel(frequency, product.subscription_interval) }}</option>
-                            </select>
-                        </div>
-                        
-                        <div class="product-quantity" v-if="hasQuantityInputEnabled()">
-                            <div class="rebuy-select-wrapper">
-                                <label class="rebuy-label">Quantity</label>
-                                <select 
-                                    class="rebuy-select" 
-                                    v-model="product.quantity">
-                                    <option v-for="n in maxQuantityInputValue()" v-bind:value="n">{{ n }}</option>
+                            <div class="subscription-frequency" v-if="showSubscriptionFrequency(product)">
+                                <select
+                                    class="rebuy-select"
+                                    v-model="product.subscription_frequency"
+                                    v-on:change="updateSubscriptionFrequency(product)">
+                                    <option v-for="frequency in product.subscription_frequencies" v-bind:value="frequency">{{ frequencyLabel(frequency, product.subscription_interval) }}</option>
                                 </select>
                             </div>
-                        </div>
+                            
+                            <div class="product-quantity" v-if="hasQuantityInputEnabled()">
+                                <div class="rebuy-select-wrapper">
+                                    <label class="rebuy-label">Quantity</label>
+                                    <select 
+                                        class="rebuy-select" 
+                                        v-model="product.quantity">
+                                        <option v-for="n in maxQuantityInputValue()" v-bind:value="n">{{ n }}</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <button
-                          class="rebuy-button bst-recommended-atc-desktop"
-                          v-bind:class="{ working: (product.status != 'ready' && product.status != 'selecting') }"
-                          v-bind:disabled="!(variantAvailable(product.selected_variant)) || (product.status != 'ready' && product.status != 'selecting')"
-                          v-bind:aria-label="buttonAriaLabel(product)"
-                          v-on:click="addToCart(product)"
-                          type="button">
-                          <span v-html="buttonLabel(product)" style="font-size: 14px;"></span>
-                        </button>
-                      </div>
+                            <button
+                            class="rebuy-button bst-recommended-atc-desktop"
+                            v-bind:class="{ working: (product.status != 'ready' && product.status != 'selecting') }"
+                            v-bind:disabled="!(variantAvailable(product.selected_variant)) || (product.status != 'ready' && product.status != 'selecting')"
+                            v-bind:aria-label="buttonAriaLabel(product)"
+                            v-on:click="addToCart(product)"
+                            type="button">
+                            <span>+</span>
+                          </button>
+                        </div>
                     </div>
                 </div>
 
@@ -488,48 +496,56 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
                       </div>
                     </div>
                     <div class="rebuy-product-options-container" v-if="product.variants.length == 1">
-                      <div class="rebuy-product-actions" style="width: 100%;">
-                        <div class="subscription-checkbox" v-if="showSubscriptionOptions(product)">
-                            <label class="rebuy-checkbox-label">
-                                <input
-                                    class="checkbox-input rebuy-checkbox"
-                                    v-model="product.subscription"
-                                    v-on:change="toggleSubscription(product)"
-                                    type="checkbox" />
-                                <span class="checkbox-label" v-html="upgradeToSubscriptionLabel(product)"></span>
-                            </label>
-                        </div>
+                        <div class="rebuy-product-options">
+                            <div class="rebuy-product-options-unique-one">
+                              <span class="rebuy-product-options-unique-one-text">UNIQUE ONE</span>
+                              <span class="rebuy-product-options-unique-one-icon">
+                                  <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='black' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" alt="Unique One">
+                              </span>
+                            </div>
+                        </div>   
+                        <div class="rebuy-product-actions">
+                            <div class="subscription-checkbox" v-if="showSubscriptionOptions(product)">
+                                <label class="rebuy-checkbox-label">
+                                    <input
+                                        class="checkbox-input rebuy-checkbox"
+                                        v-model="product.subscription"
+                                        v-on:change="toggleSubscription(product)"
+                                        type="checkbox" />
+                                    <span class="checkbox-label" v-html="upgradeToSubscriptionLabel(product)"></span>
+                                </label>
+                            </div>
 
-                        <div class="subscription-frequency" v-if="showSubscriptionFrequency(product)">
-                            <select
-                                class="rebuy-select"
-                                v-model="product.subscription_frequency"
-                                v-on:change="updateSubscriptionFrequency(product)">
-                                <option v-for="frequency in product.subscription_frequencies" v-bind:value="frequency">{{ frequencyLabel(frequency, product.subscription_interval) }}</option>
-                            </select>
-                        </div>
-                        
-                        <div class="product-quantity" v-if="hasQuantityInputEnabled()">
-                            <div class="rebuy-select-wrapper">
-                                <label class="rebuy-label">Quantity</label>
-                                <select 
-                                    class="rebuy-select" 
-                                    v-model="product.quantity">
-                                    <option v-for="n in maxQuantityInputValue()" v-bind:value="n">{{ n }}</option>
+                            <div class="subscription-frequency" v-if="showSubscriptionFrequency(product)">
+                                <select
+                                    class="rebuy-select"
+                                    v-model="product.subscription_frequency"
+                                    v-on:change="updateSubscriptionFrequency(product)">
+                                    <option v-for="frequency in product.subscription_frequencies" v-bind:value="frequency">{{ frequencyLabel(frequency, product.subscription_interval) }}</option>
                                 </select>
                             </div>
-                        </div>
+                            
+                            <div class="product-quantity" v-if="hasQuantityInputEnabled()">
+                                <div class="rebuy-select-wrapper">
+                                    <label class="rebuy-label">Quantity</label>
+                                    <select 
+                                        class="rebuy-select" 
+                                        v-model="product.quantity">
+                                        <option v-for="n in maxQuantityInputValue()" v-bind:value="n">{{ n }}</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <button
-                          class="rebuy-button bst-recommended-atc-desktop"
-                          v-bind:class="{ working: (product.status != 'ready' && product.status != 'selecting') }"
-                          v-bind:disabled="!(variantAvailable(product.selected_variant)) || (product.status != 'ready' && product.status != 'selecting')"
-                          v-bind:aria-label="buttonAriaLabel(product)"
-                          v-on:click="addToCart(product)"
-                          type="button">
-                          <span v-html="buttonLabel(product)" style="font-size: 14px;"></span>
-                        </button>
-                      </div>
+                            <button
+                            class="rebuy-button bst-recommended-atc-desktop"
+                            v-bind:class="{ working: (product.status != 'ready' && product.status != 'selecting') }"
+                            v-bind:disabled="!(variantAvailable(product.selected_variant)) || (product.status != 'ready' && product.status != 'selecting')"
+                            v-bind:aria-label="buttonAriaLabel(product)"
+                            v-on:click="addToCart(product)"
+                            type="button">
+                            <span>+</span>
+                          </button>
+                        </div>
                     </div>
                 </div>
 
@@ -658,4 +674,28 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
     line-height: 18px;            /* your custom line-height */
     max-height: calc(18px * 2);
   }
+
+  #rebuy-widget-251297 .rebuy-product-options-unique-one, 
+  #rebuy-widget-251429 .rebuy-product-options-unique-one{
+    display: flex;
+    justify-content: space-between;
+    padding: 11px 10px 11px 15px;
+    background: white;
+    border-radius: 5px;
+    color: black;
+    height: 44px;
+    cursor: not-allowed;
+  }
+  #rebuy-widget-251297 .rebuy-product-options-unique-one-text, 
+  #rebuy-widget-251429 .rebuy-product-options-unique-one-text {
+    margin-top:  2px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  @media only screen and (max-width: 749px) {
+    [data-template="collection"] #rebuy-widget-251429.rebuy-widget .rebuy-product-grid{
+        padding: 0;
+    }
+}
 </style>

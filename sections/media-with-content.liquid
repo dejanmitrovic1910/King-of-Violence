@@ -1,5 +1,3 @@
-
-
 {% liquid
   assign media_class_modifier = 'media-with-content--' | append: section.settings.media_width
 
@@ -41,6 +39,8 @@
     data-shopify-visual-preview
   {% endif %}
 >
+  {% content_for 'block', type: 'text', id: 'text' %}
+
   {% content_for 'block', type: '_media-without-appearance', id: 'media' %}
 
   {% content_for 'block', type: '_content-without-appearance', id: 'content' %}
@@ -149,7 +149,7 @@
     --media-with-content-grid-columns: var(--full-page-grid-with-margins);
 
     grid-template-columns: var(--media-with-content-grid-columns);
-    grid-template-areas: 'media media media' 'content content content';
+    grid-template-areas: 'text text text' 'media media media' 'content content content';
 
     @media screen and (min-width: 750px) {
       --media-with-content-grid-columns: 3.5fr 2.5fr;
@@ -161,7 +161,9 @@
     .media-block {
       grid-area: media;
     }
-
+    .media-block--text {
+      grid-area: text;
+    }
     .media-with-content__content {
       grid-area: content;
     }
@@ -195,6 +197,21 @@
 
     min-height: 500px;
   }
+
+  
+    @media only screen and (max-width: 749px) {
+      .media-with-content-mobile-title{
+        grid-area: text;
+      }
+      .media-with-content-desktop-title{
+        display: none !important;
+      }
+    }
+    @media only screen and (min-width: 750px) {
+      .media-with-content-mobile-title{
+        display: none !important;
+      }
+    }
 {% endstylesheet %}
 
 {% schema %}

@@ -2,7 +2,7 @@
 
 {% assign block_settings = block.settings %}
 <div
-  class="accordion accordion--{{ block.id }} accordion--{{ block_settings.icon }} border-style spacing-style{% if block_settings.inherit_color_scheme == false %} color-{{ block_settings.color_scheme }}{% endif %}{% if block_settings.dividers %} accordion--dividers{% endif %}"
+  class="accordion accordion--{{ block.id }} accordion--{{ block_settings.icon }} border-style spacing-style{% if block_settings.inherit_color_scheme == false %} color-{{ block_settings.color_scheme }}{% endif %}{% if block_settings.dividers %} accordion--dividers{% endif %} {{ block_settings.identifier }}"
   style="
     --summary-font-family: var(--font-{{ block_settings.type_preset }}--family);
      --summary-font-style: var(--font-{{ block_settings.type_preset }}--style);
@@ -249,6 +249,12 @@
       "step": 1,
       "unit": "px",
       "default": 0
+    },
+    {
+      "type": "text",
+      "id": "identifier",
+      "label": "Identifier",
+      "default": "custom-accordion"
     }
   ],
   "presets": [

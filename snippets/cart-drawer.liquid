@@ -8,11 +8,11 @@
   @param {string} [settings.drawer_color_scheme] - The color scheme for the drawer.
 {%- enddoc -%}
 
-<script
+{% comment %} <script
   src="{{ 'cart-drawer.js' | asset_url }}"
   type="module"
   fetchpriority="low"
-></script>
+></script> {% endcomment %}
 
 <cart-drawer-component
   class="cart-drawer"

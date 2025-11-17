@@ -50,7 +50,7 @@
 
 {% capture attributes %}
   class="{{ class }} spacing-style text-block text-block--{{ block.id }} {{ block_settings.type_preset }}
-    {{ text_block_classes }} {{ block.settings.identifier }}
+    {{ text_block_classes }} {{ block.settings.identifier }} {% if block_settings.capitalize %}text-block--capitalize{% endif %}
   "
 
   style="
