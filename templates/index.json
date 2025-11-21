@@ -112,13 +112,13 @@
           "type": "text",
           "settings": {
             "text": "<h5>👊      USE  FIRSTBLOOD20  AT  CHECKOUT              👊            USE  FIRSTBLOOD20  AT  CHECKOUT    👊        USE                   FIRSTBLOOD20  TO  KNOCKOUT</h5>",
-            "width": "fit-content",
-            "max_width": "normal",
+            "width": "100%",
+            "max_width": "none",
             "alignment": "left",
-            "type_preset": "custom",
+            "type_preset": "h3",
             "capitalize": false,
-            "font": "var(--font-body--family)",
-            "font_size": "1.25rem",
+            "font": "var(--font-subheading--family)",
+            "font_size": "2rem",
             "line_height": "tight",
             "letter_spacing": "tight",
             "case": "none",
@@ -590,7 +590,7 @@
           "type": "text",
           "name": "t:names.text",
           "settings": {
-            "text": "<h2>Select Your Hero</h2>",
+            "text": "<h2>CHOOSE YOUR FIGHTER</h2>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -620,7 +620,7 @@
           "static": true,
           "settings": {
             "placement": "on_image",
-            "horizontal_alignment": "flex-start",
+            "horizontal_alignment": "center",
             "vertical_alignment": "flex-end",
             "collection_card_gap": 8,
             "inherit_color_scheme": true,
@@ -761,7 +761,7 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<h2>Don't Miss Best Sellers</h2>",
+            "text": "<h2>THE KINGDOM'S BEST SELLERS</h2>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -831,7 +831,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
-                "image": "shopify://shop_images/chuck_ultimate_insta_tall_1.png",
+                "image": "shopify://shop_images/Screenshot_2025-04-15_at_2.09.06_PM.webp",
                 "link": "shopify://collections/chuck-liddell",
                 "image_ratio": "adapt",
                 "width": "fill",
@@ -1455,7 +1455,7 @@
           "static": true,
           "settings": {
             "media_type": "image",
-            "image": "shopify://shop_images/RISE_goofy_mockup_liddell_3.png",
+            "image": "shopify://shop_images/KOV_PRODUCT_HERO.png",
             "mobile_image_enable": "yes",
             "mobile_image": "shopify://shop_images/RISE_goofy_mockup_liddell_3_755e4427-d80b-439b-b024-346f0f8c4355.png",
             "link": "",
@@ -1470,9 +1470,9 @@
           "type": "_content-without-appearance",
           "static": true,
           "settings": {
-            "horizontal_alignment_flex_direction_column": "flex-start",
+            "horizontal_alignment_flex_direction_column": "flex-end",
             "vertical_alignment_flex_direction_column": "center",
-            "gap": 14
+            "gap": 0
           },
           "blocks": {
             "text_CgU6Gr": {
@@ -2700,11 +2700,11 @@
         "text_BrD7Qf": {
           "type": "text",
           "settings": {
-            "text": "<p><strong>ENTER THE KINGDOM • CLAIM YOUR CROWN</strong></p>",
-            "width": "fit-content",
+            "text": "<h3>CLAIM YOUR CROWN            👊           ENTER   FIRSTBLOOD20   AT   CHECKOUT                👊         WELCOME TO THE KINGDOM    </h3>",
+            "width": "100%",
             "max_width": "normal",
             "alignment": "left",
-            "type_preset": "custom",
+            "type_preset": "h3",
             "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "1rem",
