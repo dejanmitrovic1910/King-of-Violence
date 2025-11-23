@@ -13,6 +13,7 @@
     section-resource-list
     spacing-style
     gap-style
+    {{ section.settings.identifier }}
   "
   style="
     {% render 'spacing-style', settings: section.settings %}
@@ -339,6 +340,12 @@
       "step": 1,
       "unit": "px",
       "default": 0
+    },
+    {
+      "type": "text",
+      "id": "identifier",
+      "label": "Identifier",
+      "default": "custom-product-list"
     }
   ],
   "presets": [
