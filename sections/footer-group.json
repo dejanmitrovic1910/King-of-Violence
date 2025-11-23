@@ -88,6 +88,7 @@
             "max_width": "normal",
             "alignment": "center",
             "type_preset": "rte",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
@@ -114,6 +115,7 @@
             "max_width": "normal",
             "alignment": "center",
             "type_preset": "paragraph",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
@@ -194,6 +196,63 @@
         "padding-block-end": 76,
         "email_wrapper": true,
         "identifier": "custom-section"
+      }
+    },
+    "marquee_JjNyii": {
+      "type": "marquee",
+      "blocks": {
+        "icon_aF3D4n": {
+          "type": "icon",
+          "name": "t:names.icon",
+          "settings": {
+            "icon": "none",
+            "image_upload": "shopify://shop_images/favicon_9b700279-055b-48c2-b043-677bfeff8b08.png",
+            "width": 24,
+            "link": "",
+            "open_in_new_tab": false
+          },
+          "blocks": {}
+        },
+        "text_DkmJ3Q": {
+          "type": "text",
+          "settings": {
+            "text": "<h3>CLAIM YOUR CROWN            👊           ENTER   FIRSTBLOOD20   AT   CHECKOUT                👊         WELCOME TO THE KINGDOM    </h3>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h3",
+            "capitalize": false,
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "tight",
+            "letter_spacing": "tight",
+            "case": "none",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "icon_aF3D4n",
+        "text_DkmJ3Q"
+      ],
+      "name": "t:names.marquee_section",
+      "settings": {
+        "movement_direction": "normal",
+        "color_scheme": "scheme-2",
+        "padding-block-start": 16,
+        "padding-block-end": 16,
+        "gap_between_elements": 24,
+        "identifier": "footer-marquee"
       }
     },
     "footer": {
@@ -546,6 +605,7 @@
   "order": [
     "section_9FjKrC",
     "section_3gzURG",
+    "marquee_JjNyii",
     "footer",
     "utilities"
   ]

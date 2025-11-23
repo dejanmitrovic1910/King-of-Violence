@@ -388,6 +388,7 @@
         "icon_33RTiJ",
         "text_MBkMRg"
       ],
+      "disabled": true,
       "name": "t:names.marquee_section",
       "settings": {
         "movement_direction": "normal",

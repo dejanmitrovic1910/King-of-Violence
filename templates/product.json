@@ -1181,6 +1181,7 @@
         "icon_NmPApz",
         "text_3cmGiq"
       ],
+      "disabled": true,
       "name": "t:names.marquee_section",
       "settings": {
         "movement_direction": "normal",
