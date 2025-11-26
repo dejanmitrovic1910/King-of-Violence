@@ -284,6 +284,7 @@
         "group_RcYWXw": {
           "type": "group",
           "name": "t:names.group",
+          "disabled": true,
           "settings": {
             "content_direction": "column",
             "vertical_on_mobile": true,
@@ -433,6 +434,27 @@
               },
               "blocks": {}
             },
+            "menu_WjjJWn": {
+              "type": "menu",
+              "name": "t:names.menu",
+              "settings": {
+                "menu": "footer-menu-clip_2",
+                "heading": "",
+                "menu_spacing": 12,
+                "show_as_accordion": false,
+                "accordion_icon": "caret",
+                "accordion_dividers": false,
+                "inherit_color_scheme": true,
+                "color_scheme": "",
+                "heading_preset": "h3",
+                "link_preset": "paragraph",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
             "group_WrbDpT": {
               "type": "group",
               "name": "t:names.group",
@@ -475,27 +497,6 @@
                 "identifier": "menu-social"
               },
               "blocks": {
-                "menu_zYAMxD": {
-                  "type": "menu",
-                  "name": "t:names.menu",
-                  "settings": {
-                    "menu": "footer-menu-clip_2",
-                    "heading": "",
-                    "menu_spacing": 12,
-                    "show_as_accordion": false,
-                    "accordion_icon": "caret",
-                    "accordion_dividers": false,
-                    "inherit_color_scheme": true,
-                    "color_scheme": "",
-                    "heading_preset": "h3",
-                    "link_preset": "paragraph",
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
                 "social_links_thmBmY": {
                   "type": "social-links",
                   "name": "t:names.social_media_links",
@@ -518,13 +519,13 @@
                 }
               },
               "block_order": [
-                "menu_zYAMxD",
                 "social_links_thmBmY"
               ]
             }
           },
           "block_order": [
             "menu_fbtwcm",
+            "menu_WjjJWn",
             "group_WrbDpT"
           ]
         }
@@ -539,7 +540,7 @@
         "gap": 0,
         "color_scheme": "",
         "padding-block-start": 80,
-        "padding-block-end": 80,
+        "padding-block-end": 30,
         "background_image": "shopify://shop_images/footer_image.webp",
         "background_image_position": "cover"
       }

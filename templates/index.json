@@ -62,7 +62,7 @@
             "link": "shopify://collections/all",
             "open_in_new_tab": false,
             "style_class": "button",
-            "width": "custom",
+            "width": "fit-content",
             "custom_width": 15,
             "width_mobile": "fit-content",
             "custom_width_mobile": 100,
@@ -156,7 +156,7 @@
           "type": "text",
           "static": true,
           "settings": {
-            "text": "<h2>DON'T MISS ANOTHER DROP!</h2>",
+            "text": "",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -333,9 +333,9 @@
       },
       "name": "t:names.media_with_text",
       "settings": {
-        "media_position": "right",
+        "media_position": "left",
         "media_width": "wide",
-        "media_height": "60svh",
+        "media_height": "auto",
         "section_width": "full-width",
         "extend_media": true,
         "color_scheme": "scheme-db578fa1-da9c-48c2-a278-c672d942f928",
@@ -662,7 +662,7 @@
               "name": "t:names.image",
               "settings": {
                 "image": "shopify://shop_images/Screenshot_2025-04-15_at_2.09.06_PM.webp",
-                "link": "shopify://collections/chuck-liddell",
+                "link": "shopify://products/best-job-i-ever-had-crown-king",
                 "image_ratio": "adapt",
                 "width": "fill",
                 "custom_width": 100,
@@ -1133,7 +1133,7 @@
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
-                    "type_preset": "h4",
+                    "type_preset": "h3",
                     "font": "var(--font-body--family)",
                     "font_size": "1rem",
                     "line_height": "normal",
@@ -1213,12 +1213,12 @@
         "text_WDkNgd": {
           "type": "text",
           "settings": {
-            "text": "<p>Engineered for battle. Designed for style. Born from the fight.</p>",
+            "text": "<p>👊 <strong>Engineered for battle.       </strong>👊<strong> Designed for style.            </strong>👊<strong>Born from the fight.</strong></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
-            "type_preset": "h2",
-            "capitalize": false,
+            "type_preset": "h3",
+            "capitalize": true,
             "font": "var(--font-primary--family)",
             "font_size": "var(--font-size--heading-lg)",
             "line_height": "tight",
@@ -1241,12 +1241,13 @@
       "block_order": [
         "text_WDkNgd"
       ],
+      "disabled": true,
       "name": "t:names.marquee",
       "settings": {
         "movement_direction": "normal",
         "color_scheme": "scheme-5",
-        "padding-block-start": 20,
-        "padding-block-end": 20,
+        "padding-block-start": 16,
+        "padding-block-end": 16,
         "gap_between_elements": 52,
         "identifier": "intro-marquee"
       }
@@ -1472,7 +1473,7 @@
           "type": "_content-without-appearance",
           "static": true,
           "settings": {
-            "horizontal_alignment_flex_direction_column": "flex-end",
+            "horizontal_alignment_flex_direction_column": "center",
             "vertical_alignment_flex_direction_column": "center",
             "gap": 0
           },
@@ -1482,9 +1483,9 @@
               "name": "t:names.text",
               "settings": {
                 "text": "<h6>King of Violence</h6>",
-                "width": "fit-content",
+                "width": "100%",
                 "max_width": "normal",
-                "alignment": "left",
+                "alignment": "center",
                 "type_preset": "h6",
                 "capitalize": false,
                 "font": "var(--font-primary--family)",
@@ -1509,10 +1510,10 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h2>ENTER THE KINGDOM. </h2><h2>CLAIM YOUR CROWN.</h2>",
-                "width": "fit-content",
+                "text": "<h2>CLAIM YOUR CROWN.</h2>",
+                "width": "100%",
                 "max_width": "narrow",
-                "alignment": "left",
+                "alignment": "center",
                 "type_preset": "rte",
                 "capitalize": false,
                 "font": "var(--font-primary--family)",
@@ -1538,7 +1539,7 @@
               "name": "t:names.text",
               "settings": {
                 "text": "<p>Champions are made in the moments you don’t see. Whether you’re walking the streets or stepping into the cage, it’s the same fight. </p><p>Every day. Every challenge. It’s not just about how you fight—it’s about how you live.<br/><br/></p>",
-                "width": "fit-content",
+                "width": "100%",
                 "max_width": "narrow",
                 "alignment": "left",
                 "type_preset": "rte",
@@ -2301,6 +2302,7 @@
         "text_bqCeVf": {
           "type": "text",
           "name": "t:names.heading",
+          "disabled": true,
           "settings": {
             "text": "<h2>JOIN THE FIGHT</h2>",
             "width": "100%",
@@ -2323,6 +2325,29 @@
             "padding-inline-start": 0,
             "padding-inline-end": 0,
             "identifier": "custom-text-mobile"
+          },
+          "blocks": {}
+        },
+        "image_he7NnX": {
+          "type": "image",
+          "name": "t:names.image",
+          "settings": {
+            "image": "shopify://shop_images/6.png",
+            "link": "",
+            "image_ratio": "adapt",
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {}
         },
@@ -2392,7 +2417,7 @@
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0,
-                "identifier": "custom-text-desktop"
+                "identifier": "custom-text"
               },
               "blocks": {}
             },
@@ -2402,7 +2427,7 @@
                 "text": "<p>Stay in our corner and you’ll be the first to know when we unlock the next fighter capsule honoring the legends of combat sports. <strong>Enter your email for 10% off your next order!</strong></p>",
                 "width": "100%",
                 "max_width": "normal",
-                "alignment": "center",
+                "alignment": "left",
                 "type_preset": "paragraph",
                 "capitalize": false,
                 "font": "var(--font-body--family)",
@@ -2454,35 +2479,12 @@
             "text_39GLJr",
             "email_signup_VgfG4j"
           ]
-        },
-        "image_he7NnX": {
-          "type": "image",
-          "name": "t:names.image",
-          "settings": {
-            "image": "shopify://shop_images/6.png",
-            "link": "",
-            "image_ratio": "adapt",
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
         }
       },
       "block_order": [
         "text_bqCeVf",
-        "group_EJTiXP",
-        "image_he7NnX"
+        "image_he7NnX",
+        "group_EJTiXP"
       ],
       "name": "t:names.email_signup",
       "settings": {
@@ -2509,8 +2511,8 @@
         "overlay_color": "#fec909",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 80,
-        "padding-block-end": 80,
+        "padding-block-start": 40,
+        "padding-block-end": 30,
         "email_wrapper": false,
         "identifier": "email-signup-custom"
       }

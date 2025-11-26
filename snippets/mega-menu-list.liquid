@@ -49,7 +49,6 @@
     endif
   endif
 
-  
   if menu_content_type == 'featured_collections'
     if parent_link.type == 'collection_link'
       assign collection_handles = parent_link.object.handle | append: ','
@@ -200,7 +199,7 @@
     assign temp_column_count = column_count | plus: min_products
 
     if temp_column_count > max_menu_columns
-      assign max_product_columns = 2
+      assign max_product_columns = 3
     else
       assign max_product_columns = max_menu_columns | minus: column_count | at_most: max_products
     endif
@@ -272,7 +271,6 @@
   }
 {% endstyle %}
 
-
 {% case menu_content_type %}
   {% when 'featured_products' %}
     {%- capture image_sizes -%}
@@ -317,9 +315,7 @@
       -%}
     {%- endcapture -%}
 
-    {% if collection_handles.size == 1 %}
-      {% assign max_featured_collections = 1 %}
-    {% endif %}
+    {% assign max_featured_collections = collection_handles.size | at_most: 3 %}
 
     <span
       class="mega-menu__content"

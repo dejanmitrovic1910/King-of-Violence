@@ -216,7 +216,7 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
                             <div class="rebuy-product-options-unique-one">
                               <span class="rebuy-product-options-unique-one-text">UNIQUE ONE</span>
                               <span class="rebuy-product-options-unique-one-icon">
-                                  <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='black' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" alt="Unique One">
+                                  <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='white' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" alt="Unique One">
                               </span>
                             </div>
                         </div>   
@@ -500,7 +500,7 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
                             <div class="rebuy-product-options-unique-one">
                               <span class="rebuy-product-options-unique-one-text">UNIQUE ONE</span>
                               <span class="rebuy-product-options-unique-one-icon">
-                                  <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='black' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" alt="Unique One">
+                                  <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='white' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" alt="Unique One">
                               </span>
                             </div>
                         </div>   
@@ -579,7 +579,7 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
     flex: 1;
     margin: 0;
     order: 1;
-    border-color: black;
+    border-color: white;
     padding: 0;
   }
   #rebuy-widget-251297 .rebuy-product-actions {
@@ -590,10 +590,13 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
     padding: 0;
   }
   #rebuy-widget-251297 .rebuy-select {
-    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='black' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='white' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 8px center !important;
     background-size: 24px;
+    background-color: black;
+    border: 1px solid white;
+    color: white;
   }
   #rebuy-widget-251297 .rebuy-select{
     padding: 9px 20px 9px 15px;
@@ -606,9 +609,12 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
     font-weight: 700;
     border: none;
   }
-  #rebuy-widget-251297.rebuy-widget .super-title,
-  #rebuy-widget-251297.rebuy-widget .rebuy-product-title *,
+  #rebuy-widget-251429.rebuy-widget .rebuy-money *,
   #rebuy-widget-251297.rebuy-widget .rebuy-money *{
+    color: var(--basic-color);
+  }
+  #rebuy-widget-251297.rebuy-widget .super-title,
+  #rebuy-widget-251297.rebuy-widget .rebuy-product-title * {
     color: white !important;
   }
   #rebuy-widget-251297 .rebuy-product-info .rebuy-product-title-link {
@@ -644,10 +650,13 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
     padding: 0;
   }
   #rebuy-widget-251429 .rebuy-select {
-    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='black' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='white' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 8px center !important;
     background-size: 24px;
+    background-color: black;
+    border: 1px solid white;
+    color: white;
   }
   #rebuy-widget-251429 .rebuy-select{
     padding: 9px 30px 9px 15px;
@@ -661,8 +670,7 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
     border: none;
   }
   #rebuy-widget-251429.rebuy-widget .super-title,
-  #rebuy-widget-251429.rebuy-widget .rebuy-product-title *,
-  #rebuy-widget-251429.rebuy-widget .rebuy-money *{
+  #rebuy-widget-251429.rebuy-widget .rebuy-product-title *{
     color: white !important;
   }
   #rebuy-widget-251429 .rebuy-product-info .rebuy-product-title-link {
@@ -677,33 +685,40 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
 
   #rebuy-widget-251297 .rebuy-product-options-unique-one, 
   #rebuy-widget-251429 .rebuy-product-options-unique-one{
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 24px;
     justify-content: space-between;
     padding: 11px 10px 11px 15px;
-    background: white;
+    background: black;
     border-radius: 5px;
-    color: black;
+    border: 1px solid white;
+    color: white;
     height: 44px;
     cursor: not-allowed;
   }
   #rebuy-widget-251297 .rebuy-product-options-unique-one-text, 
   #rebuy-widget-251429 .rebuy-product-options-unique-one-text {
-    margin-top:  2px;
+    /* margin-top:  2px */
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    text-align: left;
   }
 
   #rebuy-widget-251297 .rebuy-product-title,
-  #rebuy-widget-251299 .rebuy-product-title{
+  #rebuy-widget-251429 .rebuy-product-title{
     text-align: left;
   }
 
   #rebuy-widget-251297 .rebuy-product-info .rebuy-product-price .rebuy-money
-  #rebuy-widget-251299 .rebuy-product-info .rebuy-product-price .rebuy-money{
+  #rebuy-widget-251429 .rebuy-product-info .rebuy-product-price .rebuy-money{
     color: var(--basic-color);
     font-size: 18px;
     font-weight: 900 !important;
+  }
+  #rebuy-widget-251297 .rebuy-product-options-unique-one-icon,
+  #rebuy-widget-251429 .rebuy-product-options-unique-one-icon{
+    margin-top: -2px;
   }
   @media only screen and (max-width: 749px) {
     [data-template="collection"] #rebuy-widget-251429.rebuy-widget .rebuy-product-grid{
@@ -711,9 +726,29 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
     }
 
     #rebuy-widget-251297 .rebuy-product-block,
-    #rebuy-widget-251299 .rebuy-product-block{
+    #rebuy-widget-251429 .rebuy-product-block{
         padding: 10px;
     }
+  }
+  #rebuy-widget-251297 .rebuy-product-info .rebuy-product-price .rebuy-money,
+  #rebuy-widget-251429 .rebuy-product-info .rebuy-product-price .rebuy-money{
+    font-size: 16px;
+    font-weight: 700;
+  }
+  #rebuy-widget-251297 .rebuy-product-info .rebuy-product-title-link,
+  #rebuy-widget-251429 .rebuy-product-info .rebuy-product-title-link{
+    font-size: 18px;
+  }
 
-}
+  /* General Styling */
+  .rebuy-product-info .rebuy-product-title{
+    text-align: left;
+    width: 100%;
+  }
+  .rebuy-product-info .rebuy-product-price{
+    text-align: left;
+  }
+  .rebuy-product-info .rebuy-product-price{
+    margin: 0 0 5px 0;
+  }
 </style>
