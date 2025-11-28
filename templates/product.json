@@ -970,7 +970,7 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<h2>Select your Hero</h2>",
+            "text": "<h2>CHOOSE YOUR FIGHTER</h2>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -987,7 +987,7 @@
             "background_color": "#00000026",
             "corner_radius": 0,
             "padding-block-start": 20,
-            "padding-block-end": 20,
+            "padding-block-end": 10,
             "padding-inline-start": 0,
             "padding-inline-end": 0,
             "identifier": "custom-text"

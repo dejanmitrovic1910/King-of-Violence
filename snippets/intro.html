@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UFC Players Intro — Fixed</title>
+  <style>
+    :root{
+      --accent: #fec909;
+      --bg:#070708; /* darker background for true dark mode */
+      --panel:#0e0f10;
+      --glass: rgba(255,255,255,0.02);
+      --gap: 48px;
+      --card-size: min(42vmin,440px);
+      --shadow: 0 20px 40px rgba(0,0,0,0.75);
+      --card-scale-max: 1.4; /* center scale target */
+    }
+    html,body{height:100%;}
+    body{
+      margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(1400px 800px at 20% 30%, rgba(254,201,9,0.03), transparent),
+                  radial-gradient(1000px 500px at 80% 70%, rgba(254,201,9,0.02), transparent),
+                  radial-gradient(700px 400px at 50% 90%, rgba(254,201,9,0.02), transparent),
+                  linear-gradient(180deg, var(--bg), #040405);
+      color:#fff; overflow:hidden;
+    }
+
+    /* soft moving light (dimmed) */
+    .ambient {
+      position:fixed; inset:0; pointer-events:none; z-index:0; mix-blend-mode:screen; opacity:0.22;
+      background: radial-gradient(500px 260px at 50% 40%, rgba(254,201,9,0.02), transparent),
+                  radial-gradient(350px 350px at 30% 60%, rgba(254,201,9,0.015), transparent);
+      animation: floaty 8s ease-in-out infinite;
+    }
+    @keyframes floaty{
+      0%{transform:translateY(0) rotate(0deg)}
+      50%{transform:translateY(-18px) rotate(1deg)}
+      100%{transform:translateY(0) rotate(0deg)}
+    }
+
+    .stage{
+      position:relative; height:100vh; display:flex; align-items:center; justify-content:center; z-index:1; padding:40px;
+    }
+
+    .carousel-wrap{
+      width:100%; max-width:1600px; display:flex; align-items:center; justify-content:center; position:relative;
+    }
+
+    /* viewport that holds the track */
+    .viewport{
+      width:100%; overflow:visible; display:flex; align-items:center; justify-content:center;
+      height: calc(var(--card-size) + 140px);
+      touch-action: pan-y; /* allow horizontal dragging custom */
+    }
+
+    .track{
+      display:flex; gap:var(--gap); align-items:center; will-change:transform;
+      padding:40px 20px;
+    }
+
+    .card{
+      width:var(--card-size); height:var(--card-size); flex:0 0 var(--card-size); border-radius:18px; position:relative; overflow:hidden; 
+      box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.25));
+      transition:transform 300ms cubic-bezier(.2,.9,.2,1), box-shadow 300ms; cursor:grab; user-select:none;
+      transform-origin:center center;
+    }
+    .card.center{
+        box-shadow: 0 0 40px #fec909;
+    }
+    .card:active{cursor:grabbing}
+
+    /* image area keeps 1:1 */
+    .card img{width:100%; height:100%; object-fit:cover; display:block; pointer-events:none;}
+
+    /* center styling — we remove transform here so JS controls scaling exactly */
+    .card.center{
+      filter: grayscale(0) brightness(1);
+      z-index: 5;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.85), 0 0 30px rgba(254,201,9,0.04) inset;
+    }
+
+    /* belt wraps around card */
+    .belt{
+      position:absolute;
+      top:50%; left:50%; transform:translate(-50%, -50%);
+      width:120%; height:auto;
+      pointer-events:none;
+      z-index:4;
+    }
+    .belt img{width:100%; height:auto; object-fit:contain; border: 1px solid rgba(254,201,9,0.05);}
+
+    /* nameplate */
+    .nameplate{
+      position:absolute; left:50%; transform:translateX(-50%); bottom:-18px; padding:12px 22px; border-radius:12px; background:linear-gradient(90deg, rgba(0,0,0,0.55), rgba(255,255,255,0.01));
+      backdrop-filter: blur(6px); color:var(--accent); font-weight:700; letter-spacing:1px; font-size:20px; box-shadow:0 6px 18px rgba(0,0,0,0.6);
+    }
+
+    /* extra info to the side */
+    .hud{
+      position:absolute; right:36px; top:36px; color:rgba(255,255,255,0.85); z-index:2; text-align:right; max-width:340px;
+    }
+    .hud h1{margin:0 0 6px 0; font-size:18px; letter-spacing:1px}
+    .hud .desc{opacity:0.7; font-size:14px}
+
+    /* indicator dots */
+    .dots{position:absolute; left:50%; transform:translateX(-50%); bottom:22px; display:flex; gap:8px}
+    .dot{width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.08)}
+    .dot.active{background:var(--accent); box-shadow:0 0 12px rgba(254,201,9,0.25)}
+
+    /* responsive */
+    @media (max-width:900px){
+      :root{--card-size: min(56vmin,320px)}
+      .hud{display:none}
+    }
+
+    /* subtle vignette */
+    .vignette{position:fixed; inset:0; pointer-events:none; background: radial-gradient(ellipse at center, rgba(0,0,0,0) 45%, rgba(0,0,0,0.65) 100%);} 
+
+  </style>
+</head>
+<body>
+  <div class="ambient"></div>
+  <div class="stage">
+    <div class="carousel-wrap">
+
+      <div class="hud">
+        <h1>FIGHT NIGHT — INTRO</h1>
+        <div class="desc">Drag horizontally to place a player in the spotlight. The center hero scales up and gets emphasized with the accent color.</div>
+      </div>
+
+      <div class="viewport" id="viewport">
+        <div class="track" id="track">
+          <!-- Replace image src with real player portraits (1:1 aspect ratio). Using picsum placeholders here. -->
+          <div class="card" data-name="Conor McFly">
+            <div class="card-img"><img src="https://picsum.photos/seed/1/800" alt="player"></div>
+            <div class="belt"><img src="belt.png" alt="UFC Belt" /></div>
+            <div class="info"><div class="hero-name">Conor McFly</div><div class="hero-intro">Lightweight striker with explosive power.</div></div>
+          </div>
+          <div class="card" data-name="Player 2">
+            <div class="card-img"><img src="https://picsum.photos/seed/2/800" alt="player"></div>
+            <div class="belt"><img src="belt.png" alt="UFC Belt" /></div>
+            <div class="info"><div class="hero-name">Player 2</div><div class="hero-intro">Submission specialist.</div></div>
+          </div>
+          <div class="card" data-name="Player 3">
+            <div class="card-img"><img src="https://picsum.photos/seed/3/800" alt="player"></div>
+            <div class="belt"><img src="belt.png" alt="UFC Belt" /></div>
+            <div class="info"><div class="hero-name">Player 3</div><div class="hero-intro">Powerful wrestler.</div></div>
+          </div>
+          <div class="card" data-name="Player 4">
+            <div class="card-img"><img src="https://picsum.photos/seed/4/800" alt="player"></div>
+            <div class="belt"><img src="belt.png" alt="UFC Belt" /></div>
+            <div class="info"><div class="hero-name">Player 4</div><div class="hero-intro">Counter striker.</div></div>
+          </div>
+          <div class="card" data-name="Player 5">
+            <div class="card-img"><img src="https://picsum.photos/seed/5/800" alt="player"></div>
+            <div class="belt"><img src="belt.png" alt="UFC Belt" /></div>
+            <div class="info"><div class="hero-name">Player 5</div><div class="hero-intro">Versatile all-rounder.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dots" id="dots"></div>
+
+    </div>
+
+    <div class="vignette"></div>
+  </div>
+
+  <script>
+    // Basic draggable carousel that emphasizes the center card.
+    const track = document.getElementById('track');
+    const viewport = document.getElementById('viewport');
+    const cards = Array.from(track.children);
+    const dots = document.getElementById('dots');
+    const rootStyles = getComputedStyle(document.documentElement);
+    const maxScale = parseFloat(rootStyles.getPropertyValue('--card-scale-max')) || 1.4; // read from CSS var
+
+    // build dots
+    cards.forEach((c,i)=>{
+      const d = document.createElement('div'); d.className='dot'; if(i===0) d.classList.add('active'); dots.appendChild(d);
+    });
+
+    let state = {
+      pointerDown:false, startX:0, lastX:0, offsetX:0, velocity:0, animFrame:null
+    };
+
+    // center track such that a selected index is in middle
+    function centerIndex(index, instant){
+      const viewportWidth = viewport.clientWidth;
+      const card = cards[index];
+      const cardRect = card.getBoundingClientRect();
+      const trackRect = track.getBoundingClientRect();
+      // compute current translate (we maintain using transform translateX on track)
+      const currTransform = getComputedStyle(track).transform;
+      let currX = 0;
+      if(currTransform && currTransform !== 'none'){
+        const m = currTransform.match(/matrix\(([-0-9., ]+)\)/);
+        if(m) currX = parseFloat(m[1].split(',')[4]);
+      }
+      // desired: center of card aligns with center of viewport
+      const cardCenter = cardRect.left + cardRect.width/2;
+      const viewportCenter = viewport.getBoundingClientRect().left + viewportWidth/2;
+      const dx = viewportCenter - cardCenter;
+      const newX = currX + dx;
+      track.style.transition = instant? 'transform 180ms cubic-bezier(.2,.9,.2,1)' : 'transform 300ms cubic-bezier(.12,.9,.2,1)';
+      track.style.transform = `translateX(${newX}px)`;
+      // update dots
+      Array.from(dots.children).forEach((dot,di)=> dot.classList.toggle('active', di===index));
+    }
+
+    // find nearest index to center
+    function findNearestIndex(){
+      const viewportCenter = viewport.getBoundingClientRect().left + viewport.clientWidth/2;
+      let nearest = 0; let nearestDist = Infinity;
+      cards.forEach((card,i)=>{
+        const r = card.getBoundingClientRect();
+        const dist = Math.abs((r.left + r.width/2) - viewportCenter);
+        if(dist < nearestDist){ nearestDist = dist; nearest = i; }
+      });
+      return nearest;
+    }
+
+    // update visual scaling based on distance from center
+    function updateScaling(){
+      const viewportCenter = viewport.getBoundingClientRect().left + viewport.clientWidth/2;
+      cards.forEach(card=>{
+        const r = card.getBoundingClientRect();
+        const dist = Math.abs((r.left + r.width/2) - viewportCenter);
+        const max = viewport.clientWidth; // normalization
+        const t = Math.max(0, 1 - (dist / max));
+        const scale = 1 + Math.pow(t,0.8) * (maxScale - 1); // scale between 1 and maxScale
+        card.style.transition = 'transform 120ms linear';
+        card.style.transform = `scale(${scale})`;
+        // center class for styling (no transform here so JS controls exact scale)
+        const centerThreshold = 1 + (maxScale - 1) * 0.65; // when to consider card 'center'
+        card.classList.toggle('center', scale > centerThreshold);
+      });
+    }
+
+    // initial place: center the middle card
+    function init(){
+      const start = Math.floor(cards.length/2);
+      requestAnimationFrame(()=>{
+        centerIndex(start,true);
+        // add nameplate to each card
+        cards.forEach(card => {
+          if(!card.querySelector('.nameplate')){
+            const np = document.createElement('div');
+            np.className = 'nameplate';
+            np.textContent = card.dataset.name || '';
+            card.appendChild(np);
+          }
+        });
+        updateScaling();
+      });
+    }
+    init();
+
+    // drag logic
+    let lastMove = 0;
+    viewport.addEventListener('pointerdown', e=>{
+      viewport.setPointerCapture(e.pointerId);
+      state.pointerDown = true; state.startX = e.clientX; state.lastX = e.clientX; state.velocity = 0; track.style.transition = 'none';
+    });
+    viewport.addEventListener('pointermove', e=>{
+      if(!state.pointerDown) return;
+      const dx = e.clientX - state.lastX; state.lastX = e.clientX; state.velocity = dx;
+      const currTransform = getComputedStyle(track).transform;
+      let currX = 0;
+      if(currTransform && currTransform !== 'none'){
+        const m = currTransform.match(/matrix\(([-0-9., ]+)\)/);
+        if(m) currX = parseFloat(m[1].split(',')[4]);
+      }
+      const newX = currX + dx;
+      track.style.transform = `translateX(${newX}px)`;
+      updateScaling();
+      lastMove = Date.now();
+    });
+    const release = e=>{
+      if(!state.pointerDown) return; state.pointerDown=false; viewport.releasePointerCapture?.(e?.pointerId);
+      // inertial slide
+      let velocity = state.velocity; // pixels per move
+      const decay = 0.95; // friction
+      function frame(){
+        velocity *= decay;
+        if(Math.abs(velocity) < 0.2) {
+          // snap to nearest
+          const nearest = findNearestIndex();
+          centerIndex(nearest,false); updateScaling();
+          return;
+        }
+        const currTransform = getComputedStyle(track).transform;
+        let currX = 0;
+        if(currTransform && currTransform !== 'none'){
+          const m = currTransform.match(/matrix\(([-0-9., ]+)\)/);
+          if(m) currX = parseFloat(m[1].split(',')[4]);
+        }
+        track.style.transform = `translateX(${currX + velocity}px)`;
+        updateScaling();
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    };
+    viewport.addEventListener('pointerup', release);
+    viewport.addEventListener('pointercancel', release);
+
+    // click a card to center
+    cards.forEach((card,i)=>{
+      card.addEventListener('click', ()=> centerIndex(i,false));
+    });
+
+    // on resize keep nearest centered
+    window.addEventListener('resize', ()=>{
+      const nearest = findNearestIndex(); centerIndex(nearest,true); updateScaling();
+    });
+
+    // wheel to slide
+    viewport.addEventListener('wheel', e=>{
+      e.preventDefault(); const delta = e.deltaY || e.deltaX;
+      const currTransform = getComputedStyle(track).transform;
+      let currX = 0; if(currTransform && currTransform !== 'none'){ const m = currTransform.match(/matrix\(([-0-9., ]+)\)/); if(m) currX = parseFloat(m[1].split(',')[4]); }
+      track.style.transform = `translateX(${currX - delta}px)`; updateScaling();
+      // debounce snap
+      clearTimeout(window._snapTO);
+      window._snapTO = setTimeout(()=>{ const nearest = findNearestIndex(); centerIndex(nearest,false); updateScaling(); }, 150);
+    }, {passive:false});
+
+    // keyboard navigation
+    window.addEventListener('keydown', e=>{
+      if(e.key==='ArrowLeft' || e.key==='a'){
+        const nearest = findNearestIndex(); const idx = Math.max(0, nearest-1); centerIndex(idx,false);
+      } else if(e.key==='ArrowRight' || e.key==='d'){
+        const nearest = findNearestIndex(); const idx = Math.min(cards.length-1, nearest+1); centerIndex(idx,false);
+      }
+    });
+
+    // periodic update to scaling in case of paint differences
+    setInterval(updateScaling, 80);
+
+  </script>
+</body>
+</html>
