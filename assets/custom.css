@@ -414,6 +414,9 @@ footer .footer-content .image-block{
 footer .footer-content .menu__item + .menu__item{
     margin-block-start: 12px;
 }
+footer .footer-content .menu__item {
+    white-space: nowrap;
+}
 
 footer .footer-content .social-icons__icon{
     fill: white;
@@ -453,7 +456,7 @@ footer .mobile-memu-container{
     }
 
     .mobile-memu-container accordion-custom{
-        flex-basis: 50%;
+        flex: 1;
     }
     .mobile-memu-container accordion-custom:nth-of-type(2) li{
         text-align: right;

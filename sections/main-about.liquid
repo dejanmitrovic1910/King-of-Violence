@@ -1,0 +1,218 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="section page-width-content color-{{ section.settings.color_scheme }}" data-scroll-section>
+  <div class="custom-about-section section-content-wrapper">
+    {% if section.settings.background_image != blank %}
+      <div
+        class="about-background-wrapper "
+      >
+        {% capture image_tag %}
+          {% assign media_classes = 'media-block__media border-style relldax parallax-scale' %}
+          {% render 'image',
+            image: section.settings.background_image,
+            class: media_classes,
+            unset_image_tag: unset_image_tag,
+          %}
+          {% if show_mobile_image %}
+            {% render 'image',
+              image: block_settings.mobile_image,
+              class: 'media-block__media border-style media-block__media--mobile rellax',
+              unset_image_tag: unset_image_tag,
+              data-attribute: "data-rellax-speed = '2'"
+            %}
+          {% endif %}
+        {% endcapture %}
+
+        {{ image_tag }}
+      </div>
+    {% endif %}
+    <div
+      class="
+        spacing-style
+        layout-panel-flex
+        layout-panel-flex--column
+        section-content-wrapper
+        mobile-column
+      "
+      style="
+        {% render 'layout-panel-style', settings: section.settings %}
+        {% render 'spacing-style', settings: section.settings %}
+        padding-left: {{ section.settings.padding-block-left }}px;
+        padding-right: {{ section.settings.padding-block-right }}px;
+      "
+    >
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "About",
+  "class": "section-wrapper",
+  "blocks": [
+    {
+      "type": "@theme"
+    },
+    {
+      "type": "@app"
+    },
+    {
+      "type": "_divider"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "content_direction",
+      "label": "t:settings.direction",
+      "options": [
+        {
+          "value": "column",
+          "label": "t:options.vertical"
+        }
+      ],
+      "default": "column",
+      "visible_if": "{{ section.settings.gap < 0 }}"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "t:settings.gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-left",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-right",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  (function () {
+    const minScale = 1;
+    const maxScale = 1.2;
+    const factor = 500; // higher = slower scale
+    let ticking = false;
+
+    function scaleImages() {
+      const elements = document.querySelectorAll('img.parallax-scale');
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      elements.forEach((el) => {
+        let scale = minScale + scrollTop / factor;
+        if (scale > maxScale) scale = maxScale;
+        el.style.transform = `scale(${scale})`;
+      });
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(scaleImages);
+        ticking = true;
+      }
+    });
+  })();
+</script>
+
+<style>
+  .parallax-scale {
+    background-color: #0b0b1d;
+    opacity: 0.85;
+  }
+  .custom-about-section {
+    position: relative;
+    grid-column: 1 / -1;
+    overflow: hidden;
+  }
+  img.media-block__media.border-style.rellax,
+  img.media-block__media.border-style.parallax-scale {
+    object-fit: cover;
+    object-position: 52% 100%;
+    transition: transform 0.3s ease-in-out;
+  }
+  .about-background-wrapper::after{
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: #0b0b1d;
+    opacity: 0.85;
+  }
+  .custom-about-section .icon-block{
+    justify-content: center;
+  }
+  .custom-about-section .about-content {
+    font-size: 20px;
+    color: white;
+    max-width: 375px;
+    font-weight: 500;
+  }
+  .custom-about-section .hero-sign-name{
+    color: var(--basic-color);
+    font-size: 20px;
+    font-weight: 500;
+    max-width: 240px;
+  }
+  .about-background-wrapper  .media-block__media{
+    position: absolute;
+    height: 100%;
+  }
+</style>

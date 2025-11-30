@@ -70,6 +70,14 @@
     {%  render 'rebuy-complete-look-on-cart' %}
     {%  render 'rebuy-recommended' %}
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.1/rellax.min.js" defer="defer"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        new Rellax('.rellax', {
+          center: true
+          // speed is now controlled via `data-rellax-speed` in the HTML
+        });
+      });
+    </script>
   </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.1/rellax.min.js" defer="defer"></script>
 </html>

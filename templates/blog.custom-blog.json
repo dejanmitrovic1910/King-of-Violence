@@ -21,6 +21,7 @@
             "max_width": "narrow",
             "alignment": "left",
             "type_preset": "h2",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "",
             "line_height": "normal",
@@ -34,7 +35,8 @@
             "padding-block-start": 48,
             "padding-block-end": 48,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         },
@@ -84,6 +86,23 @@
               },
               "blocks": {}
             },
+            "content": {
+              "type": "_blog-post-description",
+              "static": true,
+              "settings": {
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "padding-block-start": 16,
+                "padding-block-end": 0
+              },
+              "blocks": {}
+            },
             "image": {
               "type": "_blog-post-image",
               "static": true,
@@ -103,14 +122,24 @@
       "block_order": [
         "title"
       ],
+      "disabled": true,
       "settings": {
         "color_scheme": "",
         "padding-block-start": 0,
         "padding-block-end": 48
       }
+    },
+    "custom_blog_JLet3G": {
+      "type": "custom-blog",
+      "name": "UFC Blog Carousel",
+      "settings": {
+        "blog_title": "",
+        "selected_blog": "news"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "custom_blog_JLet3G"
   ]
 }
