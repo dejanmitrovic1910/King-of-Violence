@@ -100,7 +100,7 @@ body{
 
 footer .details-content li a {
     color: var(--basic-color);
-    font-size: 19px;
+    font-size: 20px;
     text-decoration: underline;
     text-underline-offset: 4px;
 }
@@ -218,7 +218,7 @@ footer .details-content li a {
 .footer-marquee {
     position: absolute;
     top: 0;
-    transform: translateY(65%);
+    transform: translateY(35%);
     color: var(--basic-color);
 }
 
@@ -270,8 +270,10 @@ footer .details-content li a {
     .ufc-section .group-block-content{
         align-items: center;
     }
-    .ufc-section .group-block-content .ufc-text{
-        align-items: center;
+    .ufc-section .group-block-content .ufc-text,
+    .ufc-section .group-block-content .ufc-text p{
+        text-align: left;
+        max-width: none;
     }
 }
 
@@ -405,7 +407,7 @@ footer .footer-content{
     justify-content: space-around;
 }
 footer .footer-content .image-block{
-    width: 35%;
+    width: 25%;
 }
 /* footer .footer-content .group-block{
     max-width: fit-content;
@@ -424,20 +426,25 @@ footer .footer-content .social-icons__icon{
 footer .mobile-memu-container{
     width: auto;
 }
+footer .image-block__image{
+    object-fit: contain;
+}
 
 @media only screen and (max-width: 768px) {
     footer .footer-content .image-block{
         width: 100%;
     }
     footer .footer-content .image-block img{
-        width: 70%;
+        width: 100%;
         margin: auto;
+        max-width: 377px;
     }
 
     footer .mobile-memu-container{
-        max-width: 400px !important;
-        padding: 0 40px;
+        max-width: 460px !important;
+        padding: 0 20px;
         margin: auto;
+        width: 100%;
     }
     
     .mobile-memu-container .menu-social .group-block-content{
@@ -722,10 +729,28 @@ a[ref="productTitleLink"]{
         display: flex;
         flex-direction: column;
     }
+    .ufc-section[data-testid="media-with-content"] h2{
+        text-align: center;
+    }
     .ufc-section[data-testid="media-with-content"]>.media-block {
         order: 2;
     }
     .ufc-section[data-testid="media-with-content"]>.group-block {
         order: 1;
     }
+}
+
+.header-menu__inner *{
+    color: var(--basic-color) !important;
+}
+.header-menu__inner .menu-list__link-title:hover,
+.header-menu__inner .mega-menu__link-title:hover,
+.header-menu__inner .menu-list__link--active{
+    text-decoration: underline !important;
+    text-underline-offset: 4px
+}
+
+
+.collection-list .collection-card__inner .text-block p{
+    white-space: nowrap;
 }

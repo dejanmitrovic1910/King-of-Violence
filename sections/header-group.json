@@ -77,7 +77,7 @@
           "type": "_header-menu",
           "static": true,
           "settings": {
-            "menu": "main-menu-only-shop",
+            "menu": "main-menu-shop-about",
             "color_scheme": "scheme-5",
             "type_font_primary_size": "1rem",
             "menu_font_style": "inverse",

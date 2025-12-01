@@ -12,15 +12,27 @@
     "main": {
       "type": "main-about",
       "blocks": {
-        "heading": {
-          "type": "text",
-          "name": "Title",
+        "icon_K7qdGG": {
+          "type": "icon",
+          "name": "t:names.icon",
           "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
+            "icon": "dryer",
+            "image_upload": "shopify://shop_images/10.png",
+            "width": 120,
+            "link": "",
+            "open_in_new_tab": false
+          },
+          "blocks": {}
+        },
+        "text_WRjAWJ": {
+          "type": "text",
+          "name": "t:names.text",
+          "settings": {
+            "text": "<p>Every warrior has a choice. You choose how you train, how you fight, and how you rise.</p><p>We created the King of Violence brand as a symbol of determination and the courage to overcome any obstacle in your path. We embody the spirit of those who refuse to be held back by fear or doubt, choosing instead to charge forward with unyielding intent.</p><p>Let your actions speak louder than your doubts, because tough doesn’t need a second opinion.</p>",
             "width": "100%",
             "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
+            "alignment": "center",
+            "type_preset": "rte",
             "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "1rem",
@@ -36,30 +48,292 @@
             "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0,
-            "identifier": "custom-text"
+            "identifier": "about-content"
           },
           "blocks": {}
         },
-        "page-content": {
-          "type": "page-content",
-          "settings": {},
+        "icon_dTgBrb": {
+          "type": "icon",
+          "name": "t:names.icon",
+          "settings": {
+            "icon": "price_tag",
+            "image_upload": "shopify://shop_images/11.png",
+            "width": 200,
+            "link": "",
+            "open_in_new_tab": false
+          },
+          "blocks": {}
+        },
+        "text_Hj7qk4": {
+          "type": "text",
+          "name": "t:names.text",
+          "settings": {
+            "text": "<p>– Founder and UFC Legend, Chuck Liddell</p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "rte",
+            "capitalize": false,
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "identifier": "hero-sign-name"
+          },
           "blocks": {}
         }
       },
       "block_order": [
-        "heading",
-        "page-content"
+        "icon_K7qdGG",
+        "text_WRjAWJ",
+        "icon_dTgBrb",
+        "text_Hj7qk4"
       ],
       "settings": {
         "content_direction": "column",
         "gap": 32,
         "color_scheme": "",
-        "padding-block-start": 40,
-        "padding-block-end": 80
+        "background_image": "shopify://shop_images/about_page.webp",
+        "padding-block-start": 100,
+        "padding-block-end": 170,
+        "padding-block-left": 16,
+        "padding-block-right": 16
       }
     },
+    "section_WpKQE6": {
+      "type": "section",
+      "blocks": {
+        "text_YkGTe4": {
+          "type": "text",
+          "name": "t:names.heading",
+          "disabled": true,
+          "settings": {
+            "text": "<h2>JOIN THE FIGHT</h2>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "rte",
+            "capitalize": false,
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "identifier": "custom-text-mobile"
+          },
+          "blocks": {}
+        },
+        "image_xeFWRb": {
+          "type": "image",
+          "name": "t:names.image",
+          "settings": {
+            "image": "shopify://shop_images/chuck-liddel-logo.webp",
+            "link": "",
+            "image_ratio": "adapt",
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "group_Ey4fpD": {
+          "type": "group",
+          "name": "t:names.group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 40,
+            "padding-inline-end": 0,
+            "show_carousel": false,
+            "identifier": "joint-fight-group"
+          },
+          "blocks": {
+            "text_646FTA": {
+              "type": "text",
+              "name": "t:names.heading",
+              "settings": {
+                "text": "<h2>JOIN THE FIGHT</h2>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "capitalize": false,
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0,
+                "identifier": "custom-text"
+              },
+              "blocks": {}
+            },
+            "text_9AqM7E": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Stay in our corner and you’ll be the first to know when we unlock the next fighter capsule honoring the legends of combat sports. <strong>Enter your email for 10% off your next order!</strong></p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "paragraph",
+                "capitalize": false,
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0,
+                "identifier": "join-fight"
+              },
+              "blocks": {}
+            },
+            "email_signup_W3EVxD": {
+              "type": "email-signup",
+              "settings": {
+                "width": "custom",
+                "custom_width": 50,
+                "inherit_color_scheme": true,
+                "heading": "",
+                "heading_preset": "h3",
+                "color_scheme": "",
+                "border_style": "all",
+                "border_width": 1,
+                "border_radius": 100,
+                "input_type_preset": "paragraph",
+                "style_class": "button",
+                "display_type": "text",
+                "label": "Sign up",
+                "integrated_button": true,
+                "button_type_preset": "paragraph",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_646FTA",
+            "text_9AqM7E",
+            "email_signup_W3EVxD"
+          ]
+        }
+      },
+      "block_order": [
+        "text_YkGTe4",
+        "image_xeFWRb",
+        "group_Ey4fpD"
+      ],
+      "name": "t:names.email_signup",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "scheme-2",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": true,
+        "overlay_color": "#fec909",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 30,
+        "padding-block-end": 30,
+        "email_wrapper": false,
+        "identifier": "email-signup-custom"
+      }
+    }
   },
   "order": [
-    "main"
+    "main",
+    "section_WpKQE6"
   ]
 }

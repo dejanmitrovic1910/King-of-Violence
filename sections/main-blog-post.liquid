@@ -30,7 +30,9 @@
 
     {% if blog.comments_enabled? %}
       <div class="blog-post-comments-container">
+        {% if article.comments_count > 0 %}
         <h2 class="h3">{{- 'blogs.article.comments_heading' | t: count: article.comments_count -}}</h2>
+        {% endif %}
 
         <div class="blog-post-comments">
           {% paginate article.comments by 10 %}
@@ -53,8 +55,8 @@
           {% endpaginate %}
         </div>
 
-        {% render 'blog-comment-form', article: article, section_id: section.id %}
       </div>
+      {% render 'blog-comment-form', article: article, section_id: section.id %}
     {% endif %}
   </div>
 </div>
