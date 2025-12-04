@@ -79,7 +79,7 @@
           "settings": {
             "menu": "main-menu-shop-about",
             "color_scheme": "scheme-5",
-            "type_font_primary_size": "1rem",
+            "type_font_primary_size": "1.25rem",
             "menu_font_style": "inverse",
             "type_font_primary_link": "primary",
             "type_case_primary_link": "none",

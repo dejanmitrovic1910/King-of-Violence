@@ -539,7 +539,7 @@
         "section_width": "page-width",
         "gap": 0,
         "color_scheme": "",
-        "padding-block-start": 80,
+        "padding-block-start": 100,
         "padding-block-end": 30,
         "background_image": "shopify://shop_images/footer_image.webp",
         "background_image_position": "cover"

@@ -6,21 +6,22 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "section": {
       "type": "main-blog-post",
       "blocks": {
-        "blog-post-title": {
+        "text_6t9bjJ": {
           "type": "text",
-          "name": "Title",
-          "static": true,
+          "name": "t:names.heading",
           "settings": {
-            "text": "<h1>{{ article.title }}</h1>",
+            "text": "<h2>Coming Soon...</h2>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
-            "type_preset": "h2",
+            "type_preset": "rte",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
@@ -34,7 +35,37 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
+          },
+          "blocks": {}
+        },
+        "blog-post-title": {
+          "type": "text",
+          "name": "Title",
+          "static": true,
+          "settings": {
+            "text": "<h1>{{ article.title }}</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "h2",
+            "capitalize": false,
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         },
@@ -54,11 +85,10 @@
           "blocks": {}
         },
         "blog-post-image": {
-          "type": "image",
-          "name": "Featured image",
+          "type": "_blog-post-featured-image",
           "static": true,
           "settings": {
-            "image_ratio": "landscape",
+            "image_ratio": "adapt",
             "width": "fill",
             "custom_width": 100,
             "width_mobile": "fill",
@@ -82,10 +112,13 @@
           "blocks": {}
         }
       },
+      "block_order": [
+        "text_6t9bjJ"
+      ],
       "settings": {
         "content_direction": "column",
         "gap": 32,
-        "color_scheme": "",
+        "color_scheme": "scheme-db578fa1-da9c-48c2-a278-c672d942f928",
         "padding-block-start": 40,
         "padding-block-end": 80
       }

@@ -6,20 +6,45 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
       "type": "main-404",
       "blocks": {
+        "image_VzwMey": {
+          "type": "image",
+          "name": "t:names.image",
+          "settings": {
+            "image": "shopify://shop_images/kov_IMG_7363.png",
+            "link": "",
+            "image_ratio": "adapt",
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
         "text_GqmVFf": {
           "type": "text",
           "name": "t:names.text",
           "settings": {
-            "text": "<h1>Page not found</h1>",
+            "text": "<h1>Coming Soon</h1>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
             "type_preset": "h2",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "",
             "line_height": "normal",
@@ -33,19 +58,22 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         },
         "text_Ua9XAW": {
           "type": "text",
           "name": "t:names.text",
+          "disabled": true,
           "settings": {
             "text": "<p>The link may be incorrect, or the page has been removed. </p>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
             "type_preset": "rte",
+            "capitalize": false,
             "font": "var(--font-body--family)",
             "font_size": "",
             "line_height": "normal",
@@ -59,7 +87,8 @@
             "padding-block-start": 0,
             "padding-block-end": 16,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "identifier": "custom-text"
           },
           "blocks": {}
         },
@@ -74,26 +103,28 @@
             "width": "fit-content",
             "custom_width": 100,
             "width_mobile": "fit-content",
-            "custom_width_mobile": 100
+            "custom_width_mobile": 100,
+            "identifier": "custom-button"
           },
           "blocks": {}
         }
       },
       "block_order": [
+        "image_VzwMey",
         "text_GqmVFf",
         "text_Ua9XAW",
         "button_PAQMwR"
       ],
       "settings": {
         "content_direction": "column",
-        "section_width": "page-width",
+        "section_width": "full-width",
         "section_height": "small",
         "horizontal_alignment_flex_direction_column": "center",
         "vertical_alignment_flex_direction_column": "center",
         "gap": 20,
         "color_scheme": "",
-        "padding-block-start": 100,
-        "padding-block-end": 100
+        "padding-block-start": 0,
+        "padding-block-end": 99
       }
     },
     "product_list_KcyDP3": {
@@ -141,6 +172,7 @@
                 "max_width": "normal",
                 "alignment": "left",
                 "type_preset": "h3",
+                "capitalize": false,
                 "font": "var(--font-primary--family)",
                 "font_size": "",
                 "line_height": "normal",
@@ -154,7 +186,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "identifier": "custom-text"
               },
               "blocks": {}
             }
@@ -200,7 +233,6 @@
             "group_FgrKg7": {
               "type": "_product-card-group",
               "settings": {
-                "open_in_new_tab": false,
                 "content_direction": "column",
                 "vertical_on_mobile": true,
                 "horizontal_alignment": "flex-start",
@@ -228,6 +260,8 @@
                 "overlay_color": "#00000026",
                 "overlay_style": "solid",
                 "gradient_direction": "to top",
+                "link": "",
+                "open_in_new_tab": false,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 16,
@@ -309,6 +343,7 @@
           ]
         }
       },
+      "disabled": true,
       "name": "Featured collection",
       "settings": {
         "collection": "all",
@@ -327,7 +362,8 @@
         "gap": 0,
         "color_scheme": "scheme-1",
         "padding-block-start": 0,
-        "padding-block-end": 24
+        "padding-block-end": 24,
+        "identifier": "custom-product-list"
       }
     }
   },
