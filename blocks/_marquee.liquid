@@ -55,6 +55,8 @@
     gap: var(--marquee-gap);
     width: fit-content;
     white-space: nowrap;
+    backface-visibility: hidden;
+    will-change: transform;
   }
 
   .marquee__content {
@@ -98,7 +100,7 @@
 
   @keyframes marquee-motion {
     to {
-      transform: translate3d(calc(-50% - (var(--marquee-gap) / 2)), 0, 0);
+      transform: translateX(calc(-50% - (var(--marquee-gap) / 2)));
     }
   }
 {% endstylesheet %}

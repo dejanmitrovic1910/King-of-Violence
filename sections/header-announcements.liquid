@@ -226,21 +226,22 @@
 {% endschema %}
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const bar = document.getElementById('announcement-bar');
-    if (!bar) return;
-  
-    function updateHeight() {
+document.addEventListener('DOMContentLoaded', () => {
+  const bar = document.getElementById('announcement-bar');
+  if (!bar) return;
+
+  function updateHeight() {
+    requestAnimationFrame(() => {
       const height = bar.offsetHeight;
       document.documentElement.style.setProperty('--announcement-bar-height', height + 'px');
-    }
-  
-    updateHeight();
-  
-    window.addEventListener('resize', updateHeight);
-  
-    const observer = new ResizeObserver(updateHeight);
-    observer.observe(bar);
-  });
-  
+    });
+  }
+
+  setTimeout(updateHeight(), 1000);
+
+  window.addEventListener('resize', updateHeight);
+
+  const observer = new ResizeObserver(() => updateHeight());
+  observer.observe(bar);
+});
 </script>

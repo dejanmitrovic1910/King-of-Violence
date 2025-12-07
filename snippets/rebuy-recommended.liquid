@@ -214,7 +214,7 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
                     <div class="rebuy-product-options-container" v-if="product.variants.length == 1">
                         <div class="rebuy-product-options">
                             <div class="rebuy-product-options-unique-one">
-                              <span class="rebuy-product-options-unique-one-text">UNIQUE ONE</span>
+                              <span class="rebuy-product-options-unique-one-text">One size fits all</span>
                               <span class="rebuy-product-options-unique-one-icon">
                                   <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='white' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" alt="Unique One">
                               </span>
@@ -498,7 +498,7 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
                     <div class="rebuy-product-options-container" v-if="product.variants.length == 1">
                         <div class="rebuy-product-options">
                             <div class="rebuy-product-options-unique-one">
-                              <span class="rebuy-product-options-unique-one-text">UNIQUE ONE</span>
+                              <span class="rebuy-product-options-unique-one-text">One size fits all</span>
                               <span class="rebuy-product-options-unique-one-icon">
                                   <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='white' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" alt="Unique One">
                               </span>
@@ -703,6 +703,7 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
     overflow: hidden;
     white-space: nowrap;
     text-align: left;
+    text-transform: uppercase;
   }
 
   #rebuy-widget-251297 .rebuy-product-title,
@@ -740,6 +741,28 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
     font-size: 18px;
   }
 
+  #rebuy-widget-251297 .rebuy-widget-content,
+  #rebuy-widget-251429 .rebuy-widget-content{
+    margin: 0 -20px;
+  }
+
+  #rebuy-widget-251297 .rebuy-product-image img
+  #rebuy-widget-251429 .rebuy-product-image img{
+    border-radius: 5px;
+  }
+  #rebuy-widget-251297 .rebuy-product-info
+  #rebuy-widget-251429 .rebuy-product-info{
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media only screen and (max-width: 749px){
+    #rebuy-widget-251297 .rebuy-widget-content,
+    #rebuy-widget-251429 .rebuy-widget-content{
+        margin: 0 -10px;
+    }
+  }
+
   /* General Styling */
   .rebuy-product-info .rebuy-product-title{
     text-align: left;
@@ -750,5 +773,10 @@ v-bind:class="['widget-type-' + config.type.replace('_','-'), 'widget-display-' 
   }
   .rebuy-product-info .rebuy-product-price{
     margin: 0 0 5px 0;
+  }
+  .rebuy-product-media{
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    overflow: hidden;
   }
 </style>

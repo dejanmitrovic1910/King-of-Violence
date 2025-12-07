@@ -54,9 +54,16 @@
     },
     {
       "type": "text_alignment",
-      "id": "alignment",
+      "id": "alignment_desktop",
       "label": "t:settings.alignment",
       "default": "left",
+      "visible_if": "{{ block.settings.width == '100%' }}"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment_mobile",
+      "label": "t:settings.alignment",
+      "default": "center",
       "visible_if": "{{ block.settings.width == '100%' }}"
     },
     {
