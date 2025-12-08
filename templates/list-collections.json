@@ -59,9 +59,9 @@
               "name": "t:names.text",
               "settings": {
                 "text": "<h2>Collections</h2>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment_desktop": "left",
+                "width": "100%",
+                "max_width": "narrow",
+                "alignment_desktop": "center",
                 "alignment_mobile": "center",
                 "type_preset": "h2",
                 "capitalize": true,
