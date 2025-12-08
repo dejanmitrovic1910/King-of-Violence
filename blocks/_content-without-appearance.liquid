@@ -5,11 +5,10 @@
 {% endcapture %}
 
 {% render 'group',
-  class: 'media-with-content__content',
+  class: 'media-with-content__content ' | append: classname,
   children: children,
   settings: block.settings,
   shopify_attributes: block.shopify_attributes,
-  class: classname
 %}
 
 {% schema %}
