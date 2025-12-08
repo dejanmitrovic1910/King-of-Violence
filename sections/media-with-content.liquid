@@ -39,11 +39,11 @@
     data-shopify-visual-preview
   {% endif %}
 >
-  {% content_for 'block', type: 'text', id: 'text' %}
+  {% content_for 'block', type: 'text', id: 'text', classname: 'editorial-default-mobile' %}
 
   {% content_for 'block', type: '_media-without-appearance', id: 'media' %}
 
-  {% content_for 'block', type: '_content-without-appearance', id: 'content' %}
+  {% content_for 'block', type: '_content-without-appearance', id: 'content', classname: 'editorial-default-desktop' %}
 </div>
 
 {% stylesheet %}

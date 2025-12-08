@@ -511,7 +511,7 @@ footer .image-block__image{
         display: block;
     }
     .featured-collection-products .collection-product-wrapper .featured-product-wrapper {
-        padding: 20px 0;
+        padding: 20px 0 0 0;
     }
     .featured-collection-products .collection-product-wrapper .featured-product-wrapper .group-block-content{
         display: grid;
