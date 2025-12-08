@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "collection_list_KreTXe": {
       "type": "main-collection-list",
@@ -15,7 +16,6 @@
           "type": "group",
           "name": "t:names.header",
           "settings": {
-            "open_in_new_tab": false,
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -43,10 +43,15 @@
             "overlay_color": "#00000026",
             "overlay_style": "solid",
             "gradient_direction": "to top",
-            "padding-block-start": 48,
-            "padding-block-end": 64,
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 30,
+            "padding-block-end": 15,
             "padding-inline-start": 48,
-            "padding-inline-end": 48
+            "padding-inline-end": 48,
+            "show_carousel": false,
+            "identifier": "custom-group"
           },
           "blocks": {
             "text_wgAEay": {
@@ -56,8 +61,10 @@
                 "text": "<h2>Collections</h2>",
                 "width": "fit-content",
                 "max_width": "normal",
-                "alignment": "left",
+                "alignment_desktop": "left",
+                "alignment_mobile": "center",
                 "type_preset": "h2",
+                "capitalize": true,
                 "font": "var(--font-primary--family)",
                 "font_size": "",
                 "line_height": "normal",
@@ -71,7 +78,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "identifier": "custom-text"
               },
               "blocks": {}
             }
@@ -104,7 +112,7 @@
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "h4",
+                "type_preset": "h3",
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
                 "line_height": "normal",
@@ -113,7 +121,7 @@
                 "wrap": "pretty",
                 "color": "var(--color-foreground)",
                 "background": true,
-                "background_color": "#ffffff",
+                "background_color": "#030302",
                 "corner_radius": 0,
                 "padding-block-start": 4,
                 "padding-block-end": 4,
@@ -159,9 +167,9 @@
         "max_collections": 4,
         "icons_style": "arrow",
         "icons_shape": "none",
-        "section_width": "full-width",
+        "section_width": "page-width",
         "gap": 0,
-        "color_scheme": "",
+        "color_scheme": "scheme-db578fa1-da9c-48c2-a278-c672d942f928",
         "padding-block-start": 0,
         "padding-block-end": 0
       }

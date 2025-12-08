@@ -31,6 +31,11 @@ h6,
   font-family: "KoVHeadingFont" !important;
 }
 
+@media only screen and (max-width: 680px) {
+    h2{
+        font-size: 32px !important;
+    }
+}
 body{
     --basic-color: #fec909;
 }
@@ -160,11 +165,11 @@ footer .details-content li a {
         text-align: center !important;
         min-width: 100%;
     }
-    .editorial p {
+    /* .editorial p {
         width: 100%;
         text-align: left !important;
         min-width: 100%;
-    }
+    } */
     .editorial a {
         width: fit-content;
         min-width: auto;
@@ -278,6 +283,7 @@ footer .details-content li a {
         text-align: center;
         max-width: none;
     } */
+     
 }
 
 header.header-section{
@@ -510,7 +516,7 @@ footer .image-block__image{
     .featured-collection-products .collection-product-wrapper .featured-product-wrapper .group-block-content{
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 25px;
+        gap: 24px;
     }
     .featured-collection-products .collection-product-wrapper .featured-product-wrapper .group-block-content product-card-link:nth-of-type(3){
         display: none;
@@ -544,6 +550,18 @@ footer .image-block__image{
 @media only screen and (max-width: 749px) {
     .featured-collection-products .collection-product-wrapper .featured-product-wrapper .group-block-content [ref="productTitleLink"] *{
         font-size: 18.9184px;
+    }
+    .featured-collection-products .section-content-wrapper{
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .collection-list .collection-list-heading{
+        padding-top: 0;
+    }
+    .featured-collection-products .collection-product-wrapper .featured-product-wrapper .group-block-content{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 }
 
@@ -807,7 +825,7 @@ header-drawer.header-drawer .menu-drawer__menu-item-text{
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0));
+    background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.3));
     z-index: 0;
 }
 .hero-section-name h1{
