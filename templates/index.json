@@ -179,7 +179,7 @@
             "padding-block-end": 30,
             "padding-inline-start": 0,
             "padding-inline-end": 0,
-            "identifier": "media-with-content-mobile-title"
+            "identifier": ""
           },
           "blocks": {}
         },
@@ -274,7 +274,7 @@
                     "padding-block-end": 10,
                     "padding-inline-start": 0,
                     "padding-inline-end": 0,
-                    "identifier": "media-with-content-desktop-title"
+                    "identifier": ""
                   },
                   "blocks": {}
                 },
@@ -1439,10 +1439,10 @@
           "type": "text",
           "static": true,
           "settings": {
-            "text": "",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment_desktop": "left",
+            "text": "<h2>CLAIM YOUR CROWN.</h2>",
+            "width": "100%",
+            "max_width": "none",
+            "alignment_desktop": "center",
             "alignment_mobile": "center",
             "type_preset": "rte",
             "capitalize": false,
@@ -1456,11 +1456,11 @@
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
+            "padding-block-start": 24,
+            "padding-block-end": 24,
             "padding-inline-start": 0,
             "padding-inline-end": 0,
-            "identifier": "custom-text"
+            "identifier": "media-with-content-mobile-title"
           },
           "blocks": {}
         },
@@ -1492,6 +1492,7 @@
             "text_CgU6Gr": {
               "type": "text",
               "name": "t:names.text",
+              "disabled": true,
               "settings": {
                 "text": "<h6>King of Violence</h6>",
                 "width": "100%",
@@ -1525,7 +1526,7 @@
                 "text": "<h2>CLAIM YOUR CROWN.</h2>",
                 "width": "100%",
                 "max_width": "narrow",
-                "alignment_desktop": "left",
+                "alignment_desktop": "center",
                 "alignment_mobile": "center",
                 "type_preset": "rte",
                 "capitalize": false,
@@ -1543,7 +1544,7 @@
                 "padding-block-end": 8,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0,
-                "identifier": "custom-text"
+                "identifier": "media-with-content-desktop-title"
               },
               "blocks": {}
             },
@@ -2320,7 +2321,6 @@
         "text_bqCeVf": {
           "type": "text",
           "name": "t:names.heading",
-          "disabled": true,
           "settings": {
             "text": "<h2>JOIN THE FIGHT</h2>",
             "width": "100%",
@@ -2351,7 +2351,7 @@
           "type": "image",
           "name": "t:names.image",
           "settings": {
-            "image": "shopify://shop_images/6.png",
+            "image": "shopify://shop_images/5.png",
             "link": "",
             "image_ratio": "adapt",
             "width": "fill",
@@ -2437,35 +2437,7 @@
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0,
-                "identifier": "custom-text"
-              },
-              "blocks": {}
-            },
-            "text_39GLJr": {
-              "type": "text",
-              "settings": {
-                "text": "<p>Stay in our corner and you’ll be the first to know when we unlock the next fighter capsule honoring the legends of combat sports. <strong>Enter your email for 10% off your next order!</strong></p>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment_desktop": "left",
-                "alignment_mobile": "center",
-                "type_preset": "paragraph",
-                "capitalize": false,
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0,
-                "identifier": "join-fight"
+                "identifier": "custom-text-desktop"
               },
               "blocks": {}
             },
@@ -2493,12 +2465,40 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "text_39GLJr": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Stay in our corner and you’ll be the first to know when we unlock the next fighter capsule honoring the legends of combat sports. <strong>Enter your email for 10% off your next order!</strong></p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment_desktop": "left",
+                "alignment_mobile": "left",
+                "type_preset": "paragraph",
+                "capitalize": false,
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0,
+                "identifier": "join-fight"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
             "text_tYVf4t",
-            "text_39GLJr",
-            "email_signup_VgfG4j"
+            "email_signup_VgfG4j",
+            "text_39GLJr"
           ]
         }
       },
@@ -2532,7 +2532,7 @@
         "overlay_color": "#fec909",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 79,
+        "padding-block-start": 30,
         "padding-block-end": 30,
         "email_wrapper": false,
         "identifier": "email-signup-custom"
