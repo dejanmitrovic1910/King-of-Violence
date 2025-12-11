@@ -23,22 +23,9 @@
     assign price = 1999
   endif
 
-  # Checks if product handle matches the closest product's handle (i.e. product page)
-  # and if the currency code is enabled for product pages
-  if product.handle == closest.product.handle and settings.currency_code_enabled_product_pages
-    assign price = price | money_with_currency
-    assign compare_at_price = compare_at_price | money_with_currency
-
-    # Checks if product handle does not match the closest product's handle (i.e. product card)
-    # and if the currency code is enabled for product cards
-  elsif product.handle != closest.product.handle and settings.currency_code_enabled_product_cards
-    assign price = price | money_with_currency
-    assign compare_at_price = compare_at_price | money_with_currency
-
-  else
-    assign price = price | money
-    assign compare_at_price = compare_at_price | money
-  endif
+  # Always format WITHOUT currency code
+  assign price = price | money
+  assign compare_at_price = compare_at_price | money
 -%}
 
 <div ref="priceContainer">
@@ -66,13 +53,7 @@
   {% endif %}
   {%- if selected_variant.unit_price and show_unit_price %}
     {%- liquid
-      if product.handle == closest.product.handle and settings.currency_code_enabled_product_pages
-        assign unit_price = selected_variant.unit_price | money_with_currency
-      elsif product.handle != closest.product.handle and settings.currency_code_enabled_product_cards
-        assign unit_price = selected_variant.unit_price | money_with_currency
-      else
-        assign unit_price = selected_variant.unit_price | money
-      endif
+      assign unit_price = selected_variant.unit_price | money
     -%}
     {% render 'unit-price', price: unit_price, measurement: selected_variant.unit_price_measurement %}
   {%- endif -%}

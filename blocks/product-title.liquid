@@ -1,11 +1,9 @@
-
-
 {% if closest.product == blank %}
   {% assign text = 'placeholders.product_title' | t %}
   {% assign product_title = '<p>' | append: text | append: '</p>' %}
   {% render 'text', fallback_text: product_title, block: block %}
 {% elsif closest.product != blank %}
-  {% assign product_title = '<p>' | append: closest.product.title | append: '</p>' %}
+  {% assign product_title = closest.product.title %}
   <a
     class="contents user-select-text"
     ref="productTitleLink"
@@ -401,7 +399,23 @@
       "step": 1,
       "unit": "px",
       "default": 0
-    }
+    },
+    {
+      "type": "select",
+      "id": "text_type",
+      "label": "Text Type",
+      "options": [
+        {
+          "value": "heading",
+          "label": "Heading"
+        },
+        {
+          "value": "paragraph",
+          "label": "Paragraph"
+        }
+      ],
+      "default": "paragraph"
+    },
   ],
   "presets": [
     {

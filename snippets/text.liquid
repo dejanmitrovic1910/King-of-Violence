@@ -84,7 +84,7 @@
 
 {% if fallback_text != blank and plain_text == blank %}
   <div {{ attributes }} >
-    {{ fallback_text }}
+    <{{block_settings.type_preset}} class="product-title-heading"> {{ fallback_text }}</{{block_settings.type_preset}}>
   </div>
 {% elsif plain_text != blank %}
   <{{ element }} {{ attributes }} >
