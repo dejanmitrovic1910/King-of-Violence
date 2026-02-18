@@ -160,7 +160,8 @@
     }
     .ufc-selected-hero {
       font-size: 2.2rem;
-      margin-top: 2rem;
+      margin-top: 1.5rem;
+      padding: 0 2rem;
     }
     .ufc-hero-name-show {
       position: absolute;
@@ -183,6 +184,7 @@
     .ufc-selected-hero {
       font-size: 1.5rem;
       margin-top: 1rem;
+      padding: 0 2rem;
     }
     .ufc-hero-name-show {
       position: absolute;
@@ -383,6 +385,7 @@
       const t = Math.max(0, 1 - d / vp.width);
       const s = 1 + t * 0.45;
       card.style.transform = `scale(${s})`;
+      card.style.zIndex = String(10 + Math.round(t * 20)); // higher z-index near center
       card.classList.toggle('center', i === closestIdx);
     });
 

@@ -569,6 +569,13 @@ footer .image-block__image{
     .product-information__grid .buy-buttons-block{
         order: -1;
     }
+    .collection-product-wrapper .featured-product-wrapper{
+        display: none;
+    }
+    .media-with-content__content {
+        padding-bottom: 0;
+    }
+
 }
 
 .product-page-collection-list .bento-box .bento-box__item:nth-of-type(2) .collection-card__image img{
@@ -867,4 +874,18 @@ a[ref="productTitleLink"] *{
 
 .menu-drawer__menu .menu-drawer__menu-item--mainlist{
     min-height: auto;
+}
+
+.contact-form input::placeholder, .contact-form textarea::placeholder{
+    color: white;
+}
+.contact-form input, .contact-form textarea{
+    color: white;
+}
+.contact-form input:hover{
+    background-color: var(--color-input-background);
+}
+
+.menu-drawer__featured-content{
+    display: none;
 }

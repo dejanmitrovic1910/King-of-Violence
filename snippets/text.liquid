@@ -128,7 +128,8 @@
   @media only screen and (min-width: 750px) {
     .text-block > * {
       width: var(--width);
-      max-width: var(--max-width, 100%);
+      /* max-width: var(--max-width, 100%); */
+      max-width: none;
       text-align: var(--text-align-desktop, var(--text-align-default));
       text-wrap: var(--text-wrap);
     }
@@ -136,7 +137,8 @@
   @media only screen and (max-width: 749px) {
     .text-block > * {
       width: var(--width);
-      max-width: var(--max-width, 100%);
+      /* max-width: var(--max-width, 100%); */
+      max-width: none;
       text-align: var(--text-align-mobile, var(--text-align-desktop, var(--text-align-default)));
       text-wrap: var(--text-wrap);
     }
