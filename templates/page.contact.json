@@ -16,7 +16,7 @@
           "type": "text",
           "name": "Heading",
           "settings": {
-            "text": "<h2>Contact us</h2>",
+            "text": "<h2>{{ closest.page.title }}</h2>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment_desktop": "left",

@@ -1,3 +1,5 @@
+
+
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div class="section color-{{ section.settings.color_scheme }}">
   <div
@@ -29,7 +31,7 @@
     {% if blog.comments_enabled? %}
       <div class="blog-post-comments-container">
         {% if article.comments_count > 0 %}
-          <h2 class="h3">{{- 'blogs.article.comments_heading' | t: count: article.comments_count -}}</h2>
+        <h2 class="h3">{{- 'blogs.article.comments_heading' | t: count: article.comments_count -}}</h2>
         {% endif %}
 
         <div class="blog-post-comments">
@@ -52,6 +54,7 @@
             </div>
           {% endpaginate %}
         </div>
+
       </div>
       {% render 'blog-comment-form', article: article, section_id: section.id %}
     {% endif %}
@@ -146,26 +149,6 @@
       "step": 1,
       "unit": "px",
       "default": 12
-    },
-    {
-      "type": "select",
-      "id": "horizontal_alignment_flex_direction_column",
-      "label": "t:settings.alignment",
-      "options": [
-        {
-          "value": "flex-start",
-          "label": "t:options.left"
-        },
-        {
-          "value": "center",
-          "label": "t:options.center"
-        },
-        {
-          "value": "flex-end",
-          "label": "t:options.right"
-        }
-      ],
-      "default": "flex-start"
     },
     {
       "type": "color_scheme",

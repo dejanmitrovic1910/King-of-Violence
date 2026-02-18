@@ -17,10 +17,10 @@
         "announcement_y63fFX": {
           "type": "_announcement",
           "settings": {
-            "text": "USE CODE <span style=\"text-decoration:underline\"><strong>FIRSTBLOOD20</strong></span><strong> </strong>to KNOCKOUT 👊",
+            "text": "USE <span style=\"text-decoration:underline\"><strong>FIRSTBLOOD20</strong></span> TO KNOCKOUT YOUR ORDER",
             "link": "",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
+            "font": "var(--font-heading--family)",
+            "font_size": "1.5rem",
             "weight": "",
             "letter_spacing": "normal",
             "case": "none"
