@@ -321,5 +321,20 @@
       "sold_out": "Sold out",
       "unavailable": "Unavailable"
     }
+  },
+  "sections": {
+    "ticket_redeem": {
+      "code_label": "Ticket code",
+      "placeholder": "Enter ticket code",
+      "submit": "Redeem",
+      "submitting": "Submitting...",
+      "success_default": "Ticket redeemed successfully.",
+      "error_default": "Something went wrong. Please try again.",
+      "error_network": "Unable to connect. Please check your connection and try again.",
+      "input_ticket": "Input ticket",
+      "logout": "Logout",
+      "modal_title": "Enter ticket code",
+      "close": "Close"
+    }
   }
 }

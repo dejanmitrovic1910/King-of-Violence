@@ -1,0 +1,663 @@
+{% liquid
+    assign block_settings = block.settings
+    assign response_id = 'TicketRedeemResponse-' | append: block.id
+    assign modal_id = 'TicketRedeemModal-' | append: block.id
+    assign modal_input_id = 'TicketRedeemModalInput-' | append: block.id
+  %}
+  
+  {% liquid
+    assign align_desktop = block_settings.alignment_desktop | default: 'left'
+    assign align_mobile = block_settings.alignment_mobile | default: 'left'
+    assign align_items_desktop = 'flex-start'
+    assign align_items_mobile = 'flex-start'
+    if align_desktop == 'center'
+      assign align_items_desktop = 'center'
+    elsif align_desktop == 'right'
+      assign align_items_desktop = 'flex-end'
+    endif
+    if align_mobile == 'center'
+      assign align_items_mobile = 'center'
+    elsif align_mobile == 'right'
+      assign align_items_mobile = 'flex-end'
+    endif
+  %}
+  <div
+    class="ticket-redeem spacing-style {{ block_settings.identifier }}"
+    data-ticket-block-id="{{ block.id }}"
+    data-section-id="{{ section.id }}"
+    style="
+      {% render 'spacing-style', settings: block_settings %}
+      {% render 'border-override', settings: block_settings %}
+      --ticket-align-desktop: {{ align_desktop }};
+      --ticket-align-mobile: {{ align_mobile }};
+      --ticket-align-items-desktop: {{ align_items_desktop }};
+      --ticket-align-items-mobile: {{ align_items_mobile }};
+    "
+    {{ block.shopify_attributes }}
+  >
+    <div class="ticket-redeem__inner section-content-wrapper">
+      {% if block_settings.heading != blank %}
+        <h2 class="ticket-redeem__heading {{ block_settings.heading_size }}">
+          {{ block_settings.heading }}
+        </h2>
+      {% endif %}
+  
+      <div class="ticket-redeem__form-wrapper" data-ticket-redeem>
+        {% comment %} State: no ticket in localStorage — show "Input ticket" button only {% endcomment %}
+        <div class="ticket-redeem__state ticket-redeem__state--input" data-ticket-state-input hidden>
+          <button
+            type="button"
+            class="button button--primary ticket-redeem__trigger"
+            data-ticket-open-modal
+            aria-haspopup="dialog"
+            aria-controls="{{ modal_id }}"
+          >
+            {{ block_settings.input_ticket_label }}
+          </button>
+        </div>
+  
+        {% comment %} State: ticket in localStorage — show ticket type image, name, and logout {% endcomment %}
+        <div class="ticket-redeem__state ticket-redeem__state--logged-in" data-ticket-state-logged-in hidden>
+          <div class="ticket-redeem__ticket-display">
+            <div class="ticket-redeem__ticket-content" data-ticket-type-content>
+              <span class="ticket-redeem__ticket-image-wrap" data-ticket-type-image-wrap hidden>
+                <img class="ticket-redeem__ticket-image" data-ticket-type-image alt="" width="48" height="48">
+              </span>
+              <span class="ticket-redeem__ticket-name" data-ticket-type-name></span>
+            </div>
+            <button type="button" class="button button--secondary ticket-redeem__logout" data-ticket-logout>
+              {{ block_settings.logout_label }}
+            </button>
+          </div>
+        </div>
+  
+        {% comment %} Inline response message (e.g. after submit in modal) {% endcomment %}
+        <div
+          id="{{ response_id }}"
+          class="ticket-redeem__response hidden"
+          role="status"
+          aria-live="polite"
+          data-ticket-redeem-response
+        >
+          <p class="ticket-redeem__response-text"></p>
+        </div>
+      </div>
+    </div>
+  
+    {% comment %} Modal: one input field for ticket code (inside wrapper so script can find it) {% endcomment %}
+    <dialog
+      id="{{ modal_id }}"
+      class="ticket-redeem__modal"
+      data-ticket-modal
+      aria-labelledby="{{ modal_id }}-title"
+      aria-modal="true"
+    >
+      <div class="ticket-redeem__modal-backdrop" data-ticket-modal-close></div>
+      <div class="ticket-redeem__modal-content">
+        <h3 id="{{ modal_id }}-title" class="ticket-redeem__modal-title">
+          {{ block_settings.modal_title }}
+        </h3>
+        <form class="ticket-redeem__modal-form" data-ticket-redeem-form>
+          <input type="hidden" name="form_type" value="ticket_redeem">
+          <label class="visually-hidden" for="{{ modal_input_id }}">
+            {{ 'sections.ticket_redeem.code_label' | t }}
+          </label>
+          <input
+            type="text"
+            id="{{ modal_input_id }}"
+            class="ticket-redeem__input ticket-redeem__modal-input"
+            name="code"
+            autocomplete="off"
+            placeholder="{{ block_settings.placeholder }}"
+            required
+            data-ticket-redeem-input
+          >
+          <div class="ticket-redeem__modal-actions">
+            <button type="button" class="button button--secondary" data-ticket-modal-close>
+              {{ 'sections.ticket_redeem.close' | t }}
+            </button>
+            <button type="submit" class="button button--primary ticket-redeem__submit" data-ticket-redeem-submit>
+              <span class="ticket-redeem__submit-text">{{ block_settings.button_label }}</span>
+              <span class="ticket-redeem__submit-loading hidden" aria-hidden="true">{{ 'sections.ticket_redeem.submitting' | t }}</span>
+            </button>
+          </div>
+        </form>
+        <div class="ticket-redeem__modal-response hidden" data-ticket-modal-response role="status" aria-live="polite">
+          <p class="ticket-redeem__response-text" data-ticket-modal-response-text></p>
+        </div>
+      </div>
+    </dialog>
+  </div>
+  
+  <script>
+    (function () {
+      const STORAGE_KEY = 'ticket_redeem_data';
+      const wrapper = document.querySelector('[data-ticket-block-id="{{ block.id }}"]');
+      if (!wrapper) return;
+  
+      const stateInput = wrapper.querySelector('[data-ticket-state-input]');
+      const stateLoggedIn = wrapper.querySelector('[data-ticket-state-logged-in]');
+      const openModalBtn = wrapper.querySelector('[data-ticket-open-modal]');
+      const logoutBtn = wrapper.querySelector('[data-ticket-logout]');
+      const modal = wrapper.querySelector('[data-ticket-modal]');
+      const modalCloseBtns = wrapper.querySelectorAll('[data-ticket-modal-close]');
+      const modalForm = wrapper.querySelector('[data-ticket-redeem-form]');
+      const modalInput = wrapper.querySelector('[data-ticket-redeem-input]');
+      const submitBtn = wrapper.querySelector('[data-ticket-redeem-submit]');
+      const submitText = wrapper.querySelector('.ticket-redeem__submit-text');
+      const submitLoading = wrapper.querySelector('.ticket-redeem__submit-loading');
+      const modalResponse = wrapper.querySelector('[data-ticket-modal-response]');
+      const modalResponseText = wrapper.querySelector('[data-ticket-modal-response-text]');
+      const ticketTypeImageWrap = wrapper.querySelector('[data-ticket-type-image-wrap]');
+      const ticketTypeImage = wrapper.querySelector('[data-ticket-type-image]');
+      const ticketTypeName = wrapper.querySelector('[data-ticket-type-name]');
+  
+      const defaultImageUrl = {% if block_settings.default_ticket_image != blank %}{{ block_settings.default_ticket_image | image_url: width: 96 | json }}{% else %}null{% endif %};
+  
+      function getStored() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return null;
+          const data = JSON.parse(raw);
+          const exp = data.exp != null ? Number(data.exp) : null;
+          if (exp != null) {
+            const now = Math.floor(Date.now() / 1000);
+            if (exp < now) {
+              localStorage.removeItem(STORAGE_KEY);
+              return null;
+            }
+          }
+          return data;
+        } catch (_) {
+          return null;
+        }
+      }
+  
+      function setStored(data) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        } catch (_) {}
+      }
+  
+      function clearStored() {
+        localStorage.removeItem(STORAGE_KEY);
+      }
+  
+      function showModalMessage(message, isError) {
+        if (!modalResponse || !modalResponseText) return;
+        modalResponseText.textContent = message;
+        modalResponse.classList.remove('hidden', 'ticket-redeem__response--error', 'ticket-redeem__response--success');
+        modalResponse.classList.add(isError ? 'ticket-redeem__response--error' : 'ticket-redeem__response--success');
+      }
+  
+      function hideModalMessage() {
+        if (modalResponse) modalResponse.classList.add('hidden');
+      }
+  
+      function setLoading(loading) {
+        if (submitBtn && submitText && submitLoading) {
+          submitBtn.disabled = loading;
+          submitText.classList.toggle('hidden', loading);
+          submitLoading.classList.toggle('hidden', !loading);
+        }
+      }
+  
+      function renderUI() {
+        const data = getStored();
+        if (data) {
+          if (stateInput) stateInput.hidden = true;
+          if (stateLoggedIn) stateLoggedIn.hidden = false;
+          const name = data.ticketTypeName || data.ticket_type_name || data.ticketType || data.ticket_type || data.type || 'Ticket';
+          if (ticketTypeName) ticketTypeName.textContent = name;
+          const imgUrl = data.ticketTypeImage || data.ticket_type_image || data.image_url || defaultImageUrl;
+          if (imgUrl && ticketTypeImage && ticketTypeImageWrap) {
+            ticketTypeImage.src = imgUrl;
+            ticketTypeImage.alt = name;
+            ticketTypeImageWrap.hidden = false;
+          } else if (ticketTypeImageWrap) {
+            ticketTypeImageWrap.hidden = true;
+          }
+        } else {
+          if (stateInput) stateInput.hidden = false;
+          if (stateLoggedIn) stateLoggedIn.hidden = true;
+        }
+      }
+  
+      function openModal() {
+        if (!modal) return;
+        hideModalMessage();
+        if (modalInput) {
+          modalInput.value = '';
+          modalInput.focus();
+        }
+        modal.showModal();
+      }
+  
+      function closeModal() {
+        if (modal) modal.close();
+      }
+  
+      openModalBtn?.addEventListener('click', openModal);
+      logoutBtn?.addEventListener('click', function () {
+        clearStored();
+        renderUI();
+      });
+      modalCloseBtns.forEach(function (el) {
+        el.addEventListener('click', closeModal);
+      });
+      modal?.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+      });
+      wrapper.querySelector('.ticket-redeem__modal-backdrop')?.addEventListener('click', closeModal);
+  
+      modalForm?.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (!modalInput?.value?.trim()) return;
+  
+        const code = modalInput.value.trim();
+        setLoading(true);
+        hideModalMessage();
+  
+        try {
+          const body = new FormData();
+          body.append('code', code);
+          body.append('form_type', 'ticket_redeem');
+  
+          const response = await fetch('/apps/redeem', {
+            method: 'POST',
+            body: body,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              Accept: 'application/json'
+            }
+          });
+  
+          const contentType = response.headers.get('Content-Type') || '';
+          let message = '';
+          let isError = !response.ok;
+          let data = null;
+  
+          if (contentType.includes('application/json')) {
+            data = await response.json().catch(function () { return {}; });
+            message = data.message ?? data.error ?? data.text ?? (isError ? '{{ "sections.ticket_redeem.error_default" | t }}' : '');
+            if (data.success === true) isError = false;
+            if (data.success === false || data.error) isError = true;
+          } else {
+            const text = await response.text();
+            message = text || (response.ok ? '{{ "sections.ticket_redeem.success_default" | t }}' : '{{ "sections.ticket_redeem.error_default" | t }}');
+          }
+  
+          if (!message) {
+            message = response.ok ? '{{ "sections.ticket_redeem.success_default" | t }}' : '{{ "sections.ticket_redeem.error_default" | t }}';
+          }
+  
+          showModalMessage(message, isError);
+  
+          if (!isError && response.ok && data && typeof data === 'object') {
+            setStored({
+              ticketType: data.ticketType ?? data.ticket_type ?? data.type,
+              ticketTypeName: data.ticketTypeName ?? data.ticket_type_name ?? data.name,
+              ticketTypeImage: data.ticketTypeImage ?? data.ticket_type_image ?? data.image_url,
+              exp: data.exp ?? data.expTime ?? data.expires_at ?? data.expires,
+              ...data
+            });
+            closeModal();
+            renderUI();
+          }
+        } catch (_) {
+          showModalMessage('{{ "sections.ticket_redeem.error_network" | t }}', true);
+        } finally {
+          setLoading(false);
+        }
+      });
+  
+      renderUI();
+    })();
+  </script>
+  
+  {% stylesheet %}
+    .ticket-redeem__inner {
+      max-width: var(--page-width, 1200px);
+      margin-inline: auto;
+      padding-inline: var(--padding-page);
+      display: flex;
+      flex-direction: column;
+      align-items: var(--ticket-align-items-desktop, flex-start);
+      text-align: var(--ticket-align-desktop, left);
+    }
+
+    .ticket-redeem__heading {
+      margin-bottom: var(--gap-md);
+      width: 100%;
+    }
+
+    .ticket-redeem__form-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-md);
+      max-width: 28rem;
+      width: 100%;
+      align-items: var(--ticket-align-items-desktop, flex-start);
+    }
+
+    @media screen and (max-width: 749px) {
+      .ticket-redeem__inner {
+        align-items: var(--ticket-align-items-mobile, flex-start);
+        text-align: var(--ticket-align-mobile, left);
+      }
+      .ticket-redeem__form-wrapper {
+        align-items: var(--ticket-align-items-mobile, flex-start);
+      }
+    }
+  
+    .ticket-redeem__state[hidden] {
+      display: none !important;
+    }
+  
+    .ticket-redeem__ticket-display {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--gap-md);
+    }
+  
+    .ticket-redeem__ticket-content {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--gap-sm);
+    }
+  
+    .ticket-redeem__ticket-image-wrap {
+      display: inline-block;
+    }
+  
+    .ticket-redeem__ticket-image {
+      display: block;
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: var(--style-border-radius-inputs);
+    }
+  
+    .ticket-redeem__input,
+    .ticket-redeem__modal-input {
+      width: 100%;
+      min-width: 0;
+      padding: var(--padding-lg) var(--padding-xl);
+      border-radius: var(--style-border-radius-inputs);
+      border: var(--style-border-width-inputs) solid var(--color-input-border);
+      background-color: var(--color-input-background);
+      color: var(--color-input-text);
+      -webkit-font-smoothing: antialiased;
+    }
+  
+    .ticket-redeem__submit {
+      flex-shrink: 0;
+    }
+  
+    .ticket-redeem__response,
+    .ticket-redeem__modal-response {
+      padding: var(--padding-md) var(--padding-lg);
+      border-radius: var(--style-border-radius-inputs);
+      border: var(--style-border-width-inputs) solid;
+      margin-top: 20px;
+    }
+  
+    .ticket-redeem__response--success,
+    .ticket-redeem__modal-response.ticket-redeem__response--success {
+      border-color: var(--color-success-border, green);
+      background: var(--color-success-background, rgba(0, 128, 0, 0.08));
+      color: var(--color-success-text, #0a5c0a);
+    }
+  
+    .ticket-redeem__response--error,
+    .ticket-redeem__modal-response.ticket-redeem__response--error {
+      border-color: var(--color-error-border, #c00);
+      background: var(--color-error-background, rgba(204, 0, 0, 0.08));
+      color: var(--color-error-text, #c00);
+    }
+  
+    .ticket-redeem__response-text {
+      margin: 0;
+    }
+  
+    .ticket-redeem .hidden {
+      display: none !important;
+    }
+  
+    /* Modal */
+    .ticket-redeem__modal {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      padding: 0;
+      background: transparent;
+    }
+  
+    .ticket-redeem__modal::backdrop {
+      background: rgba(0, 0, 0, 0.5);
+    }
+  
+    .ticket-redeem__modal-backdrop {
+      position: absolute;
+      inset: 0;
+    }
+  
+    .ticket-redeem__modal-content {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 24rem;
+      padding: var(--padding-xl);
+      background: var(--color-background);
+      color: var(--color-foreground);
+      border-radius: var(--style-border-radius-inputs);
+      border: var(--basic-color) solid 2px;
+      box-shadow: 0 -3px 19px -5px rgb(254 201 9), 0 3px 14px -5px rgb(254 201 9);
+    }
+  
+    .ticket-redeem__modal-title {
+      margin: 0 0 var(--gap-md);
+      font-size: 1.125rem;
+    }
+  
+    .ticket-redeem__modal-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-md);
+    }
+  
+    .ticket-redeem__modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--gap-sm);
+      justify-content: flex-end;
+    }
+  {% endstylesheet %}
+  
+  {% schema %}
+  {
+    "name": "t:names.ticket_redeem",
+    "tag": null,
+    "class": "ticket-redeem-block",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:content.heading"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "t:settings.heading",
+        "default": "Redeem ticket"
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "Heading size",
+        "options": [
+          { "value": "h0", "label": "t:options.h0" },
+          { "value": "h1", "label": "t:options.h1" },
+          { "value": "h2", "label": "t:options.h2" },
+          { "value": "h3", "label": "t:options.h3" }
+        ],
+        "default": "h2"
+      },
+      {
+        "type": "header",
+        "content": "t:content.input"
+      },
+      {
+        "type": "text",
+        "id": "placeholder",
+        "label": "Placeholder",
+        "default": "Enter ticket code"
+      },
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button label",
+        "default": "Redeem"
+      },
+      {
+        "type": "text",
+        "id": "input_ticket_label",
+        "label": "Input ticket button label",
+        "default": "Input ticket"
+      },
+      {
+        "type": "text",
+        "id": "logout_label",
+        "label": "Logout button label",
+        "default": "Logout"
+      },
+      {
+        "type": "text",
+        "id": "modal_title",
+        "label": "Modal title",
+        "default": "Enter ticket code"
+      },
+      {
+        "type": "image_picker",
+        "id": "default_ticket_image",
+        "label": "Default ticket type image",
+        "info": "Shown when API does not return an image"
+      },
+      {
+        "type": "header",
+        "content": "t:content.layout"
+      },
+      {
+        "type": "text",
+        "id": "identifier",
+        "label": "t:settings.identifier"
+      },
+      {
+        "type": "header",
+        "content": "t:settings.alignment"
+      },
+      {
+        "type": "select",
+        "id": "alignment_desktop",
+        "label": "t:settings.alignment",
+        "options": [
+          { "value": "left", "label": "t:options.left" },
+          { "value": "center", "label": "t:options.center" },
+          { "value": "right", "label": "t:options.right" }
+        ],
+        "default": "left"
+      },
+      {
+        "type": "select",
+        "id": "alignment_mobile",
+        "label": "t:settings.alignment_mobile",
+        "options": [
+          { "value": "left", "label": "t:options.left" },
+          { "value": "center", "label": "t:options.center" },
+          { "value": "right", "label": "t:options.right" }
+        ],
+        "default": "left"
+      },
+      {
+        "type": "header",
+        "content": "t:content.padding"
+      },
+      {
+        "type": "range",
+        "id": "padding-block-start",
+        "label": "t:settings.top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "default": 32
+      },
+      {
+        "type": "range",
+        "id": "padding-block-end",
+        "label": "t:settings.bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "default": 32
+      },
+      {
+        "type": "header",
+        "content": "t:settings.borders"
+      },
+      {
+        "type": "select",
+        "id": "border",
+        "label": "t:settings.borders",
+        "options": [
+          { "value": "none", "label": "t:options.none" },
+          { "value": "solid", "label": "t:options.solid" }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "range",
+        "id": "border_width",
+        "min": 0,
+        "max": 10,
+        "step": 0.5,
+        "unit": "px",
+        "label": "t:settings.border_width",
+        "default": 1,
+        "visible_if": "{{ block.settings.border != 'none' }}"
+      },
+      {
+        "type": "range",
+        "id": "border_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:settings.border_opacity",
+        "default": 100,
+        "visible_if": "{{ block.settings.border != 'none' }}"
+      },
+      {
+        "type": "range",
+        "id": "border_radius",
+        "label": "t:settings.border_radius",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:names.ticket_redeem"
+      }
+    ]
+  }
+  {% endschema %}
+  
