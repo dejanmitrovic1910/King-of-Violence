@@ -255,9 +255,65 @@
 
 <script>
   (function () {
+    var STORAGE_KEY = 'ticket_redeem_data';
     var customerLoggedIn = {% if customer %}true{% else %}false{% endif %};
+    var customerEmail = {{ customer.email | json }};
+
+    function removeTicketRedeemData() {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    }
+
     if (!customerLoggedIn) {
-      try { localStorage.removeItem('ticket_redeem_data'); } catch (e) {}
+      removeTicketRedeemData();
+      return;
+    }
+
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+
+      var data = null;
+      var trimmed = (typeof raw === 'string' ? raw : '').trim();
+      if (trimmed.startsWith('{')) {
+        data = JSON.parse(trimmed);
+      } else if (trimmed.indexOf('.') !== -1) {
+        var parts = trimmed.split('.');
+        if (parts.length === 3) {
+          var payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+          data = JSON.parse(atob(payload));
+        }
+      }
+
+      if (!data || typeof data !== 'object') {
+        removeTicketRedeemData();
+        return;
+      }
+
+      var exp = data.exp != null ? Number(data.exp) : null;
+      if (exp != null && !Number.isNaN(exp)) {
+        var nowSec = Math.floor(Date.now() / 1000);
+        if (exp < nowSec) {
+          removeTicketRedeemData();
+          return;
+        }
+      } else {
+        var expireTime = data.expireTime || data.expire_time;
+        if (expireTime) {
+          var expiry = new Date(expireTime).getTime();
+          if (!Number.isNaN(expiry) && Date.now() >= expiry) {
+            removeTicketRedeemData();
+            return;
+          }
+        }
+      }
+
+      var tokenEmail = (data.email).toString().trim().toLowerCase();
+      var loggedInEmail = (customerEmail || '').toString().trim().toLowerCase();
+      if (tokenEmail && loggedInEmail && tokenEmail !== loggedInEmail) {
+        removeTicketRedeemData();
+      }
+    } catch (_) {
+      removeTicketRedeemData();
     }
   })();
   const basePath = 'https://cdn.shopify.com/static/themes/horizon/placeholders';
