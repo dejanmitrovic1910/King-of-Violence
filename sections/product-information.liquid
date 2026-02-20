@@ -36,6 +36,12 @@
     when 'content-full-width'
       assign content_width = 'full-width'
   endcase
+
+  assign is_prize_product = false
+  if closest.product.tags contains 'Prize'
+    assign is_prize_product = true
+  endif
+  assign redeem_page_url = settings.redeem_page_url | default: '/pages/redeem'
 %}
 
 <script type="application/ld+json">
@@ -47,6 +53,7 @@
   id="product-information"
   class="product-information section section--{{ content_width }} spacing-style color-{{ section.settings.color_scheme }} relative"
   style="{% render 'spacing-style', settings: section.settings %} --gap: {{ section.settings.gap }}px;"
+  {% if is_prize_product %}data-prize-pdp-redirect data-redeem-url="{{ redeem_page_url }}"{% endif %}
 >
   {% if section.settings.desktop_media_position == 'left' and product_has_media %}
     {% assign product_href = '#ProductInformation-' | append: section.id %}

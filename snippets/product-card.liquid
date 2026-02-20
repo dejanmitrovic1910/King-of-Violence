@@ -83,6 +83,14 @@
   if product.id == empty or product == blank
     assign onboarding = true
   endif
+
+  assign is_prize_product = false
+  unless onboarding
+    if product.tags contains 'Prize'
+      assign is_prize_product = true
+    endif
+  endunless
+  assign redeem_page_url = settings.redeem_page_url | default: '/pages/redeem'
 %}
 
 {%- if settings.transition_to_main_product -%}
@@ -102,6 +110,7 @@
   id="product-card-{{ block.id }}"
   data-product-transition="{{ settings.transition_to_main_product }}"
   {{ block.shopify_attributes }}
+  {% if is_prize_product %}data-prize-product="true" data-redeem-url="{{ redeem_page_url }}"{% endif %}
   {% if no_swatch_selected %}
     data-no-swatch-selected="true"
   {% endif %}
@@ -224,5 +233,34 @@
 
   .product-card [data-available-count='0'] ~ svg {
     display: block;
+  }
+
+  /* Prize product locked state: overlay and fully non-clickable card */
+  .product-card--prize-locked,
+  product-card-link:has(.product-card--prize-locked) {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+  .product-card--prize-locked slideshow-arrows,
+  .product-card--prize-locked [ref="slideshowControls"] {
+    display: none;
+  }
+  .product-card__prize-lock-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: inherit;
+  }
+  .product-card__prize-lock-icon {
+    color: #fff;
+    opacity: 0.9;
+  }
+  .product-card__prize-lock-icon svg {
+    display: block;
+    width: 48px;
+    height: 48px;
   }
 {% endstylesheet %}

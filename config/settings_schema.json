@@ -2107,6 +2107,18 @@
     ]
   },
   {
+    "name": "Ticket & Prize",
+    "settings": [
+      {
+        "type": "text",
+        "id": "redeem_page_url",
+        "label": "Redeem page URL",
+        "default": "/pages/redeem",
+        "info": "Page where customers redeem tickets. Used when a prize product is viewed without a valid ticket."
+      }
+    ]
+  },
+  {
     "name": "t:names.search",
     "settings": [
       {
