@@ -56,6 +56,11 @@
   else
     assign can_add_to_cart = false
   endif
+
+  assign is_prize_product = false
+  if product.tags contains 'Prize'
+    assign is_prize_product = true
+  endif
 %}
 
 <quick-add-component
@@ -66,6 +71,7 @@
   <product-form-component
     data-section-id="{{ section_id }}"
     data-product-id="{{ product.id }}"
+    {% if is_prize_product %}data-prize-product="true"{% endif %}
     on:submit="/handleSubmit"
     class="
       quick-add__product-form-component

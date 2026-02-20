@@ -126,5 +126,31 @@
     init();
   }
 
+  /**
+   * Returns the raw token from localStorage for use in API calls (e.g. claim prize).
+   * Returns null if missing or invalid. Use getTicketRedeemValid() to check validity first.
+   * When ticket_redeem_data is JSON (token + other info), returns only the token for backend.
+   */
+  function getTicketRedeemToken() {
+    try {
+      if (!getTicketRedeemValid()) return null;
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw || typeof raw !== 'string') return null;
+      const trimmed = raw.trim();
+      const data = JSON.parse(trimmed);
+      const token = data.token;
+      return typeof token === 'string' ? token : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   window.getTicketRedeemValid = getTicketRedeemValid;
+  window.getTicketRedeemToken = getTicketRedeemToken;
+
+  /**
+   * Reusable check: returns true if the prize/ticket token in localStorage is valid and not expired.
+   * Use this anywhere you need to gate prize actions (add to cart, claim, etc.).
+   */
+  window.isPrizeTokenValid = getTicketRedeemValid;
 })();

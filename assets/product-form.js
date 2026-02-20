@@ -7,6 +7,18 @@ import { morph } from '@theme/morph';
 export const ADD_TO_CART_TEXT_ANIMATION_DURATION = 2000;
 
 /**
+ * Escapes HTML special characters to prevent XSS in dynamic modal content.
+ * @param {string} text
+ * @returns {string}
+ */
+function escapeHtml(text) {
+  if (typeof text !== 'string') return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+/**
  * A custom element that manages an add to cart button.
  *
  * @typedef {object} AddToCartRefs
@@ -169,21 +181,215 @@ class ProductFormComponent extends Component {
     // Check if the add to cart button is disabled and do an early return if it is
     if (this.refs.addToCartButtonContainer?.refs.addToCartButton?.getAttribute('disabled') === 'true') return;
 
-    // Send the add to cart information to the cart
     const form = this.querySelector('form');
-
     if (!form) throw new Error('Product form element missing');
 
+    // Prize product: check token, show confirm, claim via backend, then add to cart
+    if (this.dataset.prizeProduct === 'true') {
+      this.#handlePrizeAddToCart(event, form, addToCartTextError);
+      return;
+    }
+
+    this.#doAddToCart(event, form, addToCartTextError);
+  }
+
+  /**
+   * Prize flow: validate token → confirm modal → claim API → add to cart on success.
+   * @param {Event} event
+   * @param {HTMLFormElement} form
+   * @param {HTMLElement | undefined} addToCartTextError
+   */
+  #handlePrizeAddToCart(event, form, addToCartTextError) {
+    const isPrizeTokenValid =
+      typeof window.isPrizeTokenValid === 'function' ? window.isPrizeTokenValid() : false;
+
+    if (!isPrizeTokenValid) {
+      this.#showPrizeMessageModal('You need a valid ticket to claim this prize.');
+      cartPerformance.measureFromEvent('add:user-action', event);
+      return;
+    }
+
+    this.#showPrizeConfirmModal('Claim this prize? You can only pick one.', () => {
+      this.#claimPrizeAndAddToCart(event, form, addToCartTextError);
+    });
+  }
+
+  /**
+   * Calls backend to claim prize, then adds to cart on success or shows backend message on failure.
+   * @param {Event} event
+   * @param {HTMLFormElement} form
+   * @param {HTMLElement | undefined} addToCartTextError
+   */
+  async #claimPrizeAndAddToCart(event, form, addToCartTextError) {
+    const token =
+      typeof window.getTicketRedeemToken === 'function' ? window.getTicketRedeemToken() : null;
+    if (!token) {
+      this.#showPrizeMessageModal('You need a valid ticket to claim this prize.');
+      cartPerformance.measureFromEvent('add:user-action', event);
+      return;
+    }
+
+    const formData = new FormData(form);
+    const variantId = formData.get('id');
+    const productId = this.dataset.productId;
+
+    try {
+      const response = await fetch('/apps/redeem/claim', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          token,
+          product_id: productId,
+          variant_id: variantId,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      const success = data.success === true;
+      const message =
+        data.message ?? (data.data && data.data.message) ?? (response.ok ? '' : 'Something went wrong.');
+
+      if (success) {
+        this.#doAddToCart(event, form, addToCartTextError);
+      } else {
+        this.#showPrizeMessageModal(message || 'Unable to claim this prize.');
+      }
+    } catch (_) {
+      this.#showPrizeMessageModal('Something went wrong. Please try again.');
+    } finally {
+      cartPerformance.measureFromEvent('add:user-action', event);
+    }
+  }
+
+  /**
+   * Shows a confirm dialog. Calls onConfirm when user confirms, nothing on cancel.
+   * @param {string} message
+   * @param {() => void} onConfirm
+   */
+  #showPrizeConfirmModal(message, onConfirm) {
+    const dialog = document.createElement('dialog');
+    dialog.setAttribute('aria-modal', 'true');
+    dialog.setAttribute('aria-labelledby', 'prize-confirm-title');
+    dialog.className = 'prize-claim-modal';
+    dialog.innerHTML = `
+      <div class="prize-claim-modal__backdrop" data-prize-close></div>
+      <div class="prize-claim-modal__content">
+        <h3 id="prize-confirm-title" class="prize-claim-modal__title">${escapeHtml(message)}</h3>
+        <div class="prize-claim-modal__actions">
+          <button type="button" class="button button--secondary" data-prize-cancel>Cancel</button>
+          <button type="button" class="button button--primary" data-prize-confirm>Claim</button>
+        </div>
+      </div>
+    `;
+
+    const style = document.createElement('style');
+    style.textContent = `
+      .prize-claim-modal { position: fixed; inset: 0; width: 100%; height: 100%; border: none; padding: 0; background: transparent; }
+      .prize-claim-modal::backdrop { background: rgba(0, 0, 0, 0.5); }
+      .prize-claim-modal__backdrop { position: absolute; inset: 0; }
+      .prize-claim-modal__content {
+        position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+        width: 90%; max-width: 24rem; padding: var(--padding-xl, 1rem);
+        background: var(--color-background, #fff); color: var(--color-foreground, #111);
+        border-radius: var(--style-border-radius-inputs, 8px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      }
+      .prize-claim-modal__title { margin: 0 0 1rem; font-size: 1.125rem; }
+      .prize-claim-modal__actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+    `;
+    dialog.appendChild(style);
+
+    const close = () => {
+      dialog.close();
+      dialog.remove();
+    };
+
+    dialog.querySelector('[data-prize-confirm]').addEventListener('click', () => {
+      close();
+      onConfirm();
+    });
+    dialog.querySelector('[data-prize-cancel]').addEventListener('click', close);
+    dialog.querySelector('[data-prize-close]').addEventListener('click', close);
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) close();
+    });
+
+    document.body.appendChild(dialog);
+    dialog.showModal();
+  }
+
+  /**
+   * Shows a message-only modal (e.g. error or backend message).
+   * @param {string} message
+   */
+  #showPrizeMessageModal(message) {
+    const dialog = document.createElement('dialog');
+    dialog.setAttribute('aria-modal', 'true');
+    dialog.setAttribute('aria-labelledby', 'prize-message-title');
+    dialog.className = 'prize-claim-modal';
+    dialog.innerHTML = `
+      <div class="prize-claim-modal__backdrop" data-prize-close></div>
+      <div class="prize-claim-modal__content">
+        <h3 id="prize-message-title" class="prize-claim-modal__title">${escapeHtml(message)}</h3>
+        <div class="prize-claim-modal__actions">
+          <button type="button" class="button button--primary" data-prize-close>OK</button>
+        </div>
+      </div>
+    `;
+
+    const style = document.createElement('style');
+    style.textContent = `
+      .prize-claim-modal { position: fixed; inset: 0; width: 100%; height: 100%; border: none; padding: 0; background: transparent; }
+      .prize-claim-modal::backdrop { background: rgba(0, 0, 0, 0.5); }
+      .prize-claim-modal__backdrop { position: absolute; inset: 0; }
+      .prize-claim-modal__content {
+        position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+        width: 90%; max-width: 24rem; padding: var(--padding-xl, 1rem);
+        background: var(--color-background, #fff); color: var(--color-foreground, #111);
+        border-radius: var(--style-border-radius-inputs, 8px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      }
+      .prize-claim-modal__title { margin: 0 0 1rem; font-size: 1.125rem; }
+      .prize-claim-modal__actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+    `;
+    dialog.appendChild(style);
+
+    const close = () => {
+      dialog.close();
+      dialog.remove();
+    };
+
+    dialog.querySelectorAll('[data-prize-close]').forEach((el) => el.addEventListener('click', close));
+    dialog.querySelector('.prize-claim-modal__backdrop').addEventListener('click', close);
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) close();
+    });
+
+    document.body.appendChild(dialog);
+    dialog.showModal();
+  }
+
+  /**
+   * Performs the actual add-to-cart request and handles response (used for normal and post-claim add).
+   * @param {Event} event
+   * @param {HTMLFormElement} form
+   * @param {HTMLElement | undefined} addToCartTextError
+   */
+  #doAddToCart(event, form, addToCartTextError) {
     const formData = new FormData(form);
 
     const cartItemsComponents = document.querySelectorAll('cart-items-component');
-    let cartItemComponentsSectionIds = [];
+    const cartItemComponentsSectionIds = [];
     cartItemsComponents.forEach((item) => {
       if (item instanceof HTMLElement && item.dataset.sectionId) {
         cartItemComponentsSectionIds.push(item.dataset.sectionId);
       }
-      formData.append('sections', cartItemComponentsSectionIds.join(','));
     });
+    formData.append('sections', cartItemComponentsSectionIds.join(','));
 
     const fetchCfg = fetchConfig('javascript', { body: formData });
 
@@ -204,7 +410,6 @@ class ProductFormComponent extends Component {
           if (!addToCartTextError) return;
           addToCartTextError.classList.remove('hidden');
 
-          // Reuse the text node if the user is spam-clicking
           const textNode = addToCartTextError.childNodes[2];
           if (textNode) {
             textNode.textContent = response.message;
@@ -213,19 +418,14 @@ class ProductFormComponent extends Component {
             addToCartTextError.appendChild(newTextNode);
           }
 
-          // Create or get existing error live region for screen readers
           this.#setLiveRegionText(response.message);
 
           this.#timeout = setTimeout(() => {
             if (!addToCartTextError) return;
             addToCartTextError.classList.add('hidden');
-
-            // Clear the announcement
             this.#clearLiveRegionText();
           }, 10000);
 
-          // When we add more than the maximum amount of items to the cart, we need to dispatch a cart update event
-          // because our back-end still adds the max allowed amount to the cart.
           this.dispatchEvent(
             new CartAddEvent({}, this.id, {
               didError: true,
@@ -236,44 +436,42 @@ class ProductFormComponent extends Component {
           );
 
           return;
-        } else {
-          const id = formData.get('id');
-
-          if (addToCartTextError) {
-            addToCartTextError.classList.add('hidden');
-            addToCartTextError.removeAttribute('aria-live');
-          }
-
-          if (!id) throw new Error('Form ID is required');
-
-          // Add aria-live region to inform screen readers that the item was added
-          if (this.refs.addToCartButtonContainer?.refs.addToCartButton) {
-            const addToCartButton = this.refs.addToCartButtonContainer.refs.addToCartButton;
-            const addedTextElement = addToCartButton.querySelector('.add-to-cart-text--added');
-            const addedText = addedTextElement?.textContent?.trim() || Theme.translations.added;
-
-            this.#setLiveRegionText(addedText);
-
-            setTimeout(() => {
-              this.#clearLiveRegionText();
-            }, 5000);
-          }
-
-          this.dispatchEvent(
-            new CartAddEvent({}, id.toString(), {
-              source: 'product-form-component',
-              itemCount: Number(formData.get('quantity')) || Number(this.dataset.quantityDefault),
-              productId: this.dataset.productId,
-              sections: response.sections,
-            })
-          );
         }
+
+        const id = formData.get('id');
+
+        if (addToCartTextError) {
+          addToCartTextError.classList.add('hidden');
+          addToCartTextError.removeAttribute('aria-live');
+        }
+
+        if (!id) throw new Error('Form ID is required');
+
+        if (this.refs.addToCartButtonContainer?.refs.addToCartButton) {
+          const addToCartButton = this.refs.addToCartButtonContainer.refs.addToCartButton;
+          const addedTextElement = addToCartButton.querySelector('.add-to-cart-text--added');
+          const addedText = addedTextElement?.textContent?.trim() || Theme.translations.added;
+
+          this.#setLiveRegionText(addedText);
+
+          setTimeout(() => {
+            this.#clearLiveRegionText();
+          }, 5000);
+        }
+
+        this.dispatchEvent(
+          new CartAddEvent({}, id.toString(), {
+            source: 'product-form-component',
+            itemCount: Number(formData.get('quantity')) || Number(this.dataset.quantityDefault),
+            productId: this.dataset.productId,
+            sections: response.sections,
+          })
+        );
       })
       .catch((error) => {
         console.error(error);
       })
       .finally(() => {
-        // add more thing to do in here if needed.
         cartPerformance.measureFromEvent('add:user-action', event);
       });
   }

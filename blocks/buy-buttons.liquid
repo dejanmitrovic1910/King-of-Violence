@@ -6,6 +6,11 @@
     assign product = collections.all.products.first
   endif
 
+  assign is_prize_product = false
+  if product.tags contains 'Prize'
+    assign is_prize_product = true
+  endif
+
   assign variant = closest.product.selected_or_first_available_variant
   assign inventory_quantity = variant.inventory_quantity
   assign inventory_policy = variant.inventory_policy
@@ -47,6 +52,7 @@
       data-section-id="{{ section.id }}"
       data-product-id="{{ product.id }}"
       data-product-url="{{ product.url }}"
+      {% if is_prize_product %}data-prize-product="true"{% endif %}
       on:submit="/handleSubmit"
       data-quantity-default="{% if product.selected_or_first_available_variant.quantity_rule.min %}{{ product.selected_or_first_available_variant.quantity_rule.min }}{% else %}1{% endif %}"
     >
