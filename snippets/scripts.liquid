@@ -254,6 +254,12 @@
 ></script>
 
 <script>
+  (function () {
+    var customerLoggedIn = {% if customer %}true{% else %}false{% endif %};
+    if (!customerLoggedIn) {
+      try { localStorage.removeItem('ticket_redeem_data'); } catch (e) {}
+    }
+  })();
   const basePath = 'https://cdn.shopify.com/static/themes/horizon/placeholders';
   const Theme = {
     placeholders: {

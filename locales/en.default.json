@@ -334,7 +334,10 @@
       "input_ticket": "Input ticket",
       "logout": "Logout",
       "modal_title": "Enter ticket code",
-      "close": "Close"
+      "close": "Close",
+      "login_required_title": "Log in required",
+      "login_required_message": "Log in to get the prize.",
+      "log_in": "Log in"
     }
   }
 }
