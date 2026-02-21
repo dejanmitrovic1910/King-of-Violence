@@ -77,7 +77,7 @@
           "type": "_header-menu",
           "static": true,
           "settings": {
-            "menu": "main-menu-shop-about",
+            "menu": "main-menu-redeem",
             "color_scheme": "scheme-5",
             "type_font_primary_size": "1.25rem",
             "menu_font_style": "inverse_large",
