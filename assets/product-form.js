@@ -194,7 +194,57 @@ class ProductFormComponent extends Component {
   }
 
   /**
-   * Prize flow: validate token → confirm modal → claim API → add to cart on success.
+   * Fetches cart JSON. Uses Theme.routes.cart_url + '.js' for GET /cart.js.
+   * @returns {Promise<{ items: Array<{ handle?: string, product_title?: string, title?: string, url?: string, properties?: Record<string, string> }> } | null>}
+   */
+  async #fetchCart() {
+    const cartUrl = (typeof Theme !== 'undefined' && Theme.routes?.cart_url)
+      ? Theme.routes.cart_url.replace(/\?.*$/, '').replace(/\/$/, '') + '.js'
+      : '/cart.js';
+    try {
+      const res = await fetch(cartUrl, { method: 'GET', headers: { Accept: 'application/json' } });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /**
+   * Returns the first cart line item that is a prize (by _prize property or product tag), or null.
+   * @returns {Promise<{ product_title: string } | null>}
+   */
+  async #getCartPrizeItem() {
+    const cart = await this.#fetchCart();
+    if (!cart?.items?.length) return null;
+    const PRIZE_TAG = 'Prize';
+    for (const item of cart.items) {
+      if (item.properties && (item.properties._prize === '1' || item.properties._prize === 'true')) {
+        return { product_title: item.product_title || item.title || 'this item' };
+      }
+      const handle = item.handle || (item.url && item.url.match(/\/products\/([^/?]+)/)?.[1]);
+      if (!handle) continue;
+      try {
+        const productUrl = `/products/${encodeURIComponent(handle)}.js`;
+        const res = await fetch(productUrl, { method: 'GET', headers: { Accept: 'application/json' } });
+        if (!res.ok) continue;
+        const product = await res.json().catch(() => null);
+        const tags = product?.tags;
+        const hasPrizeTag = Array.isArray(tags)
+          ? tags.some((t) => String(t).toLowerCase() === PRIZE_TAG.toLowerCase())
+          : String(tags || '').toLowerCase().includes(PRIZE_TAG.toLowerCase());
+        if (hasPrizeTag) {
+          return { product_title: item.product_title || item.title || product?.title || 'this item' };
+        }
+      } catch (_) {
+        // skip on fetch/parse error
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Prize flow: validate token → check cart for existing prize → confirm modal → claim API → add to cart on success.
    * @param {Event} event
    * @param {HTMLFormElement} form
    * @param {HTMLElement | undefined} addToCartTextError
@@ -209,8 +259,18 @@ class ProductFormComponent extends Component {
       return;
     }
 
-    this.#showPrizeConfirmModal('Claim this prize? You can only pick one.', () => {
-      this.#claimPrizeAndAddToCart(event, form, addToCartTextError);
+    this.#getCartPrizeItem().then((prizeItem) => {
+      if (prizeItem) {
+        const name = escapeHtml(prizeItem.product_title);
+        this.#showPrizeMessageModal(
+          `Remove the "${name}" because you can only add one prize.`
+        );
+        cartPerformance.measureFromEvent('add:user-action', event);
+        return;
+      }
+      this.#showPrizeConfirmModal('Claim this prize? You can only pick one.', () => {
+        this.#claimPrizeAndAddToCart(event, form, addToCartTextError);
+      });
     });
   }
 
@@ -277,7 +337,7 @@ class ProductFormComponent extends Component {
     dialog.className = 'prize-claim-modal';
     dialog.innerHTML = `
       <div class="prize-claim-modal__backdrop" data-prize-close></div>
-      <div class="prize-claim-modal__content">
+      <div class="ticket-redeem__modal-content">
         <h3 id="prize-confirm-title" class="prize-claim-modal__title">${escapeHtml(message)}</h3>
         <div class="prize-claim-modal__actions">
           <button type="button" class="button button--secondary" data-prize-cancel>Cancel</button>
@@ -333,7 +393,7 @@ class ProductFormComponent extends Component {
     dialog.className = 'prize-claim-modal';
     dialog.innerHTML = `
       <div class="prize-claim-modal__backdrop" data-prize-close></div>
-      <div class="prize-claim-modal__content">
+      <div class="ticket-redeem__modal-content">
         <h3 id="prize-message-title" class="prize-claim-modal__title">${escapeHtml(message)}</h3>
         <div class="prize-claim-modal__actions">
           <button type="button" class="button button--primary" data-prize-close>OK</button>
@@ -381,6 +441,9 @@ class ProductFormComponent extends Component {
    */
   #doAddToCart(event, form, addToCartTextError) {
     const formData = new FormData(form);
+    if (this.dataset.prizeProduct === 'true') {
+      formData.append('properties[_prize]', '1');
+    }
 
     const cartItemsComponents = document.querySelectorAll('cart-items-component');
     const cartItemComponentsSectionIds = [];
