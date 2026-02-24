@@ -38,7 +38,7 @@
   endcase
 
   assign is_prize_product = false
-  if closest.product.tags contains 'Prize'
+  if closest.product.tags contains 'prize'
     assign is_prize_product = true
   endif
   assign redeem_page_url = settings.redeem_page_url | default: '/pages/redeem'
