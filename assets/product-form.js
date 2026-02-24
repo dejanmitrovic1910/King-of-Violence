@@ -334,7 +334,7 @@ class ProductFormComponent extends Component {
     const dialog = document.createElement('dialog');
     dialog.setAttribute('aria-modal', 'true');
     dialog.setAttribute('aria-labelledby', 'prize-confirm-title');
-    dialog.className = 'prize-claim-modal';
+    dialog.className = 'prize-claim-modal color-scheme-db578fa1-da9c-48c2-a278-c672d942f928';
     dialog.innerHTML = `
       <div class="prize-claim-modal__backdrop" data-prize-close></div>
       <div class="ticket-redeem__modal-content">
@@ -390,7 +390,7 @@ class ProductFormComponent extends Component {
     const dialog = document.createElement('dialog');
     dialog.setAttribute('aria-modal', 'true');
     dialog.setAttribute('aria-labelledby', 'prize-message-title');
-    dialog.className = 'prize-claim-modal';
+    dialog.className = 'prize-claim-modal color-scheme-db578fa1-da9c-48c2-a278-c672d942f928';
     dialog.innerHTML = `
       <div class="prize-claim-modal__backdrop" data-prize-close></div>
       <div class="ticket-redeem__modal-content">
