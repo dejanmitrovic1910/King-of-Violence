@@ -64,9 +64,8 @@
           <div class="ticket-redeem__ticket-display">
             <div class="ticket-redeem__ticket-content" data-ticket-type-content>
               <span class="ticket-redeem__ticket-image-wrap" data-ticket-type-image-wrap hidden>
-                <img class="ticket-redeem__ticket-image" data-ticket-type-image alt="" width="48" height="48">
+                <img class="ticket-redeem__ticket-image" data-ticket-type-image alt="" width="400" height="auto">
               </span>
-              <span class="ticket-redeem__ticket-name" data-ticket-type-name></span>
             </div>
             <button type="button" class="button button--secondary ticket-redeem__logout" data-ticket-logout>
               {{ block_settings.logout_label }}
@@ -180,9 +179,12 @@
       const modalResponseText = wrapper.querySelector('[data-ticket-modal-response-text]');
       const ticketTypeImageWrap = wrapper.querySelector('[data-ticket-type-image-wrap]');
       const ticketTypeImage = wrapper.querySelector('[data-ticket-type-image]');
-      const ticketTypeName = wrapper.querySelector('[data-ticket-type-name]');
-  
-      const defaultImageUrl = {% if block_settings.default_ticket_image != blank %}{{ block_settings.default_ticket_image | image_url: width: 96 | json }}{% else %}null{% endif %};
+
+      const imageByType = {
+        golden: {% if block_settings.golden_ticket_image != blank %}{{ block_settings.golden_ticket_image | image_url: width: 800 | json }}{% else %}null{% endif %},
+        platinum: {% if block_settings.platinum_ticket_image != blank %}{{ block_settings.platinum_ticket_image | image_url: width: 800 | json }}{% else %}null{% endif %}
+      };
+      const defaultImageUrl = {% if block_settings.default_ticket_image != blank %}{{ block_settings.default_ticket_image | image_url: width: 800 | json }}{% else %}null{% endif %};
   
       function getStored() {
         try {
@@ -206,11 +208,13 @@
       function setStored(data) {
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          try { window.dispatchEvent(new CustomEvent('ticketRedeemDataChange')); } catch (_) {}
         } catch (_) {}
       }
   
       function clearStored() {
         localStorage.removeItem(STORAGE_KEY);
+        try { window.dispatchEvent(new CustomEvent('ticketRedeemDataChange')); } catch (_) {}
       }
   
       function showModalMessage(message, isError) {
@@ -237,12 +241,11 @@
         if (data) {
           if (stateInput) stateInput.hidden = true;
           if (stateLoggedIn) stateLoggedIn.hidden = false;
-          const name = data.ticketTypeName || data.ticket_type_name || data.ticketType || data.ticket_type || data.type || 'Ticket';
-          if (ticketTypeName) ticketTypeName.textContent = name;
-          const imgUrl = data.ticketTypeImage || data.ticket_type_image || data.image_url || defaultImageUrl;
+          const ticketType = (data.ticketType).toString().toLowerCase();
+          const imgUrl = imageByType[ticketType] || data.ticketTypeImage || data.ticket_type_image || data.image_url || defaultImageUrl;
           if (imgUrl && ticketTypeImage && ticketTypeImageWrap) {
             ticketTypeImage.src = imgUrl;
-            ticketTypeImage.alt = name;
+            ticketTypeImage.alt = ticketType ? (ticketType.charAt(0).toUpperCase() + ticketType.slice(1)) : 'Ticket';
             ticketTypeImageWrap.hidden = false;
           } else if (ticketTypeImageWrap) {
             ticketTypeImageWrap.hidden = true;
@@ -370,6 +373,10 @@
   </script>
   
   {% stylesheet %}
+    .ticket-redeem {
+      width: 100%;
+    }
+
     .ticket-redeem__inner {
       max-width: var(--page-width, 1200px);
       margin-inline: auto;
@@ -427,8 +434,8 @@
   
     .ticket-redeem__ticket-image {
       display: block;
-      width: 48px;
-      height: 48px;
+      width: 200px;
+      height: auto;
       object-fit: cover;
       border-radius: var(--style-border-radius-inputs);
     }
@@ -602,9 +609,21 @@
       },
       {
         "type": "image_picker",
+        "id": "golden_ticket_image",
+        "label": "Golden ticket image",
+        "info": "Shown when ticket type is Golden"
+      },
+      {
+        "type": "image_picker",
+        "id": "platinum_ticket_image",
+        "label": "Platinum ticket image",
+        "info": "Shown when ticket type is Platinum"
+      },
+      {
+        "type": "image_picker",
         "id": "default_ticket_image",
         "label": "Default ticket type image",
-        "info": "Shown when API does not return an image"
+        "info": "Shown when ticket type is not Golden/Platinum or API does not return an image"
       },
       {
         "type": "header",

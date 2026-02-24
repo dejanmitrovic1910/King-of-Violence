@@ -1,0 +1,723 @@
+{% assign block_settings = block.settings %}
+<platinum-signup-block
+  class="email-signup-block size-style spacing-style platinum-signup-block"
+  style="{% render 'size-style', settings: block_settings %}{% render 'spacing-style', settings: block_settings %}"
+  data-platinum-block-id="{{ block.id }}"
+  data-customer-email="{% if customer %}{{ customer.email | escape }}{% endif %}"
+  {{ block.shopify_attributes }}
+>
+  {% if block_settings.heading != blank %}
+    <div class="email-signup__heading {{ block_settings.heading_preset }}">
+      {{ block_settings.heading | escape }}
+    </div>
+  {% endif %}
+  <form class="email-signup__form spacing-style" data-platinum-signup-form action="#" method="post">
+    <div
+      class="email-signup__input-group-container {% if block_settings.inherit_color_scheme == false %}color-{{ block_settings.color_scheme }}{% endif %}"
+      style="--border-width: {{ block_settings.border_width }}px; --border-radius: {{ block_settings.border_radius }}px;"
+    >
+      <div class="email-signup__input-group-inner email-signup-name-group">
+        <label class="group-label"> Name <span class="required-asterisk">(required)</span> </label>
+        <div class="email-signup__input-group">
+          <div class="firstname-input-group">
+            <label for="PlatinumFirstName-{{ block.id }}" class="name-label">
+              {{ 'blocks.email_signup.first_name' | t }}
+            </label>
+            <input
+              id="PlatinumFirstName-{{ block.id }}"
+              class="email-signup__input email-signup__input--{{ block_settings.border_style }} {{ block_settings.input_type_preset }} {{ block_settings.border_variation }}"
+              type="text"
+              name="first_name"
+              autocomplete="given-name"
+              placeholder="First Name"
+              required
+              data-platinum-first-name
+            >
+          </div>
+          <div class="lastname-input-group">
+            <label for="PlatinumLastName-{{ block.id }}" class="name-label">
+              {{ 'blocks.email_signup.last_name' | t }}
+            </label>
+            <input
+              id="PlatinumLastName-{{ block.id }}"
+              class="email-signup__input email-signup__input--{{ block_settings.border_style }} {{ block_settings.input_type_preset }} {{ block_settings.border_variation }}"
+              type="text"
+              name="last_name"
+              autocomplete="family-name"
+              placeholder="Last Name"
+              required
+              data-platinum-last-name
+            >
+          </div>
+        </div>
+      </div>
+      <div class="email-signup__input-group-inner email-signup-email-group">
+        <label for="PlatinumEmail-{{ block.id }}" class="group-label">
+          {{ 'blocks.email_signup.label' | t }}
+        </label>
+        <input
+          id="PlatinumEmail-{{ block.id }}"
+          class="email-signup__input email-signup__input--{{ block_settings.border_style }} {{ block_settings.input_type_preset }} {{ block_settings.border_variation }}"
+          type="email"
+          name="email"
+          value="{% if customer %}{{ customer.email | escape }}{% endif %}"
+          autocorrect="off"
+          autocapitalize="off"
+          autocomplete="email"
+          placeholder="{{ 'blocks.email_signup.placeholder' | t }}"
+          {% if customer %}disabled{% endif %}
+          data-platinum-email
+        >
+      </div>
+      <div id="PlatinumMessage-{{ block.id }}" class="email-signup__message email-signup__message--success hidden" data-platinum-message role="status" aria-live="polite">
+        <span class="svg-wrapper icon-success">{{ 'icon-checkmark.svg' | inline_asset_content }}</span>
+        <p class="email-signup__message-text" data-platinum-message-text></p>
+      </div>
+      <div id="PlatinumMessageError-{{ block.id }}" class="email-signup__message email-signup__message--error hidden" data-platinum-message-error role="status" aria-live="polite">
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true" class="icon-error">{% render 'icon', icon: 'error' %}</svg>
+        <p class="email-signup__message-text" data-platinum-message-error-text></p>
+      </div>
+      <button
+        type="submit"
+        class="email-signup__button {% if block_settings.integrated_button or block_settings.border_style == 'underline' %}email-signup__button--integrated{% endif %} email-signup__button--{{ block_settings.display_type }} {{ block_settings.button_type_preset }} {{ block_settings.style_class }} {{ block_settings.style_class }}--{{ block.id }} {% if block_settings.inherit_color_scheme == false %}color-{{ block_settings.color_scheme }}{% endif %}"
+        data-platinum-submit
+        {% if block_settings.display_type != 'text' %}aria-label="{{ 'actions.sign_up' | t }}"{% endif %}
+      >
+        <span data-platinum-submit-text>
+          {% if block_settings.display_type == 'text' %}
+            {{ block_settings.label }}
+          {% else %}
+            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true" class="email-signup__button-icon">{% render 'icon', icon: 'arrow' %}</svg>
+          {% endif %}
+        </span>
+        <span class="hidden" data-platinum-submit-loading aria-hidden="true">Submitting…</span>
+      </button>
+    </div>
+  </form>
+</platinum-signup-block>
+
+<script>
+  (function () {
+    const STORAGE_KEY = 'ticket_redeem_data';
+    const PLATINUM_ENDPOINT = '/apps/redeem/platinum';
+    const wrapper = document.querySelector('[data-platinum-block-id="{{ block.id }}"]');
+    if (!wrapper) return;
+
+    const form = wrapper.querySelector('[data-platinum-signup-form]');
+    const firstInput = wrapper.querySelector('[data-platinum-first-name]');
+    const lastInput = wrapper.querySelector('[data-platinum-last-name]');
+    const emailInput = wrapper.querySelector('[data-platinum-email]');
+    const submitBtn = wrapper.querySelector('[data-platinum-submit]');
+    const submitText = wrapper.querySelector('[data-platinum-submit-text]');
+    const submitLoading = wrapper.querySelector('[data-platinum-submit-loading]');
+    const messageEl = wrapper.querySelector('[data-platinum-message]');
+    const messageText = wrapper.querySelector('[data-platinum-message-text]');
+    const messageErrorEl = wrapper.querySelector('[data-platinum-message-error]');
+    const messageErrorText = wrapper.querySelector('[data-platinum-message-error-text]');
+    const customerEmail = (wrapper.getAttribute('data-customer-email') || '').trim();
+    let submittedSuccessfully = false;
+
+    function getStored() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        const trimmed = (typeof raw === 'string' ? raw : '').trim();
+        if (trimmed.startsWith('{')) return JSON.parse(trimmed);
+        return null;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function setStored(data) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch (_) {}
+    }
+
+    function getTokenFromStored() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw || typeof raw !== 'string') return null;
+        const trimmed = raw.trim();
+        if (trimmed.startsWith('{')) {
+          const data = JSON.parse(trimmed);
+          return (data && data.token) ? data.token : null;
+        }
+        if (trimmed.split('.').length === 3) return trimmed;
+        return null;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function decodeJwtPayload(token) {
+      if (!token || typeof token !== 'string') return null;
+      try {
+        const parts = token.split('.');
+        if (parts.length !== 3) return null;
+        const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(atob(payload));
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function isPayloadExpired(payload) {
+      if (!payload || typeof payload !== 'object') return true;
+      const expireTime = payload.expireTime ?? payload.expire_time;
+      if (expireTime) {
+        const expiry = new Date(expireTime).getTime();
+        if (!Number.isNaN(expiry) && Date.now() >= expiry) return true;
+      }
+      return false;
+    }
+
+    function isPlatinumActive() {
+      const token = getTokenFromStored();
+      const payload = decodeJwtPayload(token);
+      if (!payload || typeof payload !== 'object') return false;
+      const type = (payload.ticketType).toString().toLowerCase();
+      if (type !== 'platinum') return false;
+      if (payload.success !== true) return false;
+      if (isPayloadExpired(payload)) return false;
+      return true;
+    }
+
+    function setFormEnabled(enabled) {
+      const inputs = wrapper.querySelectorAll('input[data-platinum-first-name], input[data-platinum-last-name], input[data-platinum-email]');
+      inputs.forEach(function (input) {
+        input.disabled = !enabled;
+      });
+      if (submitBtn) submitBtn.disabled = !enabled;
+    }
+
+    function setFormEnabledExceptEmail(enabled) {
+      wrapper.querySelectorAll('input[data-platinum-first-name], input[data-platinum-last-name]').forEach(function (input) {
+        input.disabled = !enabled;
+      });
+      if (emailInput && customerEmail) emailInput.disabled = true;
+      else if (emailInput) emailInput.disabled = !enabled;
+      if (submitBtn) submitBtn.disabled = !enabled;
+    }
+
+    function showMessage(text, isError) {
+      if (messageEl && messageText) {
+        messageText.textContent = text || '';
+        messageEl.classList.toggle('hidden', isError || !text);
+      }
+      if (messageErrorEl && messageErrorText) {
+        messageErrorText.textContent = isError ? text : '';
+        messageErrorEl.classList.toggle('hidden', !isError || !text);
+      }
+    }
+
+    function hideMessages() {
+      if (messageEl) messageEl.classList.add('hidden');
+      if (messageErrorEl) messageErrorEl.classList.add('hidden');
+    }
+
+    function setLoading(loading) {
+      if (submitBtn) submitBtn.disabled = loading;
+      if (submitText) submitText.classList.toggle('hidden', loading);
+      if (submitLoading) submitLoading.classList.toggle('hidden', !loading);
+    }
+
+    function doSubmit(emailToUse) {
+      const first = (firstInput && firstInput.value) ? firstInput.value.trim() : '';
+      const last = (lastInput && lastInput.value) ? lastInput.value.trim() : '';
+      if (!first || !last) return;
+
+      const token = getTokenFromStored();
+      if (!token) return;
+
+      setLoading(true);
+      hideMessages();
+
+      const body = new FormData();
+      body.append('first_name', first);
+      body.append('last_name', last);
+      if (emailToUse) body.append('email', typeof emailToUse === 'string' ? emailToUse.trim() : String(emailToUse));
+      body.append('form_type', 'platinum_signup');
+      body.append('token', token);
+
+      fetch(PLATINUM_ENDPOINT, {
+        method: 'POST',
+        body: body,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json'
+        }
+      })
+        .then(function (response) {
+          const contentType = response.headers.get('Content-Type') || '';
+          if (contentType.includes('application/json')) {
+            return response.json().then(function (data) {
+              return { ok: response.ok, data: data };
+            }).catch(function () {
+              return { ok: response.ok, data: {} };
+            });
+          }
+          return response.text().then(function (text) {
+            return { ok: response.ok, data: { message: text || (response.ok ? 'Success' : 'Something went wrong') } };
+          });
+        })
+        .then(function (result) {
+          const data = result.data || {};
+          const success = result.ok && (data.success === true);
+          const message = data.message || data.error || data.text || (success ? 'Saved.' : 'Something went wrong.');
+
+          showMessage(message, !success);
+
+          if (success && data && typeof data === 'object') {
+            const current = getStored() || {};
+            setStored({ ...current, ...data });
+            submittedSuccessfully = true;
+            setFormEnabled(false);
+          }
+        })
+        .catch(function () {
+          showMessage('Network error. Please try again.', true);
+        })
+        .finally(function () {
+          setLoading(false);
+        });
+    }
+
+    function updateFormState() {
+      if (submittedSuccessfully) {
+        setFormEnabled(false);
+        return;
+      }
+      if (isPlatinumActive()) {
+        setFormEnabledExceptEmail(true);
+      } else {
+        setFormEnabled(false);
+      }
+    }
+
+    form?.addEventListener('submit', function (e) {
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      e.preventDefault();
+      const first = (firstInput && firstInput.value) ? firstInput.value.trim() : '';
+      const last = (lastInput && lastInput.value) ? lastInput.value.trim() : '';
+      const email = (emailInput && emailInput.value) ? emailInput.value.trim() : customerEmail;
+
+      if (!first || !last) return;
+
+      doSubmit(email || customerEmail || null);
+    });
+
+    updateFormState();
+    window.addEventListener('ticketRedeemDataChange', updateFormState);
+  })();
+</script>
+
+{% stylesheet %}
+  platinum-signup-block,
+  .platinum-signup-block {
+    display: block;
+    min-width: fit-content;
+  }
+
+  @media screen and (max-width: 749px) {
+    .platinum-signup-block {
+      width: 100%;
+      min-width: unset;
+    }
+  }
+
+  .platinum-signup-block .email-signup__heading {
+    padding-block: var(--padding-sm);
+  }
+
+  .platinum-signup-block .email-signup__form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .platinum-signup-block .email-signup__input-group {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: transparent;
+    gap: var(--gap-xs);
+    --button-actual-width: var(--button-size);
+  }
+
+  .platinum-signup-block .email-signup__input {
+    width: 100%;
+    border-width: var(--border-width);
+    border-radius: var(--border-radius);
+    border-style: solid;
+    border-color: var(--color-input-border);
+  }
+
+  .platinum-signup-block .email-signup__input.paragraph {
+    color: var(--color-input-text);
+    outline-color: var(--color-input-background);
+  }
+  .platinum-signup-block .email-signup__input[disabled] {
+    cursor: not-allowed;
+  }
+
+  .platinum-signup-block .email-signup__button {
+    white-space: nowrap;
+    padding: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .platinum-signup-block .email-signup__button {
+      width: 100%;
+    }
+  }
+
+  .platinum-signup-block .email-signup__input,
+  .platinum-signup-block .email-signup__button--text {
+    padding: var(--padding-lg) var(--padding-3xl);
+  }
+
+  .platinum-signup-block .email-signup__input-group .email-signup__input--underline {
+    --box-shadow-color: var(--color-input-border);
+    --box-shadow-multiplier: 1;
+    color: var(--color-input-text);
+    background-color: transparent;
+    padding: 12px 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 calc(var(--border-width) * var(--box-shadow-multiplier)) 0 var(--box-shadow-color);
+    transition: box-shadow var(--animation-values);
+  }
+
+  .platinum-signup-block .email-signup__input-group .email-signup__input--underline:focus-visible {
+    --box-shadow-multiplier: 1.75;
+    --box-shadow-color: var(--color-input-text);
+    outline: none;
+  }
+
+  .platinum-signup-block .email-signup__input::placeholder {
+    color: rgb(var(--color-input-text-rgb) / var(--opacity-70));
+  }
+
+  .platinum-signup-block .email-signup__input-group .email-signup__input--none {
+    color: var(--color-input-text);
+    background-color: var(--color-input-background);
+    border: none;
+  }
+
+  .platinum-signup-block .email-signup__button-icon {
+    fill: currentcolor;
+    padding: 5px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .platinum-signup-block .email-signup__button-icon {
+      padding: 0;
+      align-self: center;
+      justify-self: center;
+      width: var(--icon-size-lg);
+      height: var(--icon-size-lg);
+    }
+  }
+
+  .platinum-signup-block .email-signup__button--arrow {
+    aspect-ratio: 1;
+    padding-inline: var(--padding-xs);
+  }
+
+  .platinum-signup-block .email-signup__button--arrow:not(.email-signup__button--integrated) {
+    width: auto;
+  }
+
+  .platinum-signup-block .email-signup__button--integrated {
+    --button-offset: var(--margin-xs);
+    position: absolute;
+    height: calc(100% - (var(--button-offset) * 2) - (var(--border-width) * 2));
+    right: calc(var(--button-offset) + var(--border-width));
+    top: calc(var(--button-offset) + var(--border-width));
+    width: max-content;
+  }
+
+  @media screen and (max-width: 749px) {
+    .platinum-signup-block .email-signup__button--integrated {
+      width: fit-content;
+    }
+  }
+
+  .platinum-signup-block .email-signup__button:not(.button-unstyled) * {
+    background-color: var(--button-background-color);
+    color: inherit;
+    text-transform: var(--button-text-case-primary);
+  }
+
+  .platinum-signup-block .email-signup__button.button-secondary {
+    text-transform: var(--button-text-case-secondary);
+  }
+
+  .platinum-signup-block .email-signup__button.button-unstyled {
+    background-color: transparent;
+    color: var(--color-input-text);
+  }
+
+  .platinum-signup-block .email-signup__button.button-unstyled:hover {
+    color: rgb(var(--color-input-text-rgb) / var(--opacity-70));
+    cursor: pointer;
+  }
+
+  .platinum-signup-block .email-signup__message {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
+  }
+
+  .platinum-signup-block .email-signup__message-text {
+    margin: 0;
+  }
+
+  .platinum-signup-block .optional-label {
+    font-weight: normal;
+    opacity: 0.8;
+  }
+
+  .platinum-signup-block .email-signup__message.hidden,
+  .platinum-signup-block .hidden {
+    display: none !important;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Platinum signup",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Email and first/last name form. Enabled when ticket_redeem_data has type: platinum and status: active. Submits to /apps/platinum. Email is optional; if empty and customer is logged in, asks to use account email."
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:settings.width",
+      "options": [
+        { "value": "fill", "label": "t:options.fill" },
+        { "value": "custom", "label": "t:options.custom" }
+      ],
+      "default": "fill"
+    },
+    {
+      "type": "range",
+      "id": "custom_width",
+      "label": "t:settings.custom_width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100,
+      "visible_if": "{{ block.settings.width == \"custom\" }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "inherit_color_scheme",
+      "label": "t:settings.inherit_color_scheme",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:content.heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:settings.text"
+    },
+    {
+      "type": "select",
+      "id": "heading_preset",
+      "label": "t:settings.type_preset",
+      "options": [
+        { "value": "", "label": "t:options.default" },
+        { "value": "paragraph", "label": "t:options.paragraph" },
+        { "value": "h1", "label": "t:options.h1" },
+        { "value": "h2", "label": "t:options.h2" },
+        { "value": "h3", "label": "t:options.h3" },
+        { "value": "h4", "label": "t:options.h4" },
+        { "value": "h5", "label": "t:options.h5" },
+        { "value": "h6", "label": "t:options.h6" }
+      ],
+      "default": "h3",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "primary",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.input"
+    },
+    {
+      "type": "select",
+      "id": "border_style",
+      "label": "t:settings.border",
+      "options": [
+        { "value": "all", "label": "t:options.all" },
+        { "value": "underline", "label": "t:options.underline" },
+        { "value": "none", "label": "t:options.none" }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "t:settings.border_width",
+      "min": 0,
+      "max": 4,
+      "step": 0.5,
+      "unit": "px",
+      "default": 1,
+      "visible_if": "{{ block.settings.border_style != \"none\" }}"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "t:settings.border_radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 100,
+      "visible_if": "{{ block.settings.border_style != \"underline\" }}"
+    },
+    {
+      "type": "select",
+      "id": "input_type_preset",
+      "label": "t:settings.type_preset",
+      "options": [
+        { "value": "", "label": "t:options.default" },
+        { "value": "paragraph", "label": "t:options.paragraph" },
+        { "value": "h1", "label": "t:options.h1" },
+        { "value": "h2", "label": "t:options.h2" },
+        { "value": "h3", "label": "t:options.h3" },
+        { "value": "h4", "label": "t:options.h4" },
+        { "value": "h5", "label": "t:options.h5" },
+        { "value": "h6", "label": "t:options.h6" }
+      ],
+      "default": "paragraph",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "header",
+      "content": "t:content.submit_button"
+    },
+    {
+      "type": "select",
+      "id": "style_class",
+      "label": "t:settings.style",
+      "options": [
+        { "value": "button", "label": "t:options.primary" },
+        { "value": "button-secondary", "label": "t:options.secondary" },
+        { "value": "button-unstyled", "label": "t:options.link" }
+      ],
+      "default": "button"
+    },
+    {
+      "type": "select",
+      "id": "display_type",
+      "label": "t:settings.display",
+      "options": [
+        { "value": "text", "label": "t:options.text" },
+        { "value": "arrow", "label": "t:options.arrow" }
+      ],
+      "default": "text"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:settings.label",
+      "default": "Submit",
+      "visible_if": "{{ block.settings.display_type == \"text\" }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "integrated_button",
+      "label": "t:settings.integrated_button",
+      "default": false,
+      "visible_if": "{{ block.settings.border_style != \"underline\" }}"
+    },
+    {
+      "type": "select",
+      "id": "button_type_preset",
+      "label": "t:settings.type_preset",
+      "options": [
+        { "value": "", "label": "t:options.default" },
+        { "value": "paragraph", "label": "t:options.paragraph" },
+        { "value": "h1", "label": "t:options.h1" },
+        { "value": "h2", "label": "t:options.h2" },
+        { "value": "h3", "label": "t:options.h3" },
+        { "value": "h4", "label": "t:options.h4" },
+        { "value": "h5", "label": "t:options.h5" },
+        { "value": "h6", "label": "t:options.h6" }
+      ],
+      "default": "paragraph",
+      "info": "t:info.edit_presets_in_theme_settings",
+      "visible_if": "{{ block.settings.display_type == \"text\" }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Platinum signup",
+      "category": "t:categories.forms"
+    }
+  ]
+}
+{% endschema %}
