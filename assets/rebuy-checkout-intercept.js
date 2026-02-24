@@ -168,6 +168,11 @@
         return;
       }
 
+      // Include the prize product variant id from the cart for the backend
+      const prizeVariantId = prizeItems.length > 0
+        ? (prizeItems[0].variant_id ?? prizeItems[0].id)
+        : null;
+
       const response = await fetch(PRE_CHECKOUT_URL, {
         method: 'POST',
         headers: {
@@ -175,7 +180,11 @@
           'X-Requested-With': 'XMLHttpRequest',
           Accept: 'application/json',
         },
-        body: JSON.stringify({ cartToken: cartToken, token: token || '' }),
+        body: JSON.stringify({
+          cartToken: cartToken,
+          token: token || '',
+          ...(prizeVariantId != null && { prizeVariantId: prizeVariantId }),
+        }),
       });
 
       const data = await response.json().catch(() => ({}));
