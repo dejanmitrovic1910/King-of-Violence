@@ -46,17 +46,22 @@
       {% endif %}
   
       <div class="ticket-redeem__form-wrapper" data-ticket-redeem>
-        {% comment %} State: no ticket in localStorage — show "Input ticket" button only {% endcomment %}
+        {% comment %} State: no ticket in localStorage or logged out — show locked image (if set) and "Input ticket" button {% endcomment %}
         <div class="ticket-redeem__state ticket-redeem__state--input" data-ticket-state-input hidden>
-          <button
-            type="button"
-            class="button button--primary ticket-redeem__trigger"
-            data-ticket-open-modal
-            aria-haspopup="dialog"
-            aria-controls="{{ modal_id }}"
-          >
-            {{ block_settings.input_ticket_label }}
-          </button>
+          <div class="ticket-redeem__ticket-display">
+            <span class="ticket-redeem__locked-image-wrap" data-ticket-locked-image-wrap hidden>
+              <img class="ticket-redeem__ticket-image ticket-redeem__locked-image" data-ticket-locked-image alt="" width="400" height="auto">
+            </span>
+            <button
+              type="button"
+              class="button button--primary ticket-redeem__trigger"
+              data-ticket-open-modal
+              aria-haspopup="dialog"
+              aria-controls="{{ modal_id }}"
+            >
+              {{ block_settings.input_ticket_label }}
+            </button>
+          </div>
         </div>
   
         {% comment %} State: ticket in localStorage — show ticket type image, name, and logout {% endcomment %}
@@ -179,6 +184,8 @@
       const modalResponseText = wrapper.querySelector('[data-ticket-modal-response-text]');
       const ticketTypeImageWrap = wrapper.querySelector('[data-ticket-type-image-wrap]');
       const ticketTypeImage = wrapper.querySelector('[data-ticket-type-image]');
+      const lockedImageWrap = wrapper.querySelector('[data-ticket-locked-image-wrap]');
+      const lockedImage = wrapper.querySelector('[data-ticket-locked-image]');
 
       const imageByType = {
         golden: {% if block_settings.golden_ticket_image != blank %}{{ block_settings.golden_ticket_image | image_url: width: 800 | json }}{% else %}null{% endif %},
@@ -238,11 +245,17 @@
   
       function renderUI() {
         const data = getStored();
+        function nonEmptyUrl(u) {
+          return (u && typeof u === 'string' && u.trim() !== '') ? u : null;
+        }
         if (data) {
           if (stateInput) stateInput.hidden = true;
           if (stateLoggedIn) stateLoggedIn.hidden = false;
-          const ticketType = (data.ticketType).toString().toLowerCase();
-          const imgUrl = imageByType[ticketType] || data.ticketTypeImage || data.ticket_type_image || data.image_url || defaultImageUrl;
+          if (lockedImageWrap) lockedImageWrap.hidden = true;
+          const ticketType = (data.ticketType != null && data.ticketType !== '') ? (data.ticketType).toString().toLowerCase() : '';
+          const typeUrl = ticketType ? (imageByType[ticketType] || null) : null;
+          const apiUrl = nonEmptyUrl(data.ticketTypeImage) || nonEmptyUrl(data.ticket_type_image) || nonEmptyUrl(data.image_url);
+          const imgUrl = nonEmptyUrl(typeUrl) || apiUrl;
           if (imgUrl && ticketTypeImage && ticketTypeImageWrap) {
             ticketTypeImage.src = imgUrl;
             ticketTypeImage.alt = ticketType ? (ticketType.charAt(0).toUpperCase() + ticketType.slice(1)) : 'Ticket';
@@ -253,6 +266,15 @@
         } else {
           if (stateInput) stateInput.hidden = false;
           if (stateLoggedIn) stateLoggedIn.hidden = true;
+          if (ticketTypeImageWrap) ticketTypeImageWrap.hidden = true;
+          const lockedUrl = nonEmptyUrl(defaultImageUrl);
+          if (lockedUrl && lockedImage && lockedImageWrap) {
+            lockedImage.src = lockedUrl;
+            lockedImage.alt = 'Locked ticket';
+            lockedImageWrap.hidden = false;
+          } else if (lockedImageWrap) {
+            lockedImageWrap.hidden = true;
+          }
         }
       }
   
@@ -622,8 +644,8 @@
       {
         "type": "image_picker",
         "id": "default_ticket_image",
-        "label": "Default ticket type image",
-        "info": "Shown when ticket type is not Golden/Platinum or API does not return an image"
+        "label": "Locked ticket image",
+        "info": "Shown when there is no redeemed ticket (no ticket in localStorage or logged out). Not used for Golden or Platinum ticket display."
       },
       {
         "type": "header",
