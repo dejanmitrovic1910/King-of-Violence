@@ -1,7 +1,7 @@
 /**
  * Prize product gating: checks localStorage ticket_redeem_data (JWT or JSON).
  * Payload must have success: true, message "Ticket is valid, please select a prize.", and not be expired.
- * - Product cards with data-prize-product: show locked overlay and disable when invalid.
+ * - Product cards with data-prize-product: unlock only when ticketType/ticket_type is "golden"; otherwise locked.
  * - PDP with data-prize-pdp-redirect: redirect to redeem page when invalid.
  */
 (function () {
@@ -57,25 +57,41 @@
     }
   }
 
+  function isGoldenTicket() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      const data = parsePayload(raw);
+      if (!data || typeof data !== 'object') return false;
+      const type = (data.ticketType??'').toString().toLowerCase();
+      return type === 'golden';
+    } catch (_) {
+      return false;
+    }
+  }
+
   function runProductCards(redeemUrl) {
     const cards = document.querySelectorAll('[data-prize-product="true"]');
-    const valid = getTicketRedeemValid();
-    cards.forEach(function (card) {
-      const url = card.getAttribute('data-redeem-url') || redeemUrl || '/pages/redeem';
-      if (valid) {
+    const valid = getTicketRedeemValid() && isGoldenTicket();
+    if (valid) {
+      cards.forEach(function (card) {
         card.classList.remove('product-card--prize-locked');
-        const link = card.querySelector('.product-card__link') || card.querySelector('a[href]');
+        const link = card.querySelector('.product-card__link') || card.closest('product-card-link')?.querySelector('a') || card.querySelector('a[href]');
         if (link && link.dataset.originalHref) {
           link.href = link.dataset.originalHref;
           link.removeAttribute('data-original-href');
         }
-        const overlay = card.querySelector('.product-card__prize-lock-overlay');
-        if (overlay) overlay.remove();
         card.querySelectorAll('slideshow-component').forEach(function (s) {
           s.disabled = typeof s.isNested !== 'undefined' ? s.isNested : false;
         });
-        return;
-      }
+      });
+      document.querySelectorAll('.product-card__prize-lock-overlay').forEach(function (overlay) {
+        overlay.remove();
+      });
+      return;
+    }
+    cards.forEach(function (card) {
+      const url = card.getAttribute('data-redeem-url') || redeemUrl || '/pages/redeem';
       card.classList.add('product-card--prize-locked');
       card.querySelectorAll('slideshow-component').forEach(function (s) {
         s.disabled = true;
@@ -126,6 +142,12 @@
     init();
   }
 
+  // Update product cards when token is set/removed (logout, login, or manual localStorage change)
+  window.addEventListener('ticketRedeemDataChange', init);
+  window.addEventListener('storage', function (e) {
+    if (e.key === STORAGE_KEY) init();
+  });
+
   /**
    * Returns the raw token from localStorage for use in API calls (e.g. claim prize).
    * Returns null if missing or invalid. Use getTicketRedeemValid() to check validity first.
@@ -153,4 +175,10 @@
    * Use this anywhere you need to gate prize actions (add to cart, claim, etc.).
    */
   window.isPrizeTokenValid = getTicketRedeemValid;
+
+  /**
+   * Re-run product card and PDP state based on current token. Call after changing/removing
+   * ticket_redeem_data in localStorage (e.g. manual clear) so prize cards update without refresh.
+   */
+  window.refreshPrizeProductState = init;
 })();

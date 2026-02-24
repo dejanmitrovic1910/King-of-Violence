@@ -233,12 +233,10 @@
   </script>
 {% endif %}
 
-{% if template.name == 'collection' or template.name == 'search' or template.name == 'product' %}
-  <script
-    src="{{ 'prize-product.js' | asset_url }}"
-    defer
-  ></script>
-{% endif %}
+<script
+  src="{{ 'prize-product.js' | asset_url }}"
+  defer
+></script>
 
 {% if settings.transition_to_main_product %}
   <script
@@ -261,6 +259,7 @@
 
     function removeTicketRedeemData() {
       try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      try { window.dispatchEvent(new CustomEvent('ticketRedeemDataChange')); } catch (e2) {}
     }
 
     if (!customerLoggedIn) {

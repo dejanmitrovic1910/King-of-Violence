@@ -57,6 +57,9 @@
             "input_ticket_label": "Input ticket",
             "logout_label": "Logout",
             "modal_title": "Enter ticket code",
+            "golden_ticket_image": "shopify://shop_images/golden_ticket.png",
+            "platinum_ticket_image": "shopify://shop_images/platinum_ticket.png",
+            "default_ticket_image": "shopify://shop_images/Screenshot_8.png",
             "identifier": "",
             "alignment_desktop": "right",
             "alignment_mobile": "center",
@@ -259,7 +262,7 @@
       },
       "name": "t:names.products_grid",
       "settings": {
-        "collection": "t-shirts",
+        "collection": "golden-prize-collection-for-test",
         "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 16,
