@@ -57,6 +57,9 @@
             "input_ticket_label": "Input ticket",
             "logout_label": "Logout",
             "modal_title": "Enter ticket code",
+            "golden_ticket_image": "shopify://shop_images/golden_ticket.png",
+            "platinum_ticket_image": "shopify://shop_images/platinum_ticket.png",
+            "default_ticket_image": "shopify://shop_images/Screenshot_8.png",
             "identifier": "",
             "alignment_desktop": "right",
             "alignment_mobile": "center",
@@ -80,7 +83,7 @@
         "gap": 32,
         "color_scheme": "scheme-db578fa1-da9c-48c2-a278-c672d942f928",
         "padding-block-start": 40,
-        "padding-block-end": 80
+        "padding-block-end": 40
       }
     },
     "section_FmCqhi": {
@@ -119,7 +122,7 @@
           "type": "image",
           "name": "t:names.image",
           "settings": {
-            "image": "shopify://shop_images/5.png",
+            "image": "shopify://shop_images/chuck-liddel-logo.webp",
             "link": "",
             "image_ratio": "adapt",
             "width": "fill",
@@ -237,11 +240,12 @@
               },
               "blocks": {}
             },
-            "email_signup_D7xiJB": {
-              "type": "email-signup",
+            "platinum_signup_CeYhy7": {
+              "type": "platinum_signup",
+              "name": "Platinum signup",
               "settings": {
-                "width": "custom",
-                "custom_width": 50,
+                "width": "fill",
+                "custom_width": 100,
                 "inherit_color_scheme": true,
                 "heading": "",
                 "heading_preset": "h3",
@@ -252,8 +256,8 @@
                 "input_type_preset": "paragraph",
                 "style_class": "button",
                 "display_type": "text",
-                "label": "Sign up",
-                "integrated_button": true,
+                "label": "Submit",
+                "integrated_button": false,
                 "button_type_preset": "paragraph",
                 "padding-block-start": 0,
                 "padding-block-end": 0,
@@ -266,7 +270,7 @@
           "block_order": [
             "text_3HdCgb",
             "text_7LP73T",
-            "email_signup_D7xiJB"
+            "platinum_signup_CeYhy7"
           ]
         }
       },
