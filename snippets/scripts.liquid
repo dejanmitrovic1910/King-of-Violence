@@ -262,8 +262,62 @@
       try { window.dispatchEvent(new CustomEvent('ticketRedeemDataChange')); } catch (e2) {}
     }
 
-    if (!customerLoggedIn) {
+    function isPrizeItemByProperty(item) {
+      if (item.properties && (item.properties._prize === '1' || item.properties['_prize'] === '1')) return true;
+      if (item.product_type === 'prize') return true;
+      return false;
+    }
+
+    function productHasPrizeTag(handle) {
+      if (!handle) return Promise.resolve(false);
+      return fetch('/products/' + encodeURIComponent(handle) + '.js', { headers: { Accept: 'application/json' } })
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (product) {
+          var tags = product && Array.isArray(product.tags) ? product.tags : [];
+          return tags.some(function (t) { return String(t).toLowerCase() === 'prize'; });
+        })
+        .catch(function () { return false; });
+    }
+
+    function getPrizeLineItems(cart) {
+      var items = cart.items || [];
+      var byProperty = items.filter(isPrizeItemByProperty);
+      var needTagCheck = items.filter(function (item) { return !isPrizeItemByProperty(item); });
+      if (needTagCheck.length === 0) return Promise.resolve(byProperty);
+      var handles = needTagCheck.map(function (item) { return item.handle || item.product_handle; });
+      return Promise.all(handles.map(productHasPrizeTag)).then(function (results) {
+        var byTag = needTagCheck.filter(function (_, i) { return results[i]; });
+        return byProperty.concat(byTag);
+      });
+    }
+
+    function removePrizeItemsFromCart() {
+      fetch('/cart.js', { headers: { Accept: 'application/json' } })
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (cart) {
+          if (!cart || !cart.items || cart.items.length === 0) return;
+          return getPrizeLineItems(cart).then(function (prizeItems) {
+            return Promise.all(prizeItems.map(function (item) {
+              var key = item.key;
+              if (!key) return Promise.resolve();
+              return fetch('/cart/change.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                body: JSON.stringify({ id: key, quantity: 0 })
+              });
+            }));
+          });
+        })
+        .catch(function () {});
+    }
+
+    function clearStorageAndRemovePrizeProducts() {
       removeTicketRedeemData();
+      removePrizeItemsFromCart();
+    }
+
+    if (!customerLoggedIn) {
+      clearStorageAndRemovePrizeProducts();
       return;
     }
 
@@ -284,7 +338,7 @@
       }
 
       if (!data || typeof data !== 'object') {
-        removeTicketRedeemData();
+        clearStorageAndRemovePrizeProducts();
         return;
       }
 
@@ -292,7 +346,7 @@
       if (exp != null && !Number.isNaN(exp)) {
         var nowSec = Math.floor(Date.now() / 1000);
         if (exp < nowSec) {
-          removeTicketRedeemData();
+          clearStorageAndRemovePrizeProducts();
           return;
         }
       } else {
@@ -300,7 +354,7 @@
         if (expireTime) {
           var expiry = new Date(expireTime).getTime();
           if (!Number.isNaN(expiry) && Date.now() >= expiry) {
-            removeTicketRedeemData();
+            clearStorageAndRemovePrizeProducts();
             return;
           }
         }
@@ -309,10 +363,10 @@
       var tokenEmail = (data.email).toString().trim().toLowerCase();
       var loggedInEmail = (customerEmail || '').toString().trim().toLowerCase();
       if (tokenEmail && loggedInEmail && tokenEmail !== loggedInEmail) {
-        removeTicketRedeemData();
+        clearStorageAndRemovePrizeProducts();
       }
     } catch (_) {
-      removeTicketRedeemData();
+      clearStorageAndRemovePrizeProducts();
     }
   })();
   const basePath = 'https://cdn.shopify.com/static/themes/horizon/placeholders';
