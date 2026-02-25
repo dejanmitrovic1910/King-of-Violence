@@ -59,7 +59,7 @@
             "modal_title": "Enter ticket code",
             "golden_ticket_image": "shopify://shop_images/golden_ticket.png",
             "platinum_ticket_image": "shopify://shop_images/platinum_ticket.png",
-            "default_ticket_image": "shopify://shop_images/Screenshot_8.png",
+            "default_ticket_image": "shopify://shop_images/locked_ticket.png",
             "identifier": "",
             "alignment_desktop": "right",
             "alignment_mobile": "center",
