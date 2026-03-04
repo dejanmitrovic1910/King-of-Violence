@@ -70,11 +70,22 @@ export class AddToCartComponent extends Component {
     const form = this.closest('form');
     if (!form?.checkValidity()) return;
 
+    // For prize products, animation runs after claim succeeds (in #doAddToCart), not on click
+    if (form?.dataset.prizeProduct !== 'true') {
+      this.animateAddToCart();
+      const animationEnabled = this.dataset.addToCartAnimation === 'true';
+      if (animationEnabled && !event.target.closest('.quick-add-modal')) {
+        this.#animateFlyToCart();
+      }
+    }
+  }
+
+  /**
+   * Triggers the add-to-cart button animation and fly-to-cart (used after prize claim succeeds).
+   */
+  triggerAddToCartAnimation() {
     this.animateAddToCart();
-
-    const animationEnabled = this.dataset.addToCartAnimation === 'true';
-
-    if (animationEnabled && !event.target.closest('.quick-add-modal')) {
+    if (this.dataset.addToCartAnimation === 'true') {
       this.#animateFlyToCart();
     }
   }
@@ -443,6 +454,11 @@ class ProductFormComponent extends Component {
     const formData = new FormData(form);
     if (this.dataset.prizeProduct === 'true') {
       formData.append('properties[_prize]', '1');
+      const token =
+        typeof window.getTicketRedeemToken === 'function' ? window.getTicketRedeemToken() : null;
+      if (token) {
+        formData.append('properties[_prize_token]', token);
+      }
     }
 
     const cartItemsComponents = document.querySelectorAll('cart-items-component');
@@ -509,6 +525,11 @@ class ProductFormComponent extends Component {
         }
 
         if (!id) throw new Error('Form ID is required');
+
+        // Trigger "Added" state and fly-to-cart animation for prize products (normal products animate on click)
+        if (this.dataset.prizeProduct === 'true') {
+          this.refs.addToCartButtonContainer?.triggerAddToCartAnimation?.();
+        }
 
         if (this.refs.addToCartButtonContainer?.refs.addToCartButton) {
           const addToCartButton = this.refs.addToCartButtonContainer.refs.addToCartButton;

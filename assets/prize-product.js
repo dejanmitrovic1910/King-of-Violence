@@ -159,9 +159,13 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw || typeof raw !== 'string') return null;
       const trimmed = raw.trim();
-      const data = JSON.parse(trimmed);
-      const token = data.token;
-      return typeof token === 'string' ? token : null;
+      if (!trimmed) return null;
+      try {
+        const data = JSON.parse(trimmed);
+        if (data && typeof data.token === 'string') return data.token;
+      } catch (_) {}
+      // Stored value is a raw JWT string (validity already checked by getTicketRedeemValid)
+      return trimmed;
     } catch (_) {
       return null;
     }
