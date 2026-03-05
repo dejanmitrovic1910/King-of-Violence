@@ -325,11 +325,13 @@
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
 
-      var data = null;
       var trimmed = (typeof raw === 'string' ? raw : '').trim();
+      var data = null;
       if (trimmed.startsWith('{')) {
-        data = JSON.parse(trimmed);
-      } else if (trimmed.indexOf('.') !== -1) {
+        var parsed = JSON.parse(trimmed);
+        if (parsed && typeof parsed.token === 'string') trimmed = parsed.token;
+      }
+      if (trimmed.indexOf('.') !== -1) {
         var parts = trimmed.split('.');
         if (parts.length === 3) {
           var payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
@@ -360,7 +362,7 @@
         }
       }
 
-      var tokenEmail = (data.email).toString().trim().toLowerCase();
+      var tokenEmail = (data.email && typeof data.email === 'string') ? data.email.toString().trim().toLowerCase() : '';
       var loggedInEmail = (customerEmail || '').toString().trim().toLowerCase();
       if (tokenEmail && loggedInEmail && tokenEmail !== loggedInEmail) {
         clearStorageAndRemovePrizeProducts();

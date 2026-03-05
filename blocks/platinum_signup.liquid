@@ -117,24 +117,7 @@
     const customerEmail = (wrapper.getAttribute('data-customer-email') || '').trim();
     let submittedSuccessfully = false;
 
-    function getStored() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return null;
-        const trimmed = (typeof raw === 'string' ? raw : '').trim();
-        if (trimmed.startsWith('{')) return JSON.parse(trimmed);
-        return null;
-      } catch (_) {
-        return null;
-      }
-    }
-
-    function setStored(data) {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      } catch (_) {}
-    }
-
+    /** Get token from localStorage (ticket_redeem_data stores token string only; legacy JSON .token supported). */
     function getTokenFromStored() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -145,7 +128,7 @@
           return (data && data.token) ? data.token : null;
         }
         if (trimmed.split('.').length === 3) return trimmed;
-        return null;
+        return trimmed || null;
       } catch (_) {
         return null;
       }
@@ -177,9 +160,8 @@
       const token = getTokenFromStored();
       const payload = decodeJwtPayload(token);
       if (!payload || typeof payload !== 'object') return false;
-      const type = (payload.ticketType).toString().toLowerCase();
+      const type = (payload.ticketType ?? payload.ticket_type ?? '').toString().toLowerCase();
       if (type !== 'platinum') return false;
-      if (payload.success !== true) return false;
       if (isPayloadExpired(payload)) return false;
       return true;
     }
@@ -270,8 +252,6 @@
           showMessage(message, !success);
 
           if (success && data && typeof data === 'object') {
-            const current = getStored() || {};
-            setStored({ ...current, ...data });
             submittedSuccessfully = true;
             setFormEnabled(false);
           }

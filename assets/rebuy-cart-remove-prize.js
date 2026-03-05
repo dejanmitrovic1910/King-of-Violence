@@ -1,13 +1,12 @@
 /**
  * Rebuy cart drawer: intercept remove (trash) on cart items.
  * - Non-prize items: allow default Rebuy remove.
- * - Prize items: if ticket_redeem_data is missing or invalid, remove from cart immediately.
+ * - Prize items: if ticket_redeem_data (token string) is missing or invalid, remove from cart immediately.
  *   If valid, POST to /apps/redeem/release with token + variantId, then remove from cart.
  */
 (function () {
   const RELEASE_URL = '/apps/redeem/release';
   const STORAGE_KEY = 'ticket_redeem_data';
-  const PRIZE_MESSAGE = 'Ticket is valid, please select a prize.';
   const REMOVE_BUTTON_SELECTOR = '.rebuy-cart__flyout-item-remove';
   const FLYOUT_ITEM_SELECTOR = 'li.rebuy-cart__flyout-item';
 
@@ -15,7 +14,11 @@
     if (!raw || typeof raw !== 'string') return null;
     try {
       const trimmed = raw.trim();
-      if (trimmed.startsWith('{')) return JSON.parse(trimmed);
+      if (trimmed.startsWith('{')) {
+        const parsed = JSON.parse(trimmed);
+        if (parsed && typeof parsed.token === 'string') return parsePayload(parsed.token);
+        return parsed;
+      }
       const parts = trimmed.split('.');
       if (parts.length === 3) {
         const payload = parts[1];
@@ -41,16 +44,13 @@
     return false;
   }
 
-  /** Returns true if ticket_redeem_data in localStorage is valid (same rules as prize-product.js). */
+  /** Returns true if ticket_redeem_data in localStorage is valid (token decodes and is not expired). */
   function getTicketRedeemValid() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return false;
       const data = parsePayload(raw);
       if (!data || typeof data !== 'object') return false;
-      if (data.success !== true) return false;
-      if (data.message !== PRIZE_MESSAGE) return false;
-      if (data.ticketType == null && data.ticket_type == null) return false;
       if (isExpired(data)) return false;
       return true;
     } catch (_) {
@@ -58,17 +58,20 @@
     }
   }
 
-  /** Get token from localStorage (JSON .token or raw JWT string). */
+  /** Get token from localStorage (ticket_redeem_data stores token string only; legacy JSON .token supported). */
   function getTicketToken() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw || typeof raw !== 'string') return null;
       const trimmed = raw.trim();
       if (!trimmed) return null;
-      try {
-        const data = JSON.parse(trimmed);
-        if (data && typeof data.token === 'string') return data.token;
-      } catch (_) {}
+      if (trimmed.startsWith('{')) {
+        try {
+          const data = JSON.parse(trimmed);
+          if (data && typeof data.token === 'string') return data.token;
+        } catch (_) {}
+        return null;
+      }
       return trimmed;
     } catch (_) {
       return null;

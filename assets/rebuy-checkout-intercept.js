@@ -53,17 +53,20 @@
     return item.product_title || item.title || 'this item';
   }
 
-  /** Get token from localStorage ticket_redeem_data (JSON with .token or raw JWT string). */
+  /** Get token from localStorage (ticket_redeem_data stores token string only; legacy JSON .token supported). */
   function getTicketToken() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw || typeof raw !== 'string') return null;
       const trimmed = raw.trim();
       if (!trimmed) return null;
-      try {
-        const data = JSON.parse(trimmed);
-        if (data && typeof data.token === 'string') return data.token;
-      } catch (_) {}
+      if (trimmed.startsWith('{')) {
+        try {
+          const data = JSON.parse(trimmed);
+          if (data && typeof data.token === 'string') return data.token;
+        } catch (_) {}
+        return null;
+      }
       return trimmed;
     } catch (_) {
       return null;

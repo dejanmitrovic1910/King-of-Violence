@@ -193,42 +193,62 @@
       };
       const defaultImageUrl = {% if block_settings.default_ticket_image != blank %}{{ block_settings.default_ticket_image | image_url: width: 800 | json }}{% else %}null{% endif %};
   
+      /** Returns the token string from localStorage (ticket_redeem_data stores only the token). */
       function getStored() {
         try {
           const raw = localStorage.getItem(STORAGE_KEY);
-          if (!raw) return null;
-          const data = JSON.parse(raw);
-          const exp = data.exp != null ? Number(data.exp) : null;
-          if (exp != null) {
-            const now = Math.floor(Date.now() / 1000);
-            if (exp < now) {
-              localStorage.removeItem(STORAGE_KEY);
-              return null;
-            }
-          }
-          return data;
+          if (!raw || typeof raw !== 'string') return null;
+          const trimmed = raw.trim();
+          return trimmed || null;
         } catch (_) {
           return null;
         }
       }
-  
-      function setStored(data) {
+
+      /** Decode JWT payload for UI (ticketType, exp, image). Returns null if not a valid JWT. */
+      function decodeTokenPayload(token) {
+        if (!token || typeof token !== 'string') return null;
         try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          const parts = token.split('.');
+          if (parts.length !== 3) return null;
+          const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+          return JSON.parse(atob(payload));
+        } catch (_) {
+          return null;
+        }
+      }
+
+      function isPayloadExpired(payload) {
+        if (!payload || typeof payload !== 'object') return true;
+        const exp = payload.exp != null ? Number(payload.exp) : null;
+        if (exp != null && !Number.isNaN(exp)) {
+          const now = Math.floor(Date.now() / 1000);
+          if (exp < now) return true;
+        }
+        const expireTime = payload.expireTime || payload.expire_time;
+        if (expireTime) {
+          const expiry = new Date(expireTime).getTime();
+          if (!Number.isNaN(expiry) && Date.now() >= expiry) return true;
+        }
+        return false;
+      }
+
+      /** Save only the token string to localStorage. */
+      function setStored(token) {
+        try {
+          if (typeof token !== 'string' || !token.trim()) return;
+          localStorage.setItem(STORAGE_KEY, token.trim());
           try { window.dispatchEvent(new CustomEvent('ticketRedeemDataChange')); } catch (_) {}
         } catch (_) {}
       }
-  
+
       function clearStored() {
         localStorage.removeItem(STORAGE_KEY);
         try { window.dispatchEvent(new CustomEvent('ticketRedeemDataChange')); } catch (_) {}
       }
 
       function getTokenFromStored() {
-        const data = getStored();
-        if (!data) return null;
-        if (typeof data.token === 'string' && data.token.trim() !== '') return data.token;
-        return null;
+        return getStored();
       }
 
       function isPrizeItemByProperty(item) {
@@ -317,15 +337,16 @@
       }
   
       function renderUI() {
-        const data = getStored();
+        const token = getStored();
         function nonEmptyUrl(u) {
           return (u && typeof u === 'string' && u.trim() !== '') ? u : null;
         }
-        if (data) {
+        const data = token ? decodeTokenPayload(token) : null;
+        if (data && !isPayloadExpired(data)) {
           if (stateInput) stateInput.hidden = true;
           if (stateLoggedIn) stateLoggedIn.hidden = false;
           if (lockedImageWrap) lockedImageWrap.hidden = true;
-          const ticketType = (data.ticketType != null && data.ticketType !== '') ? (data.ticketType).toString().toLowerCase() : '';
+          const ticketType = (data.ticketType != null && data.ticketType !== '') ? (data.ticketType).toString().toLowerCase() : ((data.ticket_type != null && data.ticket_type !== '') ? (data.ticket_type).toString().toLowerCase() : '');
           const typeUrl = ticketType ? (imageByType[ticketType] || null) : null;
           const apiUrl = nonEmptyUrl(data.ticketTypeImage) || nonEmptyUrl(data.ticket_type_image) || nonEmptyUrl(data.image_url);
           const imgUrl = nonEmptyUrl(typeUrl) || apiUrl;
@@ -337,6 +358,9 @@
             ticketTypeImageWrap.hidden = true;
           }
         } else {
+          if (data && isPayloadExpired(data)) {
+            clearStored();
+          }
           if (stateInput) stateInput.hidden = false;
           if (stateLoggedIn) stateLoggedIn.hidden = true;
           if (ticketTypeImageWrap) ticketTypeImageWrap.hidden = true;
@@ -464,14 +488,8 @@
   
           showModalMessage(message, isError);
   
-          if (!isError && response.ok && data && typeof data === 'object') {
-            setStored({
-              ticketType: data.ticketType ?? data.ticket_type ?? data.type,
-              ticketTypeName: data.ticketTypeName ?? data.ticket_type_name ?? data.name,
-              ticketTypeImage: data.ticketTypeImage ?? data.ticket_type_image ?? data.image_url,
-              exp: data.exp ?? data.expTime ?? data.expires_at ?? data.expires,
-              ...data
-            });
+          if (!isError && response.ok && data && typeof data === 'object' && typeof data.token === 'string' && data.token.trim()) {
+            setStored(data.token);
             closeModal();
             renderUI();
             setTimeout(function () {

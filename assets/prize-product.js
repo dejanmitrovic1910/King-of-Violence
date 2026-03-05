@@ -1,19 +1,20 @@
 /**
- * Prize product gating: checks localStorage ticket_redeem_data (JWT or JSON).
- * Payload must have success: true, message "Ticket is valid, please select a prize.", and not be expired.
+ * Prize product gating: checks localStorage ticket_redeem_data (token string only).
+ * Token is a JWT; payload must have success: true, message "Ticket is valid, please select a prize.", and not be expired.
  * - Product cards with data-prize-product: unlock only when ticketType/ticket_type is "golden"; otherwise locked.
  * - PDP with data-prize-pdp-redirect: redirect to redeem page when invalid.
  */
 (function () {
   const STORAGE_KEY = 'ticket_redeem_data';
-  const PRIZE_MESSAGE = 'Ticket is valid, please select a prize.';
 
   function parsePayload(raw) {
     if (!raw || typeof raw !== 'string') return null;
     try {
       const trimmed = raw.trim();
       if (trimmed.startsWith('{')) {
-        return JSON.parse(trimmed);
+        const parsed = JSON.parse(trimmed);
+        if (parsed && typeof parsed.token === 'string') return parsePayload(parsed.token);
+        return parsed;
       }
       const parts = trimmed.split('.');
       if (parts.length === 3) {
@@ -47,9 +48,6 @@
       if (!raw) return false;
       const data = parsePayload(raw);
       if (!data || typeof data !== 'object') return false;
-      if (data.success !== true) return false;
-      if (data.message !== PRIZE_MESSAGE) return false;
-      if (data.ticketType == null && data.ticket_type == null) return false;
       if (isExpired(data)) return false;
       return true;
     } catch (_) {
@@ -71,7 +69,7 @@
   }
 
   /**
-   * Returns reservedPrizes array from ticket_redeem_data (JSON or JWT).
+   * Returns reservedPrizes array from decoded JWT payload (ticket_redeem_data stores token only).
    * Each item: { prizeId (variant id), status: "ACTIVE"|"DISABLED", reservationExpiresAt }.
    */
   function getReservedPrizes() {
@@ -228,9 +226,8 @@
   });
 
   /**
-   * Returns the raw token from localStorage for use in API calls (e.g. claim prize).
-   * Returns null if missing or invalid. Use getTicketRedeemValid() to check validity first.
-   * When ticket_redeem_data is JSON (token + other info), returns only the token for backend.
+   * Returns the token string from localStorage for use in API calls (e.g. claim prize).
+   * ticket_redeem_data stores only the token. Returns null if missing or invalid.
    */
   function getTicketRedeemToken() {
     try {
@@ -239,11 +236,13 @@
       if (!raw || typeof raw !== 'string') return null;
       const trimmed = raw.trim();
       if (!trimmed) return null;
-      try {
-        const data = JSON.parse(trimmed);
-        if (data && typeof data.token === 'string') return data.token;
-      } catch (_) {}
-      // Stored value is a raw JWT string (validity already checked by getTicketRedeemValid)
+      if (trimmed.startsWith('{')) {
+        try {
+          const data = JSON.parse(trimmed);
+          if (data && typeof data.token === 'string') return data.token;
+        } catch (_) {}
+        return null;
+      }
       return trimmed;
     } catch (_) {
       return null;
