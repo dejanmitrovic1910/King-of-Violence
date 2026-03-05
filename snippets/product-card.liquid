@@ -110,7 +110,7 @@
   id="product-card-{{ block.id }}"
   data-product-transition="{{ settings.transition_to_main_product }}"
   {{ block.shopify_attributes }}
-  {% if is_prize_product %}data-prize-product="true" data-redeem-url="{{ redeem_page_url }}"{% endif %}
+  {% if is_prize_product %}data-prize-product="true" data-prize-variant-ids="{{ product.variants | map: 'id' | join: ',' }}" data-redeem-url="{{ redeem_page_url }}"{% endif %}
   {% if no_swatch_selected %}
     data-no-swatch-selected="true"
   {% endif %}
@@ -266,5 +266,28 @@
     display: block;
     width: 48px;
     height: 48px;
+  }
+  .product-card__prize-disabled-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: inherit;
+  }
+  .product-card__prize-disabled-icon {
+    color: #dc2626;
+    opacity: 0.95;
+  }
+  .product-card__prize-disabled-icon svg {
+    display: block;
+    width: 48px;
+    height: 48px;
+  }
+  .product-card--prize-disabled,
+  product-card-link:has(.product-card--prize-disabled) {
+    pointer-events: none;
+    cursor: not-allowed;
   }
 {% endstylesheet %}
