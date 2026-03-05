@@ -204,8 +204,15 @@
                 },
                 body: JSON.stringify({ token: token || '', variantId: variantId })
               })
-                .then(function (res) { return res.json().catch(function () { return {}; }); })
-                .then(function (data) {
+                .then(function (res) {
+                  return res.json().catch(function () { return {}; }).then(function (data) { return { response: res, data: data }; });
+                })
+                .then(function (result) {
+                  var response = result.response;
+                  var data = result.data;
+                  if (typeof window.handleRedeemApiResponse === 'function' && window.handleRedeemApiResponse(response, data)) {
+                    if (response && response.status === 401) return;
+                  }
                   var success = data && (data.success === true || data.success === 'true');
                   if (!success && data && (data.message || data.error)) {
                     try { console.warn('Rebuy prize release:', data.message || data.error); } catch (_) {}

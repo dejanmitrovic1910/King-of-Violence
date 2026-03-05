@@ -256,6 +256,7 @@
     var STORAGE_KEY = 'ticket_redeem_data';
     var customerLoggedIn = {% if customer %}true{% else %}false{% endif %};
     var customerEmail = {{ customer.email | json }};
+    var INVALID_TOKEN_MESSAGE = 'Your token is invalid or expired';
 
     function removeTicketRedeemData() {
       try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
@@ -316,59 +317,156 @@
       removePrizeItemsFromCart();
     }
 
-    if (!customerLoggedIn) {
-      clearStorageAndRemovePrizeProducts();
-      return;
+    /** Allowed prize variant ids from token payload (myPrize or reservedPrizes[].prizeId). */
+    function getAllowedPrizeVariantIds(token) {
+      if (!token || typeof token !== 'string') return [];
+      try {
+        var trimmed = token.trim();
+        if (trimmed.startsWith('{')) {
+          var parsed = JSON.parse(trimmed);
+          if (parsed && typeof parsed.token === 'string') trimmed = parsed.token;
+        }
+        var parts = trimmed.split('.');
+        if (parts.length !== 3) return [];
+        var payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+        var data = JSON.parse(atob(payload));
+        if (!data || typeof data !== 'object') return [];
+        var ids = [];
+        var myPrize = data.myPrize != null ? data.myPrize : data.my_prize;
+        if (myPrize != null && myPrize !== '') ids.push(String(myPrize).trim());
+        var list = data.reservedPrizes || data.reserved_prizes;
+        if (Array.isArray(list)) {
+          list.forEach(function (p) {
+            var id = p.prizeId != null ? p.prizeId : p.prize_id;
+            if (id != null && id !== '') ids.push(String(id).trim());
+          });
+        }
+        return ids;
+      } catch (_) {
+        return [];
+      }
     }
 
-    try {
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
+    /** Remove from cart any prize item whose variant_id is not in the token's allowed list. */
+    function removePrizeItemsNotInToken(token) {
+      var allowed = getAllowedPrizeVariantIds(token);
+      fetch('/cart.js', { headers: { Accept: 'application/json' } })
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (cart) {
+          if (!cart || !cart.items || cart.items.length === 0) return;
+          return getPrizeLineItems(cart).then(function (prizeItems) {
+            var toRemove = prizeItems.filter(function (item) {
+              var vid = String(item.variant_id != null ? item.variant_id : item.id || '').trim();
+              return vid && allowed.indexOf(vid) === -1;
+            });
+            return Promise.all(toRemove.map(function (item) {
+              var key = item.key;
+              if (!key) return Promise.resolve();
+              return fetch('/cart/change.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                body: JSON.stringify({ id: key, quantity: 0 })
+              });
+            }));
+          });
+        })
+        .then(function () {
+          try { document.dispatchEvent(new CustomEvent('cart:refresh')); } catch (_) {}
+        })
+        .catch(function () {});
+    }
 
-      var trimmed = (typeof raw === 'string' ? raw : '').trim();
-      var data = null;
-      if (trimmed.startsWith('{')) {
-        var parsed = JSON.parse(trimmed);
-        if (parsed && typeof parsed.token === 'string') trimmed = parsed.token;
-      }
-      if (trimmed.indexOf('.') !== -1) {
-        var parts = trimmed.split('.');
-        if (parts.length === 3) {
-          var payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
-          data = JSON.parse(atob(payload));
+    function getTokenFromStorage() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw || typeof raw !== 'string') return null;
+        var trimmed = raw.trim();
+        if (!trimmed) return null;
+        if (trimmed.startsWith('{')) {
+          var parsed = JSON.parse(trimmed);
+          if (parsed && typeof parsed.token === 'string') return parsed.token.trim();
+          return null;
         }
+        return trimmed;
+      } catch (_) {
+        return null;
       }
+    }
 
-      if (!data || typeof data !== 'object') {
+    var REFRESH_TOKEN_URL = '/apps/redeem/refreshToken';
+
+    function runTokenCheck() {
+      if (!customerLoggedIn) {
         clearStorageAndRemovePrizeProducts();
         return;
       }
+      var token = getTokenFromStorage();
+      if (!token) return;
 
-      var exp = data.exp != null ? Number(data.exp) : null;
-      if (exp != null && !Number.isNaN(exp)) {
-        var nowSec = Math.floor(Date.now() / 1000);
-        if (exp < nowSec) {
-          clearStorageAndRemovePrizeProducts();
-          return;
-        }
-      } else {
-        var expireTime = data.expireTime || data.expire_time;
-        if (expireTime) {
-          var expiry = new Date(expireTime).getTime();
-          if (!Number.isNaN(expiry) && Date.now() >= expiry) {
-            clearStorageAndRemovePrizeProducts();
-            return;
-          }
-        }
-      }
+      fetch(REFRESH_TOKEN_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({ token: token })
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return {}; }).then(function (data) {
+            return { response: res, data: data };
+          });
+        })
+        .then(function (result) {
+          handleRedeemApiResponse(result.response, result.data);
+        })
+        .catch(function () {});
+    }
 
-      var tokenEmail = (data.email && typeof data.email === 'string') ? data.email.toString().trim().toLowerCase() : '';
-      var loggedInEmail = (customerEmail || '').toString().trim().toLowerCase();
-      if (tokenEmail && loggedInEmail && tokenEmail !== loggedInEmail) {
-        clearStorageAndRemovePrizeProducts();
-      }
-    } catch (_) {
+    function performTicketLogout() {
       clearStorageAndRemovePrizeProducts();
+    }
+
+    function applyRedeemTokenAndSync(newToken) {
+      if (!newToken || typeof newToken !== 'string' || !newToken.trim()) return;
+      try {
+        localStorage.setItem(STORAGE_KEY, newToken.trim());
+        try { window.dispatchEvent(new CustomEvent('ticketRedeemDataChange')); } catch (_) {}
+        if (typeof window.refreshPrizeProductState === 'function') {
+          window.refreshPrizeProductState();
+        }
+        removePrizeItemsNotInToken(newToken);
+      } catch (_) {}
+    }
+
+    function handleRedeemApiResponse(response, data) {
+      var message = (data && (data.message || data.error || data.text || '')).toString().trim();
+      if (response && response.status === 401 && message.indexOf(INVALID_TOKEN_MESSAGE) !== -1) {
+        performTicketLogout();
+        return true;
+      }
+      if (response && response.ok && data && typeof data.token === 'string' && data.token.trim()) {
+        applyRedeemTokenAndSync(data.token);
+        return true;
+      }
+      return false;
+    }
+
+    window.performTicketLogout = performTicketLogout;
+    window.applyRedeemTokenAndSync = applyRedeemTokenAndSync;
+    window.handleRedeemApiResponse = handleRedeemApiResponse;
+
+    function runAfterLoad() {
+      if (typeof requestIdleCallback !== 'undefined') {
+        requestIdleCallback(function () { runTokenCheck(); }, { timeout: 100 });
+      } else {
+        setTimeout(runTokenCheck, 0);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', runAfterLoad);
+    } else {
+      runAfterLoad();
     }
   })();
   const basePath = 'https://cdn.shopify.com/static/themes/horizon/placeholders';

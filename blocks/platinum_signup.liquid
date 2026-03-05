@@ -235,17 +235,28 @@
           const contentType = response.headers.get('Content-Type') || '';
           if (contentType.includes('application/json')) {
             return response.json().then(function (data) {
-              return { ok: response.ok, data: data };
+              return { ok: response.ok, status: response.status, data: data };
             }).catch(function () {
-              return { ok: response.ok, data: {} };
+              return { ok: response.ok, status: response.status, data: {} };
             });
           }
           return response.text().then(function (text) {
-            return { ok: response.ok, data: { message: text || (response.ok ? 'Success' : 'Something went wrong') } };
+            return { ok: response.ok, status: response.status, data: { message: text || (response.ok ? 'Success' : 'Something went wrong') } };
           });
         })
         .then(function (result) {
           const data = result.data || {};
+          const responseLike = { status: result.status, ok: result.ok };
+          if (typeof window.handleRedeemApiResponse === 'function' && window.handleRedeemApiResponse(responseLike, data)) {
+            if (result.status === 401) {
+              showMessage(data.message || data.error || 'Your token is invalid or expired.', true);
+            } else if (result.ok && data.success === true) {
+              submittedSuccessfully = true;
+              setFormEnabled(false);
+              showMessage(data.message || data.error || data.text || 'Saved.', false);
+            }
+            return;
+          }
           const success = result.ok && (data.success === true);
           const message = data.message || data.error || data.text || (success ? 'Saved.' : 'Something went wrong.');
 

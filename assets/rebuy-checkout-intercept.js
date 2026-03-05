@@ -194,6 +194,17 @@
       const success = data.success === true;
       const message = data.message ?? data.error ?? (data.data && data.data.message) ?? 'Checkout is not available.';
 
+      if (typeof window.handleRedeemApiResponse === 'function' && window.handleRedeemApiResponse(response, data)) {
+        if (response.status === 401) {
+          showMessageModal(message || 'Your token is invalid or expired.');
+          return;
+        }
+        if (success) {
+          window.location.href = data.checkout_url || '/checkout';
+          return;
+        }
+      }
+
       if (success) {
         window.location.href = data.checkout_url || '/checkout';
         return;

@@ -324,6 +324,18 @@ class ProductFormComponent extends Component {
       const message =
         data.message ?? (data.data && data.data.message) ?? (response.ok ? '' : 'Something went wrong.');
 
+      if (typeof window.handleRedeemApiResponse === 'function' && window.handleRedeemApiResponse(response, data)) {
+        if (response.status === 401) {
+          this.#showPrizeMessageModal(message || 'Your token is invalid or expired.');
+          return;
+        }
+        if (success) this.#doAddToCart(event, form, addToCartTextError);
+        return;
+      }
+
+      if (success && data.token && typeof window.applyRedeemTokenAndSync === 'function') {
+        window.applyRedeemTokenAndSync(data.token);
+      }
       if (success) {
         this.#doAddToCart(event, form, addToCartTextError);
       } else {

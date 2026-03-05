@@ -404,6 +404,7 @@
         if (modal) modal.close();
       }
   
+      window.addEventListener('ticketRedeemDataChange', renderUI);
       openModalBtn?.addEventListener('click', openModal);
       logoutBtn?.addEventListener('click', async function () {
         const token = getTokenFromStored();
@@ -419,6 +420,9 @@
               body: JSON.stringify({ token: token })
             });
             const data = await response.json().catch(function () { return {}; });
+            if (typeof window.handleRedeemApiResponse === 'function' && window.handleRedeemApiResponse(response, data)) {
+              if (response && response.status === 401) return;
+            }
             if (data.success !== true) {
               showLogoutFailedModal();
             }
@@ -486,17 +490,26 @@
             message = response.ok ? '{{ "sections.ticket_redeem.success_default" | t }}' : '{{ "sections.ticket_redeem.error_default" | t }}';
           }
   
-          showModalMessage(message, isError);
-  
-          if (!isError && response.ok && data && typeof data === 'object' && typeof data.token === 'string' && data.token.trim()) {
-            setStored(data.token);
-            closeModal();
-            renderUI();
-            setTimeout(function () {
-              if (typeof window.refreshPrizeProductState === 'function') {
-                window.refreshPrizeProductState();
+          if (typeof window.handleRedeemApiResponse === 'function' && window.handleRedeemApiResponse(response, data || {})) {
+            if (response && response.status === 401) {
+              showModalMessage(message || 'Your token is invalid or expired.', true);
+            } else {
+              showModalMessage(message, false);
+              closeModal();
+              renderUI();
+            }
+          } else {
+            showModalMessage(message, isError);
+            if (!isError && response.ok && data && typeof data === 'object' && typeof data.token === 'string' && data.token.trim()) {
+              if (typeof window.applyRedeemTokenAndSync === 'function') {
+                window.applyRedeemTokenAndSync(data.token);
+              } else {
+                setStored(data.token);
+                if (typeof window.refreshPrizeProductState === 'function') window.refreshPrizeProductState();
               }
-            }, 0);
+              closeModal();
+              renderUI();
+            }
           }
         } catch (_) {
           showModalMessage('{{ "sections.ticket_redeem.error_network" | t }}', true);
