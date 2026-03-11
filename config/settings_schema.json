@@ -2115,6 +2115,22 @@
         "label": "Redeem page URL",
         "default": "/pages/redeem",
         "info": "Page where customers redeem tickets. Used when a prize product is viewed without a valid ticket."
+      },
+      {
+        "type": "header",
+        "content": "Prize icons"
+      },
+      {
+        "type": "image_picker",
+        "id": "prize_lock_icon",
+        "label": "Prize locked icon",
+        "info": "Shown on product cards and Rebuy widgets when a prize is locked or in another cart. Leave blank to use the default lock icon."
+      },
+      {
+        "type": "image_picker",
+        "id": "prize_disabled_icon",
+        "label": "Prize disabled icon",
+        "info": "Shown when a prize is in another customer's cart. Leave blank to use the default icon."
       }
     ]
   },

@@ -63,6 +63,7 @@
     "type_preset": "paragraph",
     "popover_border_radius": 8,
     "popover_border": "none",
+    "prize_lock_icon": "shopify://shop_images/locked_prize.png",
     "product_corner_radius": 2,
     "card_corner_radius": 2,
     "show_variant_image": false,

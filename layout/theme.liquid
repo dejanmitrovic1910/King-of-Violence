@@ -35,6 +35,10 @@
   </head>
 
   <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
+    {% comment %} Rebuy widget templates in DOM early so cart drawer can mount at DOMContentLoaded (CVR) {% endcomment %}
+    {% render 'rebuy-complete-look' %}
+    {% render 'rebuy-complete-look-on-cart' %}
+    {% render 'rebuy-recommended' %}
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
     <div id="header-group">
       {% sections 'header-group' %}
@@ -66,14 +70,16 @@
       {% render 'quick-add-modal' %}
     {% endif %}
 
-    {%  render 'rebuy-complete-look' %}
-    {%  render 'rebuy-complete-look-on-cart' %}
-    {%  render 'rebuy-recommended' %}
-
+    <script>
+      window.__themePrizeIcons = {
+        lock: {% if settings.prize_lock_icon != blank %}"{{ settings.prize_lock_icon | image_url: width: 96 }}"{% else %}""{% endif %},
+        disabled: {% if settings.prize_disabled_icon != blank %}"{{ settings.prize_disabled_icon | image_url: width: 96 }}"{% else %}""{% endif %}
+      };
+    </script>
     <script src="{{ 'rebuy-cart-remove-prize.js' | asset_url }}"></script>
-    <script src="{{ 'rebuy-checkout-intercept.js' | asset_url }}" defer></script>
-    <script src="{{ 'rebuy-hide-prize-products.js' | asset_url }}" defer></script>
-    <script src="{{ 'rebuy-cart-drawer-hide-price-255107.js' | asset_url }}" defer></script>
+    <script src="{{ 'rebuy-checkout-intercept.js' | asset_url }}"></script>
+    <script src="{{ 'rebuy-hide-prize-products.js' | asset_url }}"></script>
+    <script src="{{ 'rebuy-cart-drawer-hide-price-255107.js' | asset_url }}"></script>
 
     {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.1/rellax.min.js" defer="defer"></script>
     <script>

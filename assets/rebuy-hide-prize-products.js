@@ -47,6 +47,22 @@
 
   var LOCK_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
 
+  function getThemePrizeIcons() {
+    try {
+      return (typeof window !== 'undefined' && window.__themePrizeIcons) || {};
+    } catch (_) {
+      return {};
+    }
+  }
+
+  function renderLockIconHtml() {
+    var icons = getThemePrizeIcons();
+    if (icons.lock) {
+      return '<img src="' + icons.lock + '" alt="" width="48" height="48" class="prize-icon-img">';
+    }
+    return LOCK_ICON_SVG;
+  }
+
   function lockRebuyCard(block) {
     if (block.classList.contains('rebuy-product-block--prize-locked')) return;
     block.classList.add('rebuy-product-block--prize-locked');
@@ -71,7 +87,7 @@
       overlay = document.createElement('div');
       overlay.className = 'rebuy-product-block__prize-lock-overlay';
       overlay.setAttribute('aria-hidden', 'true');
-      overlay.innerHTML = '<span class="rebuy-product-block__prize-lock-icon" aria-hidden="true">' + LOCK_ICON_SVG + '</span>';
+      overlay.innerHTML = '<span class="rebuy-product-block__prize-lock-icon" aria-hidden="true">' + renderLockIconHtml() + '</span>';
       block.appendChild(overlay);
     }
   }
@@ -83,8 +99,8 @@
     style.textContent =
       '.rebuy-product-block--prize-locked { pointer-events: none; cursor: not-allowed; }' +
       '.rebuy-product-block__prize-lock-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); border-radius: inherit; }' +
-      '.rebuy-product-block__prize-lock-icon { color: #fff; opacity: 0.9; }' +
-      '.rebuy-product-block__prize-lock-icon svg { display: block; width: 48px; height: 48px; }';
+      '.rebuy-product-block__prize-lock-icon { color: #fff; }' +
+      '.rebuy-product-block__prize-lock-icon svg, .rebuy-product-block__prize-lock-icon img { display: block; width: 80px; height: auto; filter: drop-shadow(0 -3px 25px rgb(254 201 9)) drop-shadow(0 3px 25px rgb(254 201 9)); }';
     document.head.appendChild(style);
   }
 

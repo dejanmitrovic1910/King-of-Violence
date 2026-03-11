@@ -112,6 +112,30 @@
   const RED_X_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
   const LOCK_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
 
+  function getThemePrizeIcons() {
+    try {
+      return (typeof window !== 'undefined' && window.__themePrizeIcons) || {};
+    } catch (_) {
+      return {};
+    }
+  }
+
+  function renderLockIconHtml() {
+    var icons = getThemePrizeIcons();
+    if (icons.lock) {
+      return '<img src="' + icons.lock + '" alt="" width="48" height="48" class="prize-icon-img">';
+    }
+    return LOCK_ICON_SVG;
+  }
+
+  function renderDisabledIconHtml() {
+    var icons = getThemePrizeIcons();
+    if (icons.disabled) {
+      return '<img src="' + icons.disabled + '" alt="" width="48" height="48" class="prize-icon-img">';
+    }
+    return RED_X_ICON_SVG;
+  }
+
   function runProductCards(redeemUrl) {
     const cards = document.querySelectorAll('[data-prize-product="true"]');
     const valid = getTicketRedeemValid() && isGoldenTicket();
@@ -141,7 +165,7 @@
         const overlay = document.createElement('div');
         overlay.className = 'product-card__prize-lock-overlay';
         overlay.setAttribute('aria-hidden', 'true');
-        overlay.innerHTML = '<span class="product-card__prize-lock-icon" aria-hidden="true">' + LOCK_ICON_SVG + '</span>';
+        overlay.innerHTML = '<span class="product-card__prize-lock-icon" aria-hidden="true">' + renderLockIconHtml() + '</span>';
         wrap.appendChild(overlay);
         return;
       }
@@ -159,7 +183,7 @@
         const overlay = document.createElement('div');
         overlay.className = 'product-card__prize-disabled-overlay';
         overlay.setAttribute('aria-hidden', 'true');
-        overlay.innerHTML = '<span class="product-card__prize-disabled-icon" aria-hidden="true">' + RED_X_ICON_SVG + '</span>';
+        overlay.innerHTML = '<span class="product-card__prize-disabled-icon" aria-hidden="true">' + renderDisabledIconHtml() + '</span>';
         wrap.appendChild(overlay);
         return;
       }
@@ -177,7 +201,7 @@
         const overlay = document.createElement('div');
         overlay.className = 'product-card__prize-lock-overlay';
         overlay.setAttribute('aria-hidden', 'true');
-        overlay.innerHTML = '<span class="product-card__prize-lock-icon" aria-hidden="true">' + LOCK_ICON_SVG + '</span>';
+        overlay.innerHTML = '<span class="product-card__prize-lock-icon" aria-hidden="true">' + renderLockIconHtml() + '</span>';
         wrap.appendChild(overlay);
         return;
       }
