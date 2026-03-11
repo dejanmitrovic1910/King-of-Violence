@@ -70,8 +70,11 @@ export class AddToCartComponent extends Component {
     const form = this.closest('form');
     if (!form?.checkValidity()) return;
 
-    // For prize products, animation runs after claim succeeds (in #doAddToCart), not on click
-    if (form?.dataset.prizeProduct !== 'true') {
+    // For prize products, animation runs only after claim succeeds (in #doAddToCart), not on click.
+    // data-prize-product is on product-form-component, not the form.
+    const productForm = this.closest('product-form-component');
+    const isPrizeProduct = productForm?.dataset.prizeProduct === 'true';
+    if (!isPrizeProduct) {
       this.animateAddToCart();
       const animationEnabled = this.dataset.addToCartAnimation === 'true';
       if (animationEnabled && !event.target.closest('.quick-add-modal')) {
