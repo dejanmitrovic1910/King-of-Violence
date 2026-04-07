@@ -3,6 +3,8 @@
  * If cart has a prize product, requires ticket_redeem_data in localStorage;
  * otherwise shows modal to remove the prize product(s) or enter ticket code.
  * Then sends cartToken and token (from localStorage) to /apps/redeem/pre-checkout.
+ * Refreshes ticket validity, applies golden-ticket discount codes only when a prize remains, then pre-checkout.
+ * If the cart ends up with no prize lines, ticket-linked discount codes are removed before checkout.
  */
 (function () {
   const PRE_CHECKOUT_URL = '/apps/redeem/pre-checkout';
@@ -125,6 +127,22 @@
     dialog.showModal();
   }
 
+  async function stripTicketPrizeDiscountsIfReady() {
+    if (typeof window.removeTicketPrizeDiscountsFromCart === 'function') {
+      await window.removeTicketPrizeDiscountsFromCart();
+    }
+  }
+
+  async function redirectToCheckoutAfterPreCheckoutSuccess(checkoutUrl) {
+    const cartRes2 = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
+    const cart2 = cartRes2.ok ? await cartRes2.json().catch(() => null) : null;
+    const prizeAfter = cart2 ? await getPrizeItems(cart2) : [];
+    if (prizeAfter.length === 0) {
+      await stripTicketPrizeDiscountsIfReady();
+    }
+    window.location.href = checkoutUrl || '/checkout';
+  }
+
   async function handleRebuyCheckoutClick(event) {
     const target = event.target.closest(REBUY_CHECKOUT_SELECTOR);
     if (!target) return;
@@ -153,9 +171,9 @@
       const prizeItems = await getPrizeItems(cart);
       const hasPrize = prizeItems.length > 0;
       const hasTicket = hasTicketRedeemData();
-      const token = getTicketToken();
 
       if (!hasPrize) {
+        await stripTicketPrizeDiscountsIfReady();
         window.location.href = '/checkout';
         return;
       }
@@ -171,10 +189,50 @@
         return;
       }
 
+      let prep = { ok: true, hadPrize: true };
+      if (typeof window.prepareCheckoutGoldenTicketDiscounts === 'function') {
+        prep = await window.prepareCheckoutGoldenTicketDiscounts();
+      }
+      if (prep && prep.invalidToken) {
+        showMessageModal('Your ticket is invalid or expired. Please redeem again.');
+        return;
+      }
+      if (prep && prep.needTicket) {
+        const names = prizeItems.map(getItemTitle);
+        const productList = names.length === 1 ? names[0] : names.join(', ');
+        showMessageModal(
+          'Your cart contains a prize product. Please remove "' +
+            productList +
+            '" from your cart, or enter your ticket code on the redeem page to continue.'
+        );
+        return;
+      }
+      if (prep && prep.noPrize) {
+        window.location.href = '/checkout';
+        return;
+      }
+
+      const cartResAfterPrep = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
+      const cartAfterPrep = cartResAfterPrep.ok ? await cartResAfterPrep.json().catch(() => null) : null;
+      const cartTokenAfter = cartAfterPrep && (cartAfterPrep.token || cartAfterPrep.key);
+      if (!cartTokenAfter) {
+        showMessageModal('Cart is empty or unavailable.');
+        return;
+      }
+      const prizeAfterPrep = cartAfterPrep ? await getPrizeItems(cartAfterPrep) : [];
+      if (prizeAfterPrep.length === 0) {
+        await stripTicketPrizeDiscountsIfReady();
+        window.location.href = '/checkout';
+        return;
+      }
+
       // Include the prize product variant id from the cart for the backend
-      const prizeVariantId = prizeItems.length > 0
-        ? (prizeItems[0].variant_id ?? prizeItems[0].id)
-        : null;
+      const prizeVariantId =
+        prizeAfterPrep.length > 0
+          ? (prizeAfterPrep[0].variant_id ?? prizeAfterPrep[0].id)
+          : null;
+
+      const tokenAfterPrep = getTicketToken();
 
       const response = await fetch(PRE_CHECKOUT_URL, {
         method: 'POST',
@@ -184,8 +242,8 @@
           Accept: 'application/json',
         },
         body: JSON.stringify({
-          cartToken: cartToken,
-          token: token || '',
+          cartToken: cartTokenAfter,
+          token: tokenAfterPrep || '',
           ...(prizeVariantId != null && { prizeVariantId: prizeVariantId }),
         }),
       });
@@ -200,13 +258,13 @@
           return;
         }
         if (success) {
-          window.location.href = data.checkout_url || '/checkout';
+          await redirectToCheckoutAfterPreCheckoutSuccess(data.checkout_url || '/checkout');
           return;
         }
       }
 
       if (success) {
-        window.location.href = data.checkout_url || '/checkout';
+        await redirectToCheckoutAfterPreCheckoutSuccess(data.checkout_url || '/checkout');
         return;
       }
 

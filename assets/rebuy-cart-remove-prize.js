@@ -139,6 +139,13 @@
     } catch (_) {}
   }
 
+  function maybeStripTicketPrizeDiscountsIfCartHasNoPrize() {
+    if (typeof window.syncTicketPrizeDiscountsBeforeCheckout === 'function') {
+      return window.syncTicketPrizeDiscountsBeforeCheckout();
+    }
+    return Promise.resolve();
+  }
+
   var HANDLED_ATTR = 'data-rebuy-prize-remove-bound';
 
   function handleRemoveClick(event) {
@@ -180,15 +187,18 @@
           var valid = getTicketRedeemValid();
 
           if (!valid) {
-            return removeFromCart(lineKey).then(function () {
-              notifyCartChanged();
-              if (loading) { loading.classList.remove('fa-sync-alt', 'fa-spin'); loading.classList.add('fa-trash'); }
-              button.disabled = false;
-            });
+            return removeFromCart(lineKey)
+              .then(maybeStripTicketPrizeDiscountsIfCartHasNoPrize)
+              .then(function () {
+                notifyCartChanged();
+                if (loading) { loading.classList.remove('fa-sync-alt', 'fa-spin'); loading.classList.add('fa-trash'); }
+                button.disabled = false;
+              });
           }
 
           var token = getTicketToken();
           return removeFromCart(lineKey)
+            .then(maybeStripTicketPrizeDiscountsIfCartHasNoPrize)
             .then(notifyCartChanged)
             .then(function () {
               if (loading) { loading.classList.remove('fa-sync-alt', 'fa-spin'); loading.classList.add('fa-trash'); }

@@ -254,13 +254,227 @@
 <script>
   (function () {
     var STORAGE_KEY = 'ticket_redeem_data';
+    var TICKET_GOLDEN_REDEEM_CODE_KEY = 'ticket_golden_redeem_code';
+    var TICKET_PRIZE_DISCOUNT_CODES_KEY = 'ticket_prize_discount_codes';
+    var CART_UPDATE_URL_FALLBACK = '{{ routes.cart_update_url }}';
     var customerLoggedIn = {% if customer %}true{% else %}false{% endif %};
     var customerEmail = {{ customer.email | json }};
     var INVALID_TOKEN_MESSAGE = 'Your token is invalid or expired';
 
+    function getCartUpdateUrl() {
+      if (typeof Theme !== 'undefined' && Theme.routes && Theme.routes.cart_update_url) {
+        return Theme.routes.cart_update_url;
+      }
+      return CART_UPDATE_URL_FALLBACK;
+    }
+
     function removeTicketRedeemData() {
       try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      try { localStorage.removeItem(TICKET_GOLDEN_REDEEM_CODE_KEY); } catch (e1) {}
       try { window.dispatchEvent(new CustomEvent('ticketRedeemDataChange')); } catch (e2) {}
+    }
+
+    function decodeJwtPayload(token) {
+      if (!token || typeof token !== 'string') return null;
+      try {
+        var parts = token.split('.');
+        if (parts.length !== 3) return null;
+        var payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(atob(payload));
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function jwtPayloadExpired(payload) {
+      if (!payload || typeof payload !== 'object') return true;
+      var exp = payload.exp != null ? Number(payload.exp) : null;
+      if (exp != null && !isNaN(exp)) {
+        if (exp < Math.floor(Date.now() / 1000)) return true;
+      }
+      var expireTime = payload.expireTime || payload.expire_time;
+      if (expireTime) {
+        var expiry = new Date(expireTime).getTime();
+        if (!isNaN(expiry) && Date.now() >= expiry) return true;
+      }
+      return false;
+    }
+
+    function goldenTicketPrimaryDiscountCode(enteredCode, jwtPayload) {
+      if (jwtPayload && typeof jwtPayload === 'object') {
+        var n = jwtPayload.ticketNumber != null ? jwtPayload.ticketNumber : jwtPayload.ticket_number;
+        if (n == null) n = jwtPayload.ticket_code;
+        if (n != null && String(n).trim() !== '') return String(n).trim();
+      }
+      return enteredCode && String(enteredCode).trim() ? String(enteredCode).trim() : '';
+    }
+
+    function goldenTicketShipDiscountCode(ticketNum) {
+      var t = String(ticketNum).trim();
+      var li = t.lastIndexOf('-');
+      if (li >= 0 && li < t.length - 1) t = t.slice(li + 1);
+      return 'SHIP-' + t;
+    }
+
+    function cartCodeListHasCode(list, code) {
+      var cl = String(code).toLowerCase();
+      return list.some(function (x) {
+        return String(x).toLowerCase() === cl;
+      });
+    }
+
+    function morphShopifySectionFromDiscountHtml(sectionId, html) {
+      var sid = 'shopify-section-' + sectionId;
+      try {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var fresh = doc.getElementById(sid);
+        var cur = document.getElementById(sid);
+        if (fresh && cur) cur.replaceWith(fresh);
+      } catch (_) {}
+    }
+
+    /** Applies golden ticket product + shipping discount codes to the cart; stores codes for later removal. */
+    function applyGoldenTicketDiscountsToCart(enteredCode, jwtPayload) {
+      var primary = goldenTicketPrimaryDiscountCode(enteredCode, jwtPayload);
+      if (!primary) return Promise.resolve();
+      var ship = goldenTicketShipDiscountCode(primary);
+      var toAdd = ship.toLowerCase() === primary.toLowerCase() ? [primary] : [primary, ship];
+
+      return fetch('/cart.js', { headers: { Accept: 'application/json' } })
+        .then(function (res) {
+          return res.ok ? res.json() : null;
+        })
+        .then(function (cart) {
+          if (!cart) return;
+          var existing = (cart.discount_codes || []).map(function (d) {
+            return d.code;
+          });
+          var merged = existing.slice();
+          for (var i = 0; i < toAdd.length; i++) {
+            if (!cartCodeListHasCode(merged, toAdd[i])) merged.push(toAdd[i]);
+          }
+          var body = { discount: merged.join(',') };
+          var sectionEl = document.querySelector('cart-items-component');
+          if (sectionEl && sectionEl.dataset && sectionEl.dataset.sectionId) {
+            body.sections = [sectionEl.dataset.sectionId];
+          }
+          return fetch(getCartUpdateUrl(), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify(body),
+          })
+            .then(function (res) {
+              return res.ok ? res.json() : null;
+            })
+            .then(function (postData) {
+              try {
+                localStorage.setItem(TICKET_PRIZE_DISCOUNT_CODES_KEY, JSON.stringify(toAdd));
+              } catch (_) {}
+              if (
+                postData &&
+                postData.sections &&
+                sectionEl &&
+                sectionEl.dataset &&
+                sectionEl.dataset.sectionId
+              ) {
+                var sid = sectionEl.dataset.sectionId;
+                if (postData.sections[sid]) {
+                  morphShopifySectionFromDiscountHtml(sid, postData.sections[sid]);
+                }
+              }
+              try {
+                document.dispatchEvent(new CustomEvent('cart:refresh'));
+              } catch (_) {}
+            });
+        })
+        .catch(function () {});
+    }
+
+    /**
+     * Checkout: refresh ticket with server, then if the cart still has a prize and the ticket is golden + in period, apply discount codes (code from localStorage).
+     * If the cart has no prize, strips stored ticket discounts.
+     */
+    function prepareCheckoutGoldenTicketDiscounts() {
+      return fetch('/cart.js', { headers: { Accept: 'application/json' } })
+        .then(function (res) {
+          return res.ok ? res.json() : null;
+        })
+        .then(function (cart) {
+          if (!cart) return { ok: true, noPrize: true };
+          return getPrizeLineItems(cart).then(function (prizeItems) {
+            if (prizeItems.length === 0) {
+              return removeTicketPrizeDiscountsFromCart().then(function () {
+                return { ok: true, noPrize: true };
+              });
+            }
+            var token = getTokenFromStorage();
+            if (!token) {
+              return { ok: false, needTicket: true };
+            }
+            return fetch(REFRESH_TOKEN_URL, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                Accept: 'application/json',
+              },
+              body: JSON.stringify({ token: token }),
+            })
+              .then(function (res) {
+                return res.json().catch(function () {
+                  return {};
+                }).then(function (data) {
+                  return { response: res, data: data };
+                });
+              })
+              .then(function (result) {
+                var handled = handleRedeemApiResponse(result.response, result.data);
+                if (handled && result.response && result.response.status === 401) {
+                  return { ok: false, invalidToken: true };
+                }
+                return fetch('/cart.js', { headers: { Accept: 'application/json' } })
+                  .then(function (r2) {
+                    return r2.ok ? r2.json() : null;
+                  })
+                  .then(function (cart2) {
+                    if (!cart2) return { ok: false, invalidToken: true };
+                    return getPrizeLineItems(cart2).then(function (prizeAfter) {
+                      if (prizeAfter.length === 0) {
+                        return removeTicketPrizeDiscountsFromCart().then(function () {
+                          return { ok: true, noPrize: true };
+                        });
+                      }
+                      var token2 = getTokenFromStorage();
+                      if (!token2) {
+                        return { ok: false, needTicket: true };
+                      }
+                      var payload = decodeJwtPayload(token2);
+                      if (!payload || jwtPayloadExpired(payload)) {
+                        return { ok: false, invalidToken: true };
+                      }
+                      var tt = (payload.ticketType != null && payload.ticketType !== '')
+                        ? String(payload.ticketType).toLowerCase()
+                        : payload.ticket_type != null && payload.ticket_type !== ''
+                          ? String(payload.ticket_type).toLowerCase()
+                          : '';
+                      if (tt !== 'golden') {
+                        return { ok: true, hadPrize: true };
+                      }
+                      var enteredCode = '';
+                      try {
+                        enteredCode = localStorage.getItem(TICKET_GOLDEN_REDEEM_CODE_KEY) || '';
+                      } catch (_) {}
+                      return applyGoldenTicketDiscountsToCart(enteredCode, payload).then(function () {
+                        return { ok: true, hadPrize: true };
+                      });
+                    });
+                  });
+              });
+          });
+        })
+        .catch(function () {
+          return { ok: true };
+        });
     }
 
     function isPrizeItemByProperty(item) {
@@ -293,7 +507,7 @@
     }
 
     function removePrizeItemsFromCart() {
-      fetch('/cart.js', { headers: { Accept: 'application/json' } })
+      return fetch('/cart.js', { headers: { Accept: 'application/json' } })
         .then(function (res) { return res.ok ? res.json() : null; })
         .then(function (cart) {
           if (!cart || !cart.items || cart.items.length === 0) return;
@@ -312,9 +526,79 @@
         .catch(function () {});
     }
 
+    /**
+     * Removes discount codes that were auto-applied for golden-ticket + prize flow (see ticket_input).
+     * Clears TICKET_PRIZE_DISCOUNT_CODES_KEY after updating the cart.
+     */
+    function removeTicketPrizeDiscountsFromCart() {
+      var raw;
+      try {
+        raw = localStorage.getItem(TICKET_PRIZE_DISCOUNT_CODES_KEY);
+      } catch (e) {
+        return Promise.resolve();
+      }
+      if (!raw || !String(raw).trim()) {
+        return Promise.resolve();
+      }
+      var toRemove;
+      try {
+        toRemove = JSON.parse(raw);
+      } catch (e2) {
+        try { localStorage.removeItem(TICKET_PRIZE_DISCOUNT_CODES_KEY); } catch (e3) {}
+        return Promise.resolve();
+      }
+      if (!Array.isArray(toRemove) || toRemove.length === 0) {
+        try { localStorage.removeItem(TICKET_PRIZE_DISCOUNT_CODES_KEY); } catch (e4) {}
+        return Promise.resolve();
+      }
+      var removeLower = toRemove.map(function (c) { return String(c).toLowerCase(); });
+      return fetch('/cart.js', { headers: { Accept: 'application/json' } })
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (cart) {
+          if (!cart) {
+            try { localStorage.removeItem(TICKET_PRIZE_DISCOUNT_CODES_KEY); } catch (e5) {}
+            return;
+          }
+          var existing = (cart.discount_codes || []).map(function (d) { return d.code; });
+          var kept = existing.filter(function (code) {
+            return removeLower.indexOf(String(code).toLowerCase()) === -1;
+          });
+          var body = { discount: kept.join(',') };
+          var sectionEl = document.querySelector('cart-items-component');
+          if (sectionEl && sectionEl.dataset && sectionEl.dataset.sectionId) {
+            body.sections = [sectionEl.dataset.sectionId];
+          }
+          return fetch(getCartUpdateUrl(), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify(body),
+          }).then(function () {
+            try { localStorage.removeItem(TICKET_PRIZE_DISCOUNT_CODES_KEY); } catch (e6) {}
+            try { document.dispatchEvent(new CustomEvent('cart:refresh')); } catch (e7) {}
+          });
+        })
+        .catch(function () {});
+    }
+
+    /** If the cart has no prize lines, strip ticket-linked discount codes (before checkout). */
+    function syncTicketPrizeDiscountsBeforeCheckout() {
+      return fetch('/cart.js', { headers: { Accept: 'application/json' } })
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (cart) {
+          if (!cart) return;
+          return getPrizeLineItems(cart).then(function (prizeItems) {
+            if (prizeItems.length > 0) return;
+            return removeTicketPrizeDiscountsFromCart();
+          });
+        })
+        .catch(function () {});
+    }
+
     function clearStorageAndRemovePrizeProducts() {
       removeTicketRedeemData();
-      removePrizeItemsFromCart();
+      removePrizeItemsFromCart()
+        .then(function () { return removeTicketPrizeDiscountsFromCart(); })
+        .catch(function () {});
     }
 
     /** Allowed prize variant ids from token payload (myPrize or reservedPrizes[].prizeId). */
@@ -455,6 +739,54 @@
     window.performTicketLogout = performTicketLogout;
     window.applyRedeemTokenAndSync = applyRedeemTokenAndSync;
     window.handleRedeemApiResponse = handleRedeemApiResponse;
+    window.removeTicketPrizeDiscountsFromCart = removeTicketPrizeDiscountsFromCart;
+    window.syncTicketPrizeDiscountsBeforeCheckout = syncTicketPrizeDiscountsBeforeCheckout;
+    window.prepareCheckoutGoldenTicketDiscounts = prepareCheckoutGoldenTicketDiscounts;
+
+    var cartCheckoutDiscountSyncBypass = false;
+    document.addEventListener(
+      'submit',
+      function (e) {
+        if (cartCheckoutDiscountSyncBypass) {
+          cartCheckoutDiscountSyncBypass = false;
+          return;
+        }
+        var form = e.target;
+        if (!form || form.id !== 'cart-form') return;
+        var sub = e.submitter;
+        if (!sub || sub.getAttribute('name') !== 'checkout') return;
+        e.preventDefault();
+        e.stopPropagation();
+        var prepPromise =
+          typeof window.prepareCheckoutGoldenTicketDiscounts === 'function'
+            ? window.prepareCheckoutGoldenTicketDiscounts()
+            : syncTicketPrizeDiscountsBeforeCheckout();
+        prepPromise
+          .then(function (prep) {
+            if (prep && prep.invalidToken) {
+              try {
+                window.alert('Your ticket is invalid or expired. Please redeem again.');
+              } catch (_) {}
+              return;
+            }
+            cartCheckoutDiscountSyncBypass = true;
+            if (typeof form.requestSubmit === 'function') {
+              form.requestSubmit(sub);
+            } else {
+              sub.click();
+            }
+          })
+          .catch(function () {
+            cartCheckoutDiscountSyncBypass = true;
+            if (typeof form.requestSubmit === 'function') {
+              form.requestSubmit(sub);
+            } else {
+              sub.click();
+            }
+          });
+      },
+      true
+    );
 
     function runAfterLoad() {
       if (typeof requestIdleCallback !== 'undefined') {
