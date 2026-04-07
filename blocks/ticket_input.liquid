@@ -233,6 +233,104 @@
         return false;
       }
 
+      /** Discount code matching the ticket (JWT ticket number if present, else entered code). */
+      function goldenTicketPrimaryDiscountCode(enteredCode, jwtPayload) {
+        if (jwtPayload && typeof jwtPayload === 'object') {
+          const n = jwtPayload.ticketNumber ?? jwtPayload.ticket_number ?? jwtPayload.ticket_code;
+          if (n != null && String(n).trim() !== '') return String(n).trim();
+        }
+        return (enteredCode && String(enteredCode).trim()) || '';
+      }
+
+      /** Second code: SHIP-{ticket id}, using the last segment after "-" when present (e.g. SHIP-12345). */
+      function goldenTicketShipDiscountCode(ticketNum) {
+        let t = String(ticketNum).trim();
+        const li = t.lastIndexOf('-');
+        if (li >= 0 && li < t.length - 1) t = t.slice(li + 1);
+        return 'SHIP-' + t;
+      }
+
+      function cartHasDiscountCode(list, code) {
+        const cl = String(code).toLowerCase();
+        return list.some(function (x) { return String(x).toLowerCase() === cl; });
+      }
+
+      function morphShopifySectionFromHtml(sectionId, html) {
+        const sid = 'shopify-section-' + sectionId;
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const fresh = doc.getElementById(sid);
+        const cur = document.getElementById(sid);
+        if (fresh && cur) cur.replaceWith(fresh);
+      }
+
+      /** Applies product + shipping discount codes for a valid golden ticket (best-effort; ignores failures). */
+      async function applyGoldenTicketCartDiscounts(enteredCode, jwtPayload) {
+        const theme = typeof Theme !== 'undefined' ? Theme : null;
+        const updateUrl = theme && theme.routes && theme.routes.cart_update_url;
+        if (!updateUrl) return;
+
+        const primary = goldenTicketPrimaryDiscountCode(enteredCode, jwtPayload);
+        if (!primary) return;
+
+        const ship = goldenTicketShipDiscountCode(primary);
+        const toAdd =
+          ship.toLowerCase() === primary.toLowerCase() ? [primary] : [primary, ship];
+
+        let cart;
+        try {
+          const cartRes = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
+          if (!cartRes.ok) return;
+          cart = await cartRes.json().catch(function () { return null; });
+        } catch (_) {
+          return;
+        }
+        if (!cart) return;
+
+        const existing = (cart.discount_codes || []).map(function (d) { return d.code; });
+        const merged = existing.slice();
+        for (let i = 0; i < toAdd.length; i++) {
+          if (!cartHasDiscountCode(merged, toAdd[i])) merged.push(toAdd[i]);
+        }
+
+        const sectionEl = document.querySelector('cart-items-component');
+        const sectionId = sectionEl && sectionEl.dataset ? sectionEl.dataset.sectionId : null;
+
+        const body = { discount: merged.join(',') };
+        if (sectionId) body.sections = [sectionId];
+
+        let postData;
+        try {
+          const postRes = await fetch(updateUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify(body),
+          });
+          if (!postRes.ok) return;
+          postData = await postRes.json().catch(function () { return null; });
+        } catch (_) {
+          return;
+        }
+        if (!postData) return;
+
+        if (sectionId && postData.sections && postData.sections[sectionId]) {
+          try {
+            morphShopifySectionFromHtml(sectionId, postData.sections[sectionId]);
+          } catch (_) {}
+        }
+      }
+
+      function maybeApplyGoldenTicketDiscountsAfterRedeem(enteredCode, token) {
+        const payload = decodeTokenPayload(token);
+        if (!payload || typeof payload !== 'object') return;
+        const ticketType = (payload.ticketType != null && payload.ticketType !== '')
+          ? String(payload.ticketType).toLowerCase()
+          : (payload.ticket_type != null && payload.ticket_type !== '')
+            ? String(payload.ticket_type).toLowerCase()
+            : '';
+        if (ticketType !== 'golden') return;
+        applyGoldenTicketCartDiscounts(enteredCode, payload).catch(function () {});
+      }
+
       /** Save only the token string to localStorage. */
       function setStored(token) {
         try {
@@ -495,6 +593,9 @@
               showModalMessage(message || 'Your token is invalid or expired.', true);
             } else {
               showModalMessage(message, false);
+              if (response.ok && data && typeof data.token === 'string' && data.token.trim()) {
+                maybeApplyGoldenTicketDiscountsAfterRedeem(code, data.token.trim());
+              }
               closeModal();
               renderUI();
             }
@@ -507,6 +608,7 @@
                 setStored(data.token);
                 if (typeof window.refreshPrizeProductState === 'function') window.refreshPrizeProductState();
               }
+              maybeApplyGoldenTicketDiscountsAfterRedeem(code, data.token.trim());
               closeModal();
               renderUI();
             }
