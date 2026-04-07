@@ -1,5 +1,6 @@
 {% liquid
     assign block_settings = block.settings
+    assign ticket_prize_modal_cs = settings.prize_modal_color_scheme | default: 'scheme-1'
     assign response_id = 'TicketRedeemResponse-' | append: block.id
     assign modal_id = 'TicketRedeemModal-' | append: block.id
     assign login_modal_id = 'TicketLoginRequiredModal-' | append: block.id
@@ -180,6 +181,7 @@
       const STORAGE_KEY = 'ticket_redeem_data';
       const TICKET_GOLDEN_REDEEM_CODE_KEY = 'ticket_golden_redeem_code';
       const MODAL_ALERT_TITLE = {{ 'sections.ticket_redeem.modal_alert_title' | t | json }};
+      const PRIZE_MODAL_COLOR_CLASS = {{ 'color-' | append: ticket_prize_modal_cs | json }};
       const PRIZE_REMOVED_TICKET_LOGOUT = {{ 'sections.ticket_redeem.prize_removed_ticket_logout' | t | json }};
       const LOGOUT_FAILED_TITLE = {{ 'sections.ticket_redeem.logout_failed_title' | t | json }};
       const LOGOUT_FAILED_MESSAGE = {{ 'sections.ticket_redeem.logout_failed_message' | t | json }};
@@ -296,7 +298,7 @@
         const dialog = document.createElement('dialog');
         dialog.setAttribute('aria-modal', 'true');
         dialog.setAttribute('aria-labelledby', 'ticket-logout-failed-header-title ticket-logout-failed-title');
-        dialog.className = 'ticket-redeem__modal color-scheme-db578fa1-da9c-48c2-a278-c672d942f928';
+        dialog.className = 'ticket-redeem__modal ' + PRIZE_MODAL_COLOR_CLASS;
         dialog.innerHTML =
           '<div class="ticket-redeem__modal-backdrop" data-ticket-logout-close></div>' +
           '<div class="ticket-redeem__modal-content">' +

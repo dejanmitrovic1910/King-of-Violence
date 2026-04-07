@@ -347,7 +347,9 @@
       "prize_removed_not_allowed_for_ticket": "The prize in your cart did not match your current ticket. It was removed from your cart.",
       "prize_removed_no_valid_ticket": "There was no valid ticket on this device. The prize was removed from your cart.",
       "logout_failed_title": "Logout unsuccessful",
-      "logout_failed_message": "The server could not complete logout. Your ticket session was cleared here anyway, and any prize was removed from your cart."
+      "logout_failed_message": "The server could not complete logout. Your ticket session was cleared here anyway, and any prize was removed from your cart.",
+      "prize_checkout_modal_remove_prize": "Remove prize",
+      "prize_checkout_modal_ok": "OK"
     }
   }
 }

@@ -251,6 +251,9 @@
   defer="defer"
 ></script>
 
+{% liquid
+  assign prize_modal_color_scheme_scripts = settings.prize_modal_color_scheme | default: 'scheme-1'
+%}
 <script>
   (function () {
     var STORAGE_KEY = 'ticket_redeem_data';
@@ -264,6 +267,7 @@
     var PRIZE_REMOVED_TICKET_INVALID = {{ 'sections.ticket_redeem.prize_removed_ticket_invalid' | t | json }};
     var PRIZE_REMOVED_NOT_ALLOWED = {{ 'sections.ticket_redeem.prize_removed_not_allowed_for_ticket' | t | json }};
     var PRIZE_REMOVED_MODAL_OK = {{ 'sections.ticket_redeem.prize_removed_ok' | t | json }};
+    var PRIZE_MODAL_COLOR_CLASS = {{ 'color-' | append: prize_modal_color_scheme_scripts | json }};
 
     function getCartUpdateUrl() {
       if (typeof Theme !== 'undefined' && Theme.routes && Theme.routes.cart_update_url) {
@@ -561,7 +565,7 @@
       var dialog = document.createElement('dialog');
       dialog.setAttribute('aria-modal', 'true');
       dialog.setAttribute('aria-labelledby', 'prize-removed-header-title prize-removed-body');
-      dialog.className = 'prize-claim-modal color-scheme-db578fa1-da9c-48c2-a278-c672d942f928';
+      dialog.className = 'prize-claim-modal ' + PRIZE_MODAL_COLOR_CLASS;
       var okLabel = PRIZE_REMOVED_MODAL_OK || 'OK';
       dialog.innerHTML =
         '<div class="prize-claim-modal__backdrop" data-prize-removed-close></div>' +
@@ -584,13 +588,13 @@
       if (headerEl) headerEl.textContent = headerTitle;
       if (bodyEl) bodyEl.textContent = message;
       if (okBtn) okBtn.textContent = okLabel;
-      var style = document.createElement('style');
+      {% comment %} var style = document.createElement('style');
       style.textContent =
         '.prize-claim-modal { position: fixed; inset: 0; width: 100%; height: 100%; border: none; padding: 0; background: transparent; }' +
         '.prize-claim-modal::backdrop { background: rgba(0, 0, 0, 0.5); }' +
         '.prize-claim-modal__backdrop { position: absolute; inset: 0; }' +
         '.prize-claim-modal__actions { display: flex; gap: 0.5rem; justify-content: flex-end; }';
-      dialog.appendChild(style);
+      dialog.appendChild(style); {% endcomment %}
       function close() {
         try {
           dialog.close();

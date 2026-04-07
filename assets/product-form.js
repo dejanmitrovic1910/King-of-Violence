@@ -36,6 +36,15 @@ function getPrizeCheckoutDeadlineNotice() {
   return 'Complete checkout within 15 minutes to win the prize, or you may miss the prize.';
 }
 
+/** Theme setting: color scheme class for prize/ticket `<dialog>` modals (e.g. `color-scheme-1`). */
+function getPrizeModalColorSchemeClass() {
+  try {
+    const c = typeof window !== 'undefined' && window.__themePrizeModalColorSchemeClass;
+    if (typeof c === 'string' && c.trim()) return c.trim();
+  } catch (_) {}
+  return 'color-scheme-1';
+}
+
 /** Inline SVG: warning triangle (decorative; paired with role="alert" text). */
 const PRIZE_CHECKOUT_ALERT_ICON_SVG =
   '<svg class="prize-claim-modal__checkout-notice-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
@@ -385,7 +394,7 @@ class ProductFormComponent extends Component {
       'aria-labelledby',
       'prize-confirm-header-title prize-confirm-title prize-confirm-notice'
     );
-    dialog.className = 'prize-claim-modal color-scheme-db578fa1-da9c-48c2-a278-c672d942f928';
+    dialog.className = `prize-claim-modal ${getPrizeModalColorSchemeClass()}`;
     dialog.innerHTML = `
       <div class="prize-claim-modal__backdrop" data-prize-close></div>
       <div class="ticket-redeem__modal-content">
@@ -405,15 +414,6 @@ class ProductFormComponent extends Component {
         </div>
       </div>
     `;
-
-    const style = document.createElement('style');
-    style.textContent = `
-      .prize-claim-modal { position: fixed; inset: 0; width: 100%; height: 100%; border: none; padding: 0; background: transparent; }
-      .prize-claim-modal::backdrop { background: rgba(0, 0, 0, 0.5); }
-      .prize-claim-modal__backdrop { position: absolute; inset: 0; }
-      .prize-claim-modal__actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
-    `;
-    dialog.appendChild(style);
 
     const close = () => {
       dialog.close();
@@ -442,7 +442,7 @@ class ProductFormComponent extends Component {
     const dialog = document.createElement('dialog');
     dialog.setAttribute('aria-modal', 'true');
     dialog.setAttribute('aria-labelledby', 'prize-message-header-title prize-message-body');
-    dialog.className = 'prize-claim-modal color-scheme-db578fa1-da9c-48c2-a278-c672d942f928';
+    dialog.className = `prize-claim-modal ${getPrizeModalColorSchemeClass()}`;
     dialog.innerHTML = `
       <div class="prize-claim-modal__backdrop" data-prize-close></div>
       <div class="ticket-redeem__modal-content">
@@ -457,15 +457,6 @@ class ProductFormComponent extends Component {
         </div>
       </div>
     `;
-
-    const style = document.createElement('style');
-    style.textContent = `
-      .prize-claim-modal { position: fixed; inset: 0; width: 100%; height: 100%; border: none; padding: 0; background: transparent; }
-      .prize-claim-modal::backdrop { background: rgba(0, 0, 0, 0.5); }
-      .prize-claim-modal__backdrop { position: absolute; inset: 0; }
-      .prize-claim-modal__actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
-    `;
-    dialog.appendChild(style);
 
     const close = () => {
       dialog.close();

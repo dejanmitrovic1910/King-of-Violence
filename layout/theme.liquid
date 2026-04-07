@@ -70,6 +70,10 @@
       {% render 'quick-add-modal' %}
     {% endif %}
 
+    {% liquid
+      assign prize_modal_color_scheme = settings.prize_modal_color_scheme | default: 'scheme-1'
+    %}
+
     <script>
       window.__themePrizeIcons = {
         lock: {% if settings.prize_lock_icon != blank %}"{{ settings.prize_lock_icon | image_url: width: 96 }}"{% else %}""{% endif %},
@@ -77,6 +81,11 @@
       };
       window.__themeTicketModalAlertTitle = {{ 'sections.ticket_redeem.modal_alert_title' | t | json }};
       window.__themePrizeCheckoutDeadlineNotice = {{ 'sections.ticket_redeem.prize_checkout_deadline_notice' | t | json }};
+      window.__themePrizeModalColorSchemeClass = {{ 'color-' | append: prize_modal_color_scheme | json }};
+      window.__themePrizeCheckoutModalStrings = {
+        removePrize: {{ 'sections.ticket_redeem.prize_checkout_modal_remove_prize' | t | json }},
+        ok: {{ 'sections.ticket_redeem.prize_checkout_modal_ok' | t | json }}
+      };
     </script>
     <script src="{{ 'rebuy-cart-remove-prize.js' | asset_url }}"></script>
     <script src="{{ 'rebuy-checkout-intercept.js' | asset_url }}"></script>
