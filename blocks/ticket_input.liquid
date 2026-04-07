@@ -674,11 +674,13 @@
     .ticket-redeem__modal-title {
       margin: 0 0 var(--gap-md);
       font-size: 1.125rem;
+      text-transform: uppercase;
     }
 
     .ticket-redeem__login-message {
       margin: 0 0 var(--gap-md);
       color: var(--color-foreground);
+      text-transform: uppercase;
     }
   
     .ticket-redeem__modal-form {
@@ -693,6 +695,15 @@
       gap: var(--gap-sm);
       justify-content: flex-end;
     }
+
+    .ticket-redeem__trigger { 
+      text-transform: uppercase;
+    }
+
+    .ticket-redeem__modal-content * {
+      text-transform: uppercase;
+    }
+
   {% endstylesheet %}
   
   {% schema %}

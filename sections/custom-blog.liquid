@@ -211,7 +211,8 @@
     filter: grayscale(100%) brightness(0.6);
     box-shadow: 0 10px 30px #000a;
     user-select: none;
-    z-index: 2;
+    z-index: 1;
+    box-shadow: 0 0 40px var(--accent);
   }
 
   .ufc-link-inner {
@@ -224,7 +225,6 @@
   .ufc-card.center {
     filter: grayscale(0%) brightness(1);
     box-shadow: 0 0 40px var(--accent);
-    z-index: 5;
   }
 
   .ufc-card-img img {
@@ -377,13 +377,23 @@
       }
     });
 
+    const distances = cards.map((card) => {
+      const r = card.getBoundingClientRect();
+      return Math.abs(r.left + r.width / 2 - center);
+    });
+    const dMin = Math.min(...distances);
+    const dMax = Math.max(...distances);
+    const dSpan = dMax - dMin;
+
     cards.forEach((card, i) => {
       const r = card.getBoundingClientRect();
-      const d = Math.abs(r.left + r.width / 2 - center);
+      const d = distances[i];
       const t = Math.max(0, 1 - d / vp.width);
       const s = 1 + t * 0.45;
       card.style.transform = `scale(${s})`;
       card.classList.toggle('center', i === closestIdx);
+      const near = dSpan < 0.5 ? 1 : (dMax - d) / dSpan;
+      card.style.zIndex = String(10 + Math.round(near * 89));
     });
 
     // Set hero name with animation

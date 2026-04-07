@@ -881,3 +881,12 @@ a[ref="productTitleLink"] *{
 .menu-drawer__featured-content{
     display: none;
 }
+
+.shopify-policy__title h1 {
+    text-transform: uppercase;
+}
+
+.shopify-policy__body a {
+    color: white;
+    font-weight: bold;
+}
