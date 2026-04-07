@@ -191,7 +191,7 @@
 
       let prep = { ok: true, hadPrize: true };
       if (typeof window.prepareCheckoutGoldenTicketDiscounts === 'function') {
-        prep = await window.prepareCheckoutGoldenTicketDiscounts();
+        prep = await window.prepareCheckoutGoldenTicketDiscounts({ initialCart: cart });
       }
       if (prep && prep.invalidToken) {
         showMessageModal('Your ticket is invalid or expired. Please redeem again.');
@@ -212,8 +212,11 @@
         return;
       }
 
-      const cartResAfterPrep = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
-      const cartAfterPrep = cartResAfterPrep.ok ? await cartResAfterPrep.json().catch(() => null) : null;
+      let cartAfterPrep = prep && prep.cart ? prep.cart : null;
+      if (!cartAfterPrep || !(cartAfterPrep.token || cartAfterPrep.key)) {
+        const cartResAfterPrep = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
+        cartAfterPrep = cartResAfterPrep.ok ? await cartResAfterPrep.json().catch(() => null) : null;
+      }
       const cartTokenAfter = cartAfterPrep && (cartAfterPrep.token || cartAfterPrep.key);
       if (!cartTokenAfter) {
         showMessageModal('Cart is empty or unavailable.');
@@ -232,7 +235,7 @@
           ? (prizeAfterPrep[0].variant_id ?? prizeAfterPrep[0].id)
           : null;
 
-      const tokenAfterPrep = getTicketToken();
+      const tokenAfterPrep = (prep && prep.token) || getTicketToken();
 
       const response = await fetch(PRE_CHECKOUT_URL, {
         method: 'POST',
