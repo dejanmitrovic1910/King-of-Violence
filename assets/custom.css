@@ -41,20 +41,67 @@ body{
     --announcement-bar-color: #d4af37 ;
 }
 
+/* Prize / ticket <dialog> modals created in JS (product-form, scripts.liquid, rebuy-checkout-intercept); color vars from .color-scheme-* on <dialog> */
+.prize-claim-modal {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  max-width: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  z-index: 10050;
+  box-sizing: border-box;
+}
+
+.prize-claim-modal.rebuy-precheckout-modal {
+  z-index: 100000;
+}
+
+.prize-claim-modal::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.prize-claim-modal__backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.prize-claim-modal .ticket-redeem__modal-content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 24rem;
+  padding: 0;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  border-radius: var(--style-border-radius-inputs, 8px);
+  border: 2px solid var(--basic-color, #fec909);
+  box-shadow: 0 -3px 19px -5px rgb(254 201 9), 0 3px 14px -5px rgb(254 201 9);
+  overflow: hidden;
+  z-index: 1;
+  box-sizing: border-box;
+}
+
 /* Ticket / prize dialogs: accent header bar + black frame (used by ticket_input, product-form, rebuy-checkout-intercept) */
 .ticket-redeem__modal-header {
   background: var(--basic-color, #fec909);
-  border: 2px solid #000;
+  border: 2px solid var(--color-background, #111);
   padding: var(--padding-md, 0.75rem) var(--padding-xl, 1rem);
   margin: 0;
   box-sizing: border-box;
 }
 
-.ticket-redeem__modal-header-title {
+h2.ticket-redeem__modal-header-title {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: 1.125rem !important;
   text-transform: uppercase;
-  color: #111;
+  color: var(--color-background, #111);
 }
 
 .ticket-redeem__modal-body {
@@ -62,31 +109,53 @@ body{
   box-sizing: border-box;
 }
 
-.rebuy-precheckout-modal .rebuy-precheckout-modal__content {
-  padding: 0;
-  overflow: hidden;
-}
-
 .prize-claim-modal .ticket-redeem__modal-header,
 .rebuy-precheckout-modal .ticket-redeem__modal-header {
   border-radius: calc(var(--style-border-radius-inputs, 8px) - 2px) calc(var(--style-border-radius-inputs, 8px) - 2px) 0 0;
 }
 
-.prize-claim-modal .ticket-redeem__modal-body .prize-claim-modal__title,
+.prize-claim-modal .ticket-redeem__modal-body .prize-claim-modal__title {
+  margin: 0 0 0.875rem;
+  font-size: 1.125rem;
+  white-space: pre-wrap;
+}
+
 .prize-claim-modal .ticket-redeem__modal-body .prize-claim-modal__message {
   margin: 0 0 var(--gap-md, 2rem);
   font-size: 1.125rem;
   white-space: pre-wrap;
 }
 
-.prize-claim-modal .ticket-redeem__modal-body .prize-claim-modal__actions {
-  margin-top: calc(var(--gap-md, 2rem) * 2);
+.prize-claim-modal .ticket-redeem__modal-body .prize-claim-modal__checkout-notice {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin: 0 0 var(--gap-md, 1.25rem);
+  padding: 0.75rem 1rem;
+  border: 1px solid #b8860b;
+  background: rgba(254, 201, 9, 0.14);
+  border-radius: var(--style-border-radius-inputs, 8px);
+  color: #fff;
 }
 
-.rebuy-precheckout-modal .rebuy-precheckout-modal__body .rebuy-precheckout-modal__message {
-  margin: 0 0 var(--gap-md, 1rem);
-  font-size: 1.125rem;
-  white-space: pre-wrap;
+.prize-claim-modal .prize-claim-modal__checkout-notice-icon {
+  flex-shrink: 0;
+  margin-top: 0.1em;
+  color: #8b6914;
+}
+
+.prize-claim-modal .prize-claim-modal__checkout-notice-text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.prize-claim-modal .ticket-redeem__modal-body .prize-claim-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
 }
 
 /* .dancing-script{
@@ -617,8 +686,8 @@ footer .image-block__image{
     .product-information__grid .buy-buttons-block{
         order: -1;
     }
-    .collection-product-wrapper
-    .featured-product-wrapper
+    /* .collection-product-wrapper
+    .featured-product-wrapper */
 }
 
 .product-page-collection-list .bento-box .bento-box__item:nth-of-type(2) .collection-card__image img{
@@ -937,4 +1006,26 @@ a[ref="productTitleLink"] *{
 .shopify-policy__body a {
     color: white;
     font-weight: bold;
+}
+
+.prize-claim-modal {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0;
+    background-color: transparent !important;
+}
+.prize-claim-modal::backdrop {
+    background: rgba(0, 0, 0, 0.8);
+}
+.prize-claim-modal__backdrop {
+    position: absolute;
+    inset: 0;
+}
+.prize-claim-modal__actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
 }

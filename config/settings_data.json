@@ -64,6 +64,7 @@
     "popover_border_radius": 8,
     "popover_border": "none",
     "prize_lock_icon": "shopify://shop_images/locked_prize.png",
+    "prize_modal_color_scheme": "scheme-db578fa1-da9c-48c2-a278-c672d942f928",
     "product_corner_radius": 2,
     "card_corner_radius": 2,
     "show_variant_image": false,

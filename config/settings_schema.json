@@ -2117,6 +2117,12 @@
         "info": "Page where customers redeem tickets. Used when a prize product is viewed without a valid ticket."
       },
       {
+        "type": "color_scheme",
+        "id": "prize_modal_color_scheme",
+        "label": "t:settings.prize_modal_color_scheme",
+        "default": "scheme-1"
+      },
+      {
         "type": "header",
         "content": "Prize icons"
       },

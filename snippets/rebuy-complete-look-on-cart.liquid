@@ -25,7 +25,24 @@
 
             <div class="rebuy-product-grid" v-bind:class="layoutClasses">
 
-            <div class="rebuy-product-block" v-for="(product, product_index) in products" v-if="!Array.isArray(product.tags) || !product.tags.some(function(t){ return String(t).toLowerCase() === 'prize'; })" v-bind:class="[product.handle, 'product-id-' + product.id, cartHasProduct(product) ? 'cart-has-item' : '', productTagClasses(product)]">
+            <div
+              class="rebuy-product-block"
+              v-for="(product, product_index) in products"
+              v-if="(
+                !(function(t){
+                  if(t==null||t==='')return false;
+                  if(Array.isArray(t))return t.some(function(x){return String(x).toLowerCase().trim()==='prize';});
+                  if(typeof t==='string')return t.split(',').some(function(x){return x.trim().toLowerCase()==='prize';});
+                  return false;
+                })(product.tags)
+              )"
+              :class="[
+                product.handle,
+                'product-id-' + product.id,
+                cartHasProduct(product) ? 'cart-has-item' : '',
+                productTagClasses(product)
+              ]"
+            >
                     <div class="rebuy-product-media">
                         <a class="rebuy-product-image" v-bind:href="learnMoreURL(product)" v-bind:style="imageStyles" v-on:click="learnMore(product);" v-bind:class="[hasLearnMore() ? 'clickable' : '']">
                             <img v-bind:src="itemImage(product, product.selected_variant, '400x400')" v-bind:alt="'View ' + product.title">

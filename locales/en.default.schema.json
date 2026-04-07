@@ -960,6 +960,7 @@
     "primary_color": "Links",
     "primary_font": "Primary font",
     "primary_hover_color": "Hover links",
+    "prize_modal_color_scheme": "Prize modal color scheme",
     "product": "Product",
     "product_and_card_title_case": "Product and card title case",
     // Checkbox to enable image carousel within product cards
