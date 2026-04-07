@@ -338,7 +338,8 @@
       "close": "Close",
       "login_required_title": "Log in required",
       "login_required_message": "Log in to get the prize.",
-      "log_in": "Log in"
+      "log_in": "Log in",
+      "prize_checkout_deadline_notice": "Complete checkout within 15 minutes to win the prize, or you may miss the prize."
     }
   }
 }

@@ -76,6 +76,7 @@
         disabled: {% if settings.prize_disabled_icon != blank %}"{{ settings.prize_disabled_icon | image_url: width: 96 }}"{% else %}""{% endif %}
       };
       window.__themeTicketModalAlertTitle = {{ 'sections.ticket_redeem.modal_alert_title' | t | json }};
+      window.__themePrizeCheckoutDeadlineNotice = {{ 'sections.ticket_redeem.prize_checkout_deadline_notice' | t | json }};
     </script>
     <script src="{{ 'rebuy-cart-remove-prize.js' | asset_url }}"></script>
     <script src="{{ 'rebuy-checkout-intercept.js' | asset_url }}"></script>
