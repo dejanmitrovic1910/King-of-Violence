@@ -18,6 +18,15 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
+/** Shared title for prize/ticket dialogs (from theme.liquid translation). */
+function getPrizeModalHeaderTitle() {
+  try {
+    const t = typeof window !== 'undefined' && window.__themeTicketModalAlertTitle;
+    if (typeof t === 'string' && t.trim()) return t.trim();
+  } catch (_) {}
+  return 'Ticket alert';
+}
+
 /**
  * A custom element that manages an add to cart button.
  *
@@ -359,15 +368,20 @@ class ProductFormComponent extends Component {
   #showPrizeConfirmModal(message, onConfirm) {
     const dialog = document.createElement('dialog');
     dialog.setAttribute('aria-modal', 'true');
-    dialog.setAttribute('aria-labelledby', 'prize-confirm-title');
+    dialog.setAttribute('aria-labelledby', 'prize-confirm-header-title prize-confirm-title');
     dialog.className = 'prize-claim-modal color-scheme-db578fa1-da9c-48c2-a278-c672d942f928';
     dialog.innerHTML = `
       <div class="prize-claim-modal__backdrop" data-prize-close></div>
       <div class="ticket-redeem__modal-content">
+        <div class="ticket-redeem__modal-header">
+          <h2 id="prize-confirm-header-title" class="ticket-redeem__modal-header-title">${escapeHtml(getPrizeModalHeaderTitle())}</h2>
+        </div>
+        <div class="ticket-redeem__modal-body">
         <h3 id="prize-confirm-title" class="prize-claim-modal__title">${escapeHtml(message)}</h3>
         <div class="prize-claim-modal__actions">
-          <button type="button" class="button button--secondary" data-prize-cancel>Cancel</button>
           <button type="button" class="button button--primary" data-prize-confirm>Claim</button>
+          <button type="button" class="button button--secondary" data-prize-cancel>Cancel</button>
+        </div>
         </div>
       </div>
     `;
@@ -377,14 +391,6 @@ class ProductFormComponent extends Component {
       .prize-claim-modal { position: fixed; inset: 0; width: 100%; height: 100%; border: none; padding: 0; background: transparent; }
       .prize-claim-modal::backdrop { background: rgba(0, 0, 0, 0.5); }
       .prize-claim-modal__backdrop { position: absolute; inset: 0; }
-      .prize-claim-modal__content {
-        position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-        width: 90%; max-width: 24rem; padding: var(--padding-xl, 1rem);
-        background: var(--color-background, #fff); color: var(--color-foreground, #111);
-        border-radius: var(--style-border-radius-inputs, 8px);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      }
-      .prize-claim-modal__title { margin: 0 0 1rem; font-size: 1.125rem; }
       .prize-claim-modal__actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
     `;
     dialog.appendChild(style);
@@ -415,14 +421,19 @@ class ProductFormComponent extends Component {
   #showPrizeMessageModal(message) {
     const dialog = document.createElement('dialog');
     dialog.setAttribute('aria-modal', 'true');
-    dialog.setAttribute('aria-labelledby', 'prize-message-title');
+    dialog.setAttribute('aria-labelledby', 'prize-message-header-title prize-message-body');
     dialog.className = 'prize-claim-modal color-scheme-db578fa1-da9c-48c2-a278-c672d942f928';
     dialog.innerHTML = `
       <div class="prize-claim-modal__backdrop" data-prize-close></div>
       <div class="ticket-redeem__modal-content">
-        <h3 id="prize-message-title" class="prize-claim-modal__title">${escapeHtml(message)}</h3>
+        <div class="ticket-redeem__modal-header">
+          <h2 id="prize-message-header-title" class="ticket-redeem__modal-header-title">${escapeHtml(getPrizeModalHeaderTitle())}</h2>
+        </div>
+        <div class="ticket-redeem__modal-body">
+        <p id="prize-message-body" class="prize-claim-modal__message">${escapeHtml(message)}</p>
         <div class="prize-claim-modal__actions">
           <button type="button" class="button button--primary" data-prize-close>OK</button>
+        </div>
         </div>
       </div>
     `;
@@ -432,14 +443,6 @@ class ProductFormComponent extends Component {
       .prize-claim-modal { position: fixed; inset: 0; width: 100%; height: 100%; border: none; padding: 0; background: transparent; }
       .prize-claim-modal::backdrop { background: rgba(0, 0, 0, 0.5); }
       .prize-claim-modal__backdrop { position: absolute; inset: 0; }
-      .prize-claim-modal__content {
-        position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-        width: 90%; max-width: 24rem; padding: var(--padding-xl, 1rem);
-        background: var(--color-background, #fff); color: var(--color-foreground, #111);
-        border-radius: var(--style-border-radius-inputs, 8px);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      }
-      .prize-claim-modal__title { margin: 0 0 1rem; font-size: 1.125rem; }
       .prize-claim-modal__actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
     `;
     dialog.appendChild(style);

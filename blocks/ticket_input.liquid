@@ -96,11 +96,17 @@
       id="{{ modal_id }}"
       class="ticket-redeem__modal"
       data-ticket-modal
-      aria-labelledby="{{ modal_id }}-title"
+      aria-labelledby="{{ modal_id }}-header-title {{ modal_id }}-title"
       aria-modal="true"
     >
       <div class="ticket-redeem__modal-backdrop" data-ticket-modal-close></div>
       <div class="ticket-redeem__modal-content">
+        <div class="ticket-redeem__modal-header">
+          <h2 id="{{ modal_id }}-header-title" class="ticket-redeem__modal-header-title">
+            {{ 'sections.ticket_redeem.modal_alert_title' | t }}
+          </h2>
+        </div>
+        <div class="ticket-redeem__modal-body">
         <h3 id="{{ modal_id }}-title" class="ticket-redeem__modal-title">
           {{ block_settings.modal_title }}
         </h3>
@@ -120,17 +126,18 @@
             data-ticket-redeem-input
           >
           <div class="ticket-redeem__modal-actions">
-            <button type="button" class="button button--secondary" data-ticket-modal-close>
-              {{ 'sections.ticket_redeem.close' | t }}
-            </button>
             <button type="submit" class="button button--primary ticket-redeem__submit" data-ticket-redeem-submit>
               <span class="ticket-redeem__submit-text">{{ block_settings.button_label }}</span>
               <span class="ticket-redeem__submit-loading hidden" aria-hidden="true">{{ 'sections.ticket_redeem.submitting' | t }}</span>
+            </button>
+            <button type="button" class="button button--secondary" data-ticket-modal-close>
+              {{ 'sections.ticket_redeem.close' | t }}
             </button>
           </div>
         </form>
         <div class="ticket-redeem__modal-response hidden" data-ticket-modal-response role="status" aria-live="polite">
           <p class="ticket-redeem__response-text" data-ticket-modal-response-text></p>
+        </div>
         </div>
       </div>
     </dialog>
@@ -140,11 +147,17 @@
       id="{{ login_modal_id }}"
       class="ticket-redeem__modal ticket-redeem__modal--login-required"
       data-ticket-login-modal
-      aria-labelledby="{{ login_modal_id }}-title"
+      aria-labelledby="{{ login_modal_id }}-header-title {{ login_modal_id }}-title"
       aria-modal="true"
     >
       <div class="ticket-redeem__modal-backdrop" data-ticket-login-modal-close></div>
       <div class="ticket-redeem__modal-content">
+        <div class="ticket-redeem__modal-header">
+          <h2 id="{{ login_modal_id }}-header-title" class="ticket-redeem__modal-header-title">
+            {{ 'sections.ticket_redeem.modal_alert_title' | t }}
+          </h2>
+        </div>
+        <div class="ticket-redeem__modal-body">
         <h3 id="{{ login_modal_id }}-title" class="ticket-redeem__modal-title">
           {{ 'sections.ticket_redeem.login_required_title' | t | default: 'Log in required' }}
         </h3>
@@ -157,6 +170,7 @@
             {{ 'sections.ticket_redeem.close' | t }}
           </button>
         </div>
+        </div>
       </div>
     </dialog>
   </div>
@@ -165,6 +179,7 @@
     (function () {
       const STORAGE_KEY = 'ticket_redeem_data';
       const TICKET_GOLDEN_REDEEM_CODE_KEY = 'ticket_golden_redeem_code';
+      const MODAL_ALERT_TITLE = {{ 'sections.ticket_redeem.modal_alert_title' | t | json }};
       const wrapper = document.querySelector('[data-ticket-block-id="{{ block.id }}"]');
       if (!wrapper) return;
   
@@ -326,9 +341,21 @@
       function showLogoutFailedModal() {
         const dialog = document.createElement('dialog');
         dialog.setAttribute('aria-modal', 'true');
-        dialog.setAttribute('aria-labelledby', 'ticket-logout-failed-title');
+        dialog.setAttribute('aria-labelledby', 'ticket-logout-failed-header-title ticket-logout-failed-title');
         dialog.className = 'ticket-redeem__modal color-scheme-db578fa1-da9c-48c2-a278-c672d942f928';
-        dialog.innerHTML = '<div class="ticket-redeem__modal-backdrop" data-ticket-logout-close></div><div class="ticket-redeem__modal-content"><h3 id="ticket-logout-failed-title" class="ticket-redeem__modal-title">Logout unsuccessful</h3><p class="ticket-redeem__login-message">The server returned success: false. Your ticket session was cleared.</p><div class="ticket-redeem__modal-actions"><button type="button" class="button button--primary" data-ticket-logout-close>OK</button></div></div>';
+        dialog.innerHTML =
+          '<div class="ticket-redeem__modal-backdrop" data-ticket-logout-close></div>' +
+          '<div class="ticket-redeem__modal-content">' +
+          '<div class="ticket-redeem__modal-header">' +
+          '<h2 id="ticket-logout-failed-header-title" class="ticket-redeem__modal-header-title"></h2>' +
+          '</div>' +
+          '<div class="ticket-redeem__modal-body">' +
+          '<h3 id="ticket-logout-failed-title" class="ticket-redeem__modal-title">Logout unsuccessful</h3>' +
+          '<p class="ticket-redeem__login-message">The server returned success: false. Your ticket session was cleared.</p>' +
+          '<div class="ticket-redeem__modal-actions"><button type="button" class="button button--primary" data-ticket-logout-close>OK</button></div>' +
+          '</div></div>';
+        const headerEl = dialog.querySelector('#ticket-logout-failed-header-title');
+        if (headerEl) headerEl.textContent = MODAL_ALERT_TITLE;
         function close() {
           dialog.close();
           dialog.remove();
@@ -693,12 +720,17 @@
       transform: translate(-50%, -50%);
       width: 90%;
       max-width: 24rem;
-      padding: var(--padding-xl);
+      padding: 0;
       background: var(--color-background);
       color: var(--color-foreground);
       border-radius: var(--style-border-radius-inputs);
       border: var(--basic-color) solid 2px;
       box-shadow: 0 -3px 19px -5px rgb(254 201 9), 0 3px 14px -5px rgb(254 201 9);
+      overflow: hidden;
+    }
+
+    .ticket-redeem__modal-header {
+      border-radius: calc(var(--style-border-radius-inputs) - 2px) calc(var(--style-border-radius-inputs) - 2px) 0 0;
     }
   
     .ticket-redeem__modal-title {

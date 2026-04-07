@@ -41,6 +41,54 @@ body{
     --announcement-bar-color: #d4af37 ;
 }
 
+/* Ticket / prize dialogs: accent header bar + black frame (used by ticket_input, product-form, rebuy-checkout-intercept) */
+.ticket-redeem__modal-header {
+  background: var(--basic-color, #fec909);
+  border: 2px solid #000;
+  padding: var(--padding-md, 0.75rem) var(--padding-xl, 1rem);
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.ticket-redeem__modal-header-title {
+  margin: 0;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.ticket-redeem__modal-body {
+  padding: var(--padding-xl);
+  box-sizing: border-box;
+}
+
+.rebuy-precheckout-modal .rebuy-precheckout-modal__content {
+  padding: 0;
+  overflow: hidden;
+}
+
+.prize-claim-modal .ticket-redeem__modal-header,
+.rebuy-precheckout-modal .ticket-redeem__modal-header {
+  border-radius: calc(var(--style-border-radius-inputs, 8px) - 2px) calc(var(--style-border-radius-inputs, 8px) - 2px) 0 0;
+}
+
+.prize-claim-modal .ticket-redeem__modal-body .prize-claim-modal__title,
+.prize-claim-modal .ticket-redeem__modal-body .prize-claim-modal__message {
+  margin: 0 0 var(--gap-md, 2rem);
+  font-size: 1.125rem;
+  white-space: pre-wrap;
+}
+
+.prize-claim-modal .ticket-redeem__modal-body .prize-claim-modal__actions {
+  margin-top: calc(var(--gap-md, 2rem) * 2);
+}
+
+.rebuy-precheckout-modal .rebuy-precheckout-modal__body .rebuy-precheckout-modal__message {
+  margin: 0 0 var(--gap-md, 1rem);
+  font-size: 1.125rem;
+  white-space: pre-wrap;
+}
+
 /* .dancing-script{
     font-family: "DancingScript" !important;
     font-size: 24px;

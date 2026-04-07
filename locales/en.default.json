@@ -334,6 +334,7 @@
       "input_ticket": "Input ticket",
       "logout": "Logout",
       "modal_title": "Enter ticket code",
+      "modal_alert_title": "Ticket alert",
       "close": "Close",
       "login_required_title": "Log in required",
       "login_required_message": "Log in to get the prize.",

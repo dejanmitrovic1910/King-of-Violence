@@ -17,6 +17,14 @@
     return div.innerHTML;
   }
 
+  function getTicketModalAlertTitle() {
+    try {
+      const t = typeof window !== 'undefined' && window.__themeTicketModalAlertTitle;
+      if (typeof t === 'string' && t.trim()) return t.trim();
+    } catch (_) {}
+    return 'Ticket alert';
+  }
+
   /** Returns true if the line item is a prize product (has _prize property or product_type). */
   function isPrizeItemByProperty(item) {
     if (item.properties && (item.properties._prize === '1' || item.properties['_prize'] === '1')) return true;
@@ -83,14 +91,19 @@
   function showMessageModal(message) {
     const dialog = document.createElement('dialog');
     dialog.setAttribute('aria-modal', 'true');
-    dialog.setAttribute('aria-labelledby', 'rebuy-precheckout-message-title');
+    dialog.setAttribute('aria-labelledby', 'rebuy-precheckout-header-title rebuy-precheckout-message-body');
     dialog.className = 'rebuy-precheckout-modal';
     dialog.innerHTML = `
       <div class="rebuy-precheckout-modal__backdrop" data-rebuy-close></div>
       <div class="rebuy-precheckout-modal__content">
-        <h3 id="rebuy-precheckout-message-title" class="rebuy-precheckout-modal__title">${escapeHtml(message)}</h3>
+        <div class="ticket-redeem__modal-header">
+          <h2 id="rebuy-precheckout-header-title" class="ticket-redeem__modal-header-title">${escapeHtml(getTicketModalAlertTitle())}</h2>
+        </div>
+        <div class="rebuy-precheckout-modal__body ticket-redeem__modal-body">
+        <p id="rebuy-precheckout-message-body" class="rebuy-precheckout-modal__message">${escapeHtml(message)}</p>
         <div class="rebuy-precheckout-modal__actions">
           <button type="button" class="button button--primary" data-rebuy-close>OK</button>
+        </div>
         </div>
       </div>
     `;
@@ -102,12 +115,12 @@
       .rebuy-precheckout-modal__backdrop { position: absolute; inset: 0; }
       .rebuy-precheckout-modal__content {
         position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-        width: 90%; max-width: 24rem; padding: var(--padding-xl, 1rem);
+        width: 90%; max-width: 24rem; padding: 0;
         background: var(--color-background, #fff); color: var(--color-foreground, #111);
         border-radius: var(--style-border-radius-inputs, 8px);
         box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        overflow: hidden;
       }
-      .rebuy-precheckout-modal__title { margin: 0 0 1rem; font-size: 1.125rem; white-space: pre-wrap; }
       .rebuy-precheckout-modal__actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
     `;
     dialog.appendChild(style);
