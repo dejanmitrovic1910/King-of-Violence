@@ -260,6 +260,10 @@
     var customerLoggedIn = {% if customer %}true{% else %}false{% endif %};
     var customerEmail = {{ customer.email | json }};
     var INVALID_TOKEN_MESSAGE = 'Your token is invalid or expired';
+    var PRIZE_REMOVED_NOT_LOGGED_IN = {{ 'sections.ticket_redeem.prize_removed_not_logged_in' | t | json }};
+    var PRIZE_REMOVED_TICKET_INVALID = {{ 'sections.ticket_redeem.prize_removed_ticket_invalid' | t | json }};
+    var PRIZE_REMOVED_NOT_ALLOWED = {{ 'sections.ticket_redeem.prize_removed_not_allowed_for_ticket' | t | json }};
+    var PRIZE_REMOVED_MODAL_OK = {{ 'sections.ticket_redeem.prize_removed_ok' | t | json }};
 
     function getCartUpdateUrl() {
       if (typeof Theme !== 'undefined' && Theme.routes && Theme.routes.cart_update_url) {
@@ -552,24 +556,94 @@
       });
     }
 
-    function removePrizeItemsFromCart() {
+    function showPrizeRemovedFromCartModal(message) {
+      if (!message || typeof message !== 'string') return;
+      var dialog = document.createElement('dialog');
+      dialog.setAttribute('aria-modal', 'true');
+      dialog.setAttribute('aria-labelledby', 'prize-removed-header-title prize-removed-body');
+      dialog.className = 'prize-claim-modal color-scheme-db578fa1-da9c-48c2-a278-c672d942f928';
+      var okLabel = PRIZE_REMOVED_MODAL_OK || 'OK';
+      dialog.innerHTML =
+        '<div class="prize-claim-modal__backdrop" data-prize-removed-close></div>' +
+        '<div class="ticket-redeem__modal-content">' +
+        '<div class="ticket-redeem__modal-header">' +
+        '<h2 id="prize-removed-header-title" class="ticket-redeem__modal-header-title"></h2>' +
+        '</div>' +
+        '<div class="ticket-redeem__modal-body">' +
+        '<p id="prize-removed-body" class="prize-claim-modal__message"></p>' +
+        '<div class="prize-claim-modal__actions">' +
+        '<button type="button" class="button button--primary" data-prize-removed-close></button>' +
+        '</div></div></div>';
+      var headerEl = dialog.querySelector('#prize-removed-header-title');
+      var bodyEl = dialog.querySelector('#prize-removed-body');
+      var okBtn = dialog.querySelector('[data-prize-removed-close].button');
+      var headerTitle =
+        typeof window !== 'undefined' && window.__themeTicketModalAlertTitle
+          ? String(window.__themeTicketModalAlertTitle)
+          : 'Ticket alert';
+      if (headerEl) headerEl.textContent = headerTitle;
+      if (bodyEl) bodyEl.textContent = message;
+      if (okBtn) okBtn.textContent = okLabel;
+      var style = document.createElement('style');
+      style.textContent =
+        '.prize-claim-modal { position: fixed; inset: 0; width: 100%; height: 100%; border: none; padding: 0; background: transparent; }' +
+        '.prize-claim-modal::backdrop { background: rgba(0, 0, 0, 0.5); }' +
+        '.prize-claim-modal__backdrop { position: absolute; inset: 0; }' +
+        '.prize-claim-modal__actions { display: flex; gap: 0.5rem; justify-content: flex-end; }';
+      dialog.appendChild(style);
+      function close() {
+        try {
+          dialog.close();
+        } catch (_) {}
+        dialog.remove();
+      }
+      dialog.querySelectorAll('[data-prize-removed-close]').forEach(function (el) {
+        el.addEventListener('click', close);
+      });
+      var backdrop = dialog.querySelector('.prize-claim-modal__backdrop');
+      if (backdrop) backdrop.addEventListener('click', close);
+      dialog.addEventListener('click', function (e) {
+        if (e.target === dialog) close();
+      });
+      document.body.appendChild(dialog);
+      try {
+        dialog.showModal();
+      } catch (_) {}
+    }
+
+    /**
+     * @param {string} [reasonMessage] If set and at least one prize line was removed, shows explain modal after removal.
+     */
+    function removePrizeItemsFromCart(reasonMessage) {
+      var msg = typeof reasonMessage === 'string' && reasonMessage.trim() ? reasonMessage : '';
       return fetch('/cart.js', { headers: { Accept: 'application/json' } })
         .then(function (res) { return res.ok ? res.json() : null; })
         .then(function (cart) {
-          if (!cart || !cart.items || cart.items.length === 0) return;
+          if (!cart || !cart.items || cart.items.length === 0) return 0;
           return getPrizeLineItems(cart).then(function (prizeItems) {
-            return Promise.all(prizeItems.map(function (item) {
-              var key = item.key;
-              if (!key) return Promise.resolve();
-              return fetch('/cart/change.js', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-                body: JSON.stringify({ id: key, quantity: 0 })
-              });
-            }));
+            if (!prizeItems || prizeItems.length === 0) return 0;
+            return Promise.all(
+              prizeItems.map(function (item) {
+                var key = item.key;
+                if (!key) return Promise.resolve();
+                return fetch('/cart/change.js', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                  body: JSON.stringify({ id: key, quantity: 0 })
+                });
+              })
+            ).then(function () {
+              try {
+                document.dispatchEvent(new CustomEvent('cart:refresh'));
+              } catch (_) {}
+              if (msg) showPrizeRemovedFromCartModal(msg);
+              return prizeItems.length;
+            });
           });
         })
-        .catch(function () {});
+        .catch(function () {
+          return 0;
+        });
     }
 
     /**
@@ -640,9 +714,9 @@
         .catch(function () {});
     }
 
-    function clearStorageAndRemovePrizeProducts() {
+    function clearStorageAndRemovePrizeProducts(reasonMessage) {
       removeTicketRedeemData();
-      removePrizeItemsFromCart()
+      removePrizeItemsFromCart(reasonMessage)
         .then(function () { return removeTicketPrizeDiscountsFromCart(); })
         .catch(function () {});
     }
@@ -689,19 +763,24 @@
               var vid = String(item.variant_id != null ? item.variant_id : item.id || '').trim();
               return vid && allowed.indexOf(vid) === -1;
             });
-            return Promise.all(toRemove.map(function (item) {
-              var key = item.key;
-              if (!key) return Promise.resolve();
-              return fetch('/cart/change.js', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-                body: JSON.stringify({ id: key, quantity: 0 })
-              });
-            }));
+            if (toRemove.length === 0) return;
+            return Promise.all(
+              toRemove.map(function (item) {
+                var key = item.key;
+                if (!key) return Promise.resolve();
+                return fetch('/cart/change.js', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                  body: JSON.stringify({ id: key, quantity: 0 })
+                });
+              })
+            ).then(function () {
+              try {
+                document.dispatchEvent(new CustomEvent('cart:refresh'));
+              } catch (_) {}
+              showPrizeRemovedFromCartModal(PRIZE_REMOVED_NOT_ALLOWED);
+            });
           });
-        })
-        .then(function () {
-          try { document.dispatchEvent(new CustomEvent('cart:refresh')); } catch (_) {}
         })
         .catch(function () {});
     }
@@ -727,7 +806,7 @@
 
     function runTokenCheck() {
       if (!customerLoggedIn) {
-        clearStorageAndRemovePrizeProducts();
+        clearStorageAndRemovePrizeProducts(PRIZE_REMOVED_NOT_LOGGED_IN);
         return;
       }
       var token = getTokenFromStorage();
@@ -754,7 +833,7 @@
     }
 
     function performTicketLogout() {
-      clearStorageAndRemovePrizeProducts();
+      clearStorageAndRemovePrizeProducts(PRIZE_REMOVED_TICKET_INVALID);
     }
 
     function applyRedeemTokenAndSync(newToken) {
@@ -785,6 +864,11 @@
     window.performTicketLogout = performTicketLogout;
     window.applyRedeemTokenAndSync = applyRedeemTokenAndSync;
     window.handleRedeemApiResponse = handleRedeemApiResponse;
+    window.showPrizeRemovedFromCartModal = showPrizeRemovedFromCartModal;
+    window.removePrizeItemsFromCart = removePrizeItemsFromCart;
+    window.__themePrizeRemovedMessages = {
+      noValidTicket: {{ 'sections.ticket_redeem.prize_removed_no_valid_ticket' | t | json }}
+    };
     window.removeTicketPrizeDiscountsFromCart = removeTicketPrizeDiscountsFromCart;
     window.syncTicketPrizeDiscountsBeforeCheckout = syncTicketPrizeDiscountsBeforeCheckout;
     window.prepareCheckoutGoldenTicketDiscounts = prepareCheckoutGoldenTicketDiscounts;

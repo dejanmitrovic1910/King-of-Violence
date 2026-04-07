@@ -109,7 +109,7 @@ h2.ticket-redeem__modal-header-title {
 }
 
 .prize-claim-modal .ticket-redeem__modal-body .prize-claim-modal__actions {
-  margin-top: calc(var(--gap-md, 2rem) * 2);
+  margin-top: 1.5rem;
 }
 
 .rebuy-precheckout-modal .rebuy-precheckout-modal__body .rebuy-precheckout-modal__message {

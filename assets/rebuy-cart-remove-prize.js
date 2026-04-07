@@ -191,6 +191,13 @@
               .then(maybeStripTicketPrizeDiscountsIfCartHasNoPrize)
               .then(function () {
                 notifyCartChanged();
+                var msg =
+                  typeof window !== 'undefined' &&
+                  window.__themePrizeRemovedMessages &&
+                  window.__themePrizeRemovedMessages.noValidTicket;
+                if (msg && typeof window.showPrizeRemovedFromCartModal === 'function') {
+                  window.showPrizeRemovedFromCartModal(msg);
+                }
                 if (loading) { loading.classList.remove('fa-sync-alt', 'fa-spin'); loading.classList.add('fa-trash'); }
                 button.disabled = false;
               });

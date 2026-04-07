@@ -339,7 +339,15 @@
       "login_required_title": "Log in required",
       "login_required_message": "Log in to get the prize.",
       "log_in": "Log in",
-      "prize_checkout_deadline_notice": "Complete checkout within 15 minutes to win the prize, or you may miss the prize."
+      "prize_checkout_deadline_notice": "Complete checkout within 15 minutes to win the prize, or you may miss the prize.",
+      "prize_removed_ok": "OK",
+      "prize_removed_not_logged_in": "You are not logged in. Your saved ticket was cleared and any prize was removed from your cart because a valid ticket is required.",
+      "prize_removed_ticket_invalid": "Your ticket is invalid or expired. Any prize was removed from your cart. Redeem a new ticket to claim a prize again.",
+      "prize_removed_ticket_logout": "You logged out of your ticket. The prize was removed from your cart because a valid ticket is required to keep it.",
+      "prize_removed_not_allowed_for_ticket": "The prize in your cart did not match your current ticket. It was removed from your cart.",
+      "prize_removed_no_valid_ticket": "There was no valid ticket on this device. The prize was removed from your cart.",
+      "logout_failed_title": "Logout unsuccessful",
+      "logout_failed_message": "The server could not complete logout. Your ticket session was cleared here anyway, and any prize was removed from your cart."
     }
   }
 }
